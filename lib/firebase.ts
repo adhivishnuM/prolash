@@ -1,7 +1,7 @@
 import { getApp, getApps, initializeApp } from "firebase/app";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCO4DMBi5P9LZSKbgJMtU9wXRu1YaSXCWJ4",
+  apiKey: "AIzaSyCO4DMBiP5LZSKbgJMtU9wXRu1YaSXCWJ4",
   authDomain: "prolash-ec7ba.firebaseapp.com",
   projectId: "prolash-ec7ba",
   storageBucket: "prolash-ec7ba.firebasestorage.app",

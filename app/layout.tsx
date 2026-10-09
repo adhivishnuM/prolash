@@ -1,17 +1,20 @@
-import type { Metadata } from "next";
-import { Work_Sans } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Cormorant_Garamond, Work_Sans } from "next/font/google";
 import FirebaseAnalytics from "@/components/firebase-analytics";
 import "./globals.css";
 
 const workSans = Work_Sans({ subsets: ["latin"], display: "swap", variable: "--font-work-sans" });
+const editorial = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500"], style: ["normal", "italic"], display: "swap", variable: "--font-editorial" });
+
+export const viewport: Viewport = { themeColor: "#480c1b" };
 
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "BeautySalon",
   name: "PaoLash Lounge & Academy",
   url: "https://prolash-ec7ba.web.app/",
-  logo: "https://prolash-ec7ba.web.app/assets/logo.webp",
-  image: "https://prolash-ec7ba.web.app/og.png",
+  logo: "https://prolash-ec7ba.web.app/assets/paolash-logo-transparent.png",
+  image: "https://prolash-ec7ba.web.app/og-burgundy.png",
   description: "Bespoke lash artistry, signature sets and professional education in Dublin 2.",
   telephone: "+353838119207",
   email: "support@paolash.com",
@@ -43,23 +46,23 @@ export const metadata: Metadata = {
     url: "/",
     siteName: "PaoLash Lounge & Academy",
     locale: "en_IE",
-    title: "PaoLash — Quiet luxury. Unmissable eyes.",
+    title: "PaoLash — The art of being you.",
     description: "Bespoke lash artistry and professional education in Dublin 2.",
-    images: [{ url: "/og.png", width: 1200, height: 630, alt: "PaoLash Lounge & Academy — Quiet luxury. Unmissable eyes." }],
+    images: [{ url: "/og-burgundy.png", width: 1200, height: 630, alt: "PaoLash’s champagne monogram on burgundy — The art of being you." }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "PaoLash — Quiet luxury. Unmissable eyes.",
+    title: "PaoLash — The art of being you.",
     description: "Bespoke lash artistry and professional education in Dublin 2.",
-    images: ["/og.png"],
+    images: ["/og-burgundy.png"],
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
   other: {
     "codex-preview": "development",
   },
   icons: {
-    icon: "/favicon.svg",
-    shortcut: "/favicon.svg",
+    icon: "/assets/paolash-logo-transparent.png",
+    shortcut: "/assets/paolash-logo-transparent.png",
   },
 };
 
@@ -70,7 +73,7 @@ export default function RootLayout({
 }>) {
   return (
   <html lang="en">
-      <body className={`${workSans.variable} antialiased`}>
+      <body className={`${workSans.variable} ${editorial.variable} antialiased`}>
         <FirebaseAnalytics />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
         {children}

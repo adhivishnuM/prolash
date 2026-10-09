@@ -8,7 +8,7 @@ export default function FirebaseAnalytics() {
     let cancelled = false;
 
     void import("firebase/analytics").then(async ({ getAnalytics, isSupported, logEvent }) => {
-      if (cancelled || !(await isSupported())) return;
+      if (!(await isSupported()) || cancelled) return;
       const analytics = getAnalytics(firebaseApp);
       logEvent(analytics, "page_view", {
         page_title: document.title,
