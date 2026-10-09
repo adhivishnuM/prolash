@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://prolash-ec7ba.web.app/sitemap.xml

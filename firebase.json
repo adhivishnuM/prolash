@@ -1,0 +1,23 @@
+{
+  "hosting": {
+    "site": "prolash-ec7ba",
+    "public": "dist/client",
+    "cleanUrls": true,
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "headers": [
+      {
+        "source": "**/*.@(js|css|png|webp|svg|woff2)",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public,max-age=31536000,immutable"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -9,9 +9,9 @@ const structuredData = {
   "@context": "https://schema.org",
   "@type": "BeautySalon",
   name: "PaoLash Lounge & Academy",
-  url: "https://paolash-studio.adhivishnu-m.chatgpt.site/",
-  logo: "https://paolash-studio.adhivishnu-m.chatgpt.site/assets/logo.webp",
-  image: "https://paolash-studio.adhivishnu-m.chatgpt.site/og.png",
+  url: "https://prolash-ec7ba.web.app/",
+  logo: "https://prolash-ec7ba.web.app/assets/logo.webp",
+  image: "https://prolash-ec7ba.web.app/og.png",
   description: "Bespoke lash artistry, signature sets and professional education in Dublin 2.",
   telephone: "+353838119207",
   email: "support@paolash.com",
@@ -29,7 +29,7 @@ const structuredData = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://paolash-studio.adhivishnu-m.chatgpt.site"),
+  metadataBase: new URL("https://prolash-ec7ba.web.app"),
   title: "PaoLash — Lash Artistry & Academy, Dublin",
   description: "Bespoke lash artistry, signature sets and professional education by PaoLash in Dublin 2.",
   applicationName: "PaoLash Lounge & Academy",
