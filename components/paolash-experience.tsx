@@ -84,17 +84,24 @@ export default function PaoLashExperience() {
     </div>
     <main id="main" inert={menuOpen}>
       <section className="hero" id="top" data-scene="hero" aria-labelledby="hero-title">
+        <p className="hero-location">Lash artistry · Dublin</p>
         <div className="hero-masthead" aria-hidden="true"><span>PAO</span><span>LASH</span></div>
         <div className="hero-portrait"><Image unoptimized src="/assets/hero.webp" alt="Paola Gutierrez, founder of PaoLash" width={900} height={1351} priority /></div>
-        <div className="hero-intro"><p className="hero-location">Lash artistry · Dublin</p><h1 className="hero-title" id="hero-title"><span className="hero-line"><span>Entirely</span></span><span className="hero-line"><em>you.</em></span></h1><BookingLink className="button button-wine">Find your look</BookingLink></div>
+        <div className="hero-intro"><h1 className="hero-title" id="hero-title"><span className="hero-line"><span>Entirely</span></span><span className="hero-line"><em>you.</em></span></h1><BookingLink className="button button-wine">Find your look</BookingLink></div>
       </section>
 
       <section className="collection" id="services" aria-labelledby="collection-title">
         <div className="collection-editorial">
-          <div className="collection-heading shell"><p className="eyebrow" data-reveal>The PaoLash edit</p><h2 id="collection-title" data-reveal="type">Find your <em>signature.</em></h2></div>
-          <div className="look-editorial shell" data-reveal>
-            <div className="look-description"><div className="look-copy" key={selectedLook} aria-live="polite"><p className="look-kicker">{services[selectedLook].mood}</p><h3>{services[selectedLook].name.split(" ").map((word, i) => <span key={i}>{word} </span>)}</h3><p>{services[selectedLook].note}</p></div><div className="look-choices" aria-label="Choose a lash treatment">{services.map((service,index) => <button key={service.name} type="button" aria-pressed={index === selectedLook} onClick={() => setSelectedLook(index)}>{service.name}</button>)}</div></div>
-            <figure className="look-photo" key={services[selectedLook].image}><Image unoptimized src={`/assets/${services[selectedLook].image}`} alt={`PaoLash ${services[selectedLook].name.toLowerCase()} lash work, shown in full`} width={900} height={950} loading="eager" /></figure>
+          <div className="collection-heading shell"><h2 id="collection-title" data-reveal="type">The lash edit.</h2><p className="collection-hint" data-reveal>Four ways to make it yours.</p></div>
+          <div className="lash-gallery shell" data-reveal>
+            <figure className="lash-exhibit" aria-live="polite">
+              <div className="lash-exhibit-image" key={services[selectedLook].image}><Image unoptimized src={`/assets/${services[selectedLook].image}`} alt={`PaoLash ${services[selectedLook].name.toLowerCase()} lash work, shown in full`} width={900} height={950} loading="eager" /></div>
+              <figcaption><h3>{services[selectedLook].name}</h3><p>{services[selectedLook].note}</p></figcaption>
+            </figure>
+            <div className="lash-index" role="group" aria-label="Choose a lash treatment">
+              <p className="lash-index-label">Explore the looks <Arrow down /></p>
+              {services.map((service,index) => <button className="lash-option" key={service.name} type="button" aria-pressed={index === selectedLook} onClick={() => setSelectedLook(index)}><Image unoptimized src={`/assets/${service.image}`} alt="" width={90} height={95} /><span className="lash-option-copy"><span>{service.name}</span><small>{index === selectedLook ? "Now viewing" : "View look"}</small></span><Arrow /></button>)}
+            </div>
           </div>
         </div>
       </section>
@@ -122,6 +129,15 @@ export default function PaoLashExperience() {
         </div>
         <div className="academy-word" aria-hidden="true">ACADEMY</div>
         <div className="academy-invite shell"><p>Classic · Hybrid · Volume · Wispy</p><a className="button button-wine" href="mailto:support@paolash.com?subject=PaoLash%20Academy%20interest">Let’s talk training <Arrow /></a></div>
+        <div className="trainer-credential shell" data-reveal>
+          <div className="trainer-credential-copy">
+            <p className="eyebrow">Your educator’s credentials</p>
+            <h3>International<br /><em>Top Trainer.</em></h3>
+            <p>Paola Gutierrez<br />International Lash School Lotus · June 2025</p>
+            <a className="button" href="/assets/trainer-certificate.webp" target="_blank" rel="noreferrer">View certificate <Arrow /></a>
+          </div>
+          <figure className="trainer-certificate"><a href="/assets/trainer-certificate.webp" target="_blank" rel="noreferrer" aria-label="Open Paola’s International Top Trainer certificate in full"><Image unoptimized src="/assets/trainer-certificate.webp" alt="Paola Gutierrez’s International Top Trainer course certificate, LondonLashPro accredited, issued by International Lash School Lotus in June 2025" width={1080} height={755} loading="lazy" /></a></figure>
+        </div>
       </section>
 
       <section className="studio-notes shell" data-scene="notes" aria-labelledby="essentials-title">

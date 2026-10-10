@@ -5,11 +5,11 @@ Native Next.js App Router, React and TypeScript. White space, burgundy and gold 
 | Section | Composition and movement |
 | --- | --- |
 | Hero | Unframed founder portrait against a large brand masthead. Masked type entrance and opposing scroll depth. |
-| Collection | One complete photograph and treatment name at a time. Tap or click treatment names to reveal the next photograph. No pinning, extended scroll distance, counters or underlined booking controls. |
+| Collection | Photo-led lash exhibit with a visual thumbnail index. Each image button has an explicit View look / Now viewing label and selected edge; the main photograph transitions without pinning or extra scroll distance. |
 | Artist | Full founder portrait and short statement. Words fill with burgundy as the section passes. |
 | Recognition | Complete certificate and trophy rise independently and settle level. Both link to original images. |
 | Aftercare | Oversized AFTER / CARE typography, independently moving product photograph and small annotations. |
-| Academy | Three complete photographs unfold from an overlapping contact sheet, followed by a large moving ACADEMY wordmark. Direct training enquiry. |
+| Academy | Three complete photographs unfold from an overlapping contact sheet, followed by a large moving ACADEMY wordmark. Direct training enquiry and an uncropped International Top Trainer certificate, with a full-size viewing link. |
 | Before visiting | Studio invitation with a perforated Dublin ticket stub. Appointment information opens in a native dialog. |
 | Closing | Invitation with opposing text lines and the supplied logo rising into view. |
 
