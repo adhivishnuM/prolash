@@ -10,19 +10,14 @@ export function useEditorialMotion(rootRef: RefObject<HTMLDivElement | null>) {
     const root = rootRef.current;
     if (!root) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-    const desktop = matchMedia("(min-height: 640px)");
     const header = root.querySelector<HTMLElement>(".site-header");
-    const looks = Array.from(root.querySelectorAll<HTMLElement>("[data-look]"));
-    const collection = root.querySelector<HTMLElement>(".collection");
     const scenes = Array.from(root.querySelectorAll<HTMLElement>("[data-scene]"));
     const words = Array.from(root.querySelectorAll<HTMLElement>("[data-word]"));
     let measurements: { element: HTMLElement; top: number; height: number }[] = [];
     let frame = 0;
     let measureFrame = 0;
     let viewportHeight = innerHeight;
-    let active = -1;
     let disposed = false;
-    let pinned = false;
 
     const reveal = new IntersectionObserver((entries) => {
       entries.forEach(({ target, isIntersecting }) => {
@@ -51,26 +46,6 @@ export function useEditorialMotion(rootRef: RefObject<HTMLDivElement | null>) {
           element.style.setProperty("--hero-person", `${progress * 135}px`);
           element.style.setProperty("--hero-detail", `${progress * -85}px`);
           element.style.setProperty("--hero-fade", `${1 - progress * .8}`);
-        } else if (name === "collection" && pinned) {
-          const progress = clamp(local / Math.max(1, height - viewportHeight));
-          const position = progress * (looks.length - 1);
-          looks.forEach((look, index) => {
-            const distance = index - position;
-            const amount = Math.min(1, Math.abs(distance));
-            look.style.setProperty("--look-alpha", String(1 - amount));
-            look.style.setProperty("--photo-y", `${distance > 0 ? amount * 85 : amount * -12}%`);
-            look.style.setProperty("--photo-angle", `${distance > 0 ? amount * 9 : amount * -5}deg`);
-            look.style.setProperty("--photo-scale", String(1 - amount * .1));
-            look.style.setProperty("--copy-y", `${distance > 0 ? amount * 45 : amount * -45}px`);
-          });
-          const next = Math.round(progress * 3);
-          if (next !== active) {
-            active = next;
-            looks.forEach((look, index) => {
-              look.classList.toggle("is-current", index === next);
-              look.inert = index !== next;
-            });
-          }
         } else if (name === "artist") {
           element.style.setProperty("--portrait-rise", `${(1 - enter) * 80}px`);
           const reading = clamp((local + viewportHeight * .72) / (height * .6));
@@ -80,12 +55,14 @@ export function useEditorialMotion(rootRef: RefObject<HTMLDivElement | null>) {
           element.style.setProperty("--award-right", `${(1 - enter) * 160}px`);
           element.style.setProperty("--award-angle", `${(1 - enter) * 5}deg`);
         } else if (name === "detail") {
-          element.style.setProperty("--detail-scale", `${.84 + enter * .16}`);
-          element.style.setProperty("--detail-type", `${(1 - enter) * -75}px`);
-          element.style.setProperty("--care-rise", `${(1 - clamp((local + viewportHeight * .5) / (height * .5))) * 80}px`);
+          element.style.setProperty("--ritual-drift", `${(1 - enter) * 110}px`);
+          element.style.setProperty("--ritual-rise", `${(1 - enter) * 90}px`);
+          element.style.setProperty("--ritual-turn", `${(1 - enter) * -8}deg`);
         } else if (name === "academy") {
-          element.style.setProperty("--academy-lift", `${(1 - enter) * 100}px`);
-          element.style.setProperty("--academy-angle", `${(1 - enter) * -7}deg`);
+          const spread = clamp((local + viewportHeight * .55) / (height * .6));
+          element.style.setProperty("--study-spread", String(spread));
+          element.style.setProperty("--academy-lift", `${(1 - spread) * 65}px`);
+          element.style.setProperty("--academy-type", `${(1 - spread) * -70}px`);
         } else if (name === "visit") {
           element.style.setProperty("--closing-drift", `${(1 - passage) * 80}px`);
           element.style.setProperty("--logo-rise", `${(1 - enter) * 70}px`);
@@ -97,12 +74,8 @@ export function useEditorialMotion(rootRef: RefObject<HTMLDivElement | null>) {
       measureFrame = 0;
       if (disposed) return;
       viewportHeight = innerHeight;
-      pinned = desktop.matches && !reduced.matches;
       root.classList.toggle("motion-enabled", !reduced.matches);
-      collection?.classList.toggle("is-pinned", pinned);
-      looks.forEach((look) => { if (!pinned) look.inert = false; });
       measurements = scenes.map((element) => ({ element, top: element.getBoundingClientRect().top + scrollY, height: element.offsetHeight }));
-      active = -1;
       schedule();
     };
     const scheduleMeasure = () => { if (!measureFrame) measureFrame = requestAnimationFrame(measure); };
@@ -112,7 +85,6 @@ export function useEditorialMotion(rootRef: RefObject<HTMLDivElement | null>) {
     addEventListener("scroll", schedule, { passive: true });
     addEventListener("resize", scheduleMeasure, { passive: true });
     reduced.addEventListener("change", scheduleMeasure);
-    desktop.addEventListener("change", scheduleMeasure);
     void document.fonts.ready.then(() => { if (!disposed) scheduleMeasure(); });
     root.classList.add("reveal-ready");
     measure();
@@ -127,10 +99,7 @@ export function useEditorialMotion(rootRef: RefObject<HTMLDivElement | null>) {
       removeEventListener("scroll", schedule);
       removeEventListener("resize", scheduleMeasure);
       reduced.removeEventListener("change", scheduleMeasure);
-      desktop.removeEventListener("change", scheduleMeasure);
       root.classList.remove("reveal-ready", "motion-enabled");
-      collection?.classList.remove("is-pinned");
-      looks.forEach((look) => { look.inert = false; look.removeAttribute("style"); });
     };
   }, [rootRef]);
 }

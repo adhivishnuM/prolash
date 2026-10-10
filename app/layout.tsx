@@ -13,7 +13,7 @@ const structuredData = {
   "@type": "BeautySalon",
   name: "PaoLash Lounge & Academy",
   url: "https://prolash-ec7ba.web.app/",
-  logo: "https://prolash-ec7ba.web.app/assets/paolash-logo-transparent.png",
+  logo: "https://prolash-ec7ba.web.app/assets/paolash-paper-logo.png",
   image: "https://prolash-ec7ba.web.app/og-burgundy.png",
   description: "Bespoke lash artistry, signature sets and professional education in Dublin 2.",
   telephone: "+353838119207",
@@ -58,8 +58,8 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
   icons: {
-    icon: "/assets/paolash-logo-transparent.png",
-    shortcut: "/assets/paolash-logo-transparent.png",
+    icon: "/assets/paolash-paper-logo.png",
+    shortcut: "/assets/paolash-paper-logo.png",
   },
 };
 

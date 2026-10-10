@@ -23,4 +23,15 @@ npm run dev
 npm run build
 ```
 
-The published site configuration is stored in `.openai/hosting.json`.
+The native Next.js build exports to `out/`. Preview with `npm start`.
+
+## Firebase Hosting
+
+```bash
+npm run build
+firebase deploy --only hosting --project prolash-ec7ba
+```
+
+Firebase serves `out/` as configured in `firebase.json`. Retained `dev:sites` and `build:sites` scripts provide optional compatibility tooling, not the primary runtime.
+
+Section-specific motion is documented in `docs/MOTION_PLAN.md`.
