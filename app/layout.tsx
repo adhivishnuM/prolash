@@ -1,12 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Work_Sans } from "next/font/google";
+import { Manrope } from "next/font/google";
 import FirebaseAnalytics from "@/components/firebase-analytics";
 import "./globals.css";
 
-const workSans = Work_Sans({ subsets: ["latin"], display: "swap", variable: "--font-work-sans" });
-const editorial = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500"], style: ["normal", "italic"], display: "swap", variable: "--font-editorial" });
+const manrope = Manrope({ subsets: ["latin"], display: "swap", variable: "--font-work-sans" });
 
-export const viewport: Viewport = { themeColor: "#ffffff" };
+export const viewport: Viewport = { themeColor: "#420c19" };
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -70,7 +69,7 @@ export default function RootLayout({
 }>) {
   return (
   <html lang="en">
-      <body className={`${workSans.variable} ${editorial.variable} antialiased`}>
+      <body className={`${manrope.variable} antialiased`}>
         <FirebaseAnalytics />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
         {children}

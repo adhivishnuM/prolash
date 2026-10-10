@@ -1,6 +1,8 @@
 # PaoLash — section choreography
 
-Native Next.js App Router, React and TypeScript. White space, burgundy and gold from the supplied logo; real photography only. No custom cursor or intercepted scrolling.
+Native Next.js App Router, React and TypeScript. Deep maroon surfaces, warm paper-coloured type and gold from the supplied logo; real photography only. No custom cursor or intercepted scrolling. White-theme checkpoint: 7d26f7c.
+
+Typography uses Manrope throughout: a modern sans-serif with upright, lighter-weight gold emphasis, not calligraphic or luxury-serif styling.
 
 | Section | Composition and movement |
 | --- | --- |
