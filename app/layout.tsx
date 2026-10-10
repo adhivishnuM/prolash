@@ -6,7 +6,7 @@ import "./globals.css";
 const workSans = Work_Sans({ subsets: ["latin"], display: "swap", variable: "--font-work-sans" });
 const editorial = Cormorant_Garamond({ subsets: ["latin"], weight: ["400", "500"], style: ["normal", "italic"], display: "swap", variable: "--font-editorial" });
 
-export const viewport: Viewport = { themeColor: "#480c1b" };
+export const viewport: Viewport = { themeColor: "#ffffff" };
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -57,9 +57,6 @@ export const metadata: Metadata = {
     images: ["/og-burgundy.png"],
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
-  other: {
-    "codex-preview": "development",
-  },
   icons: {
     icon: "/assets/paolash-logo-transparent.png",
     shortcut: "/assets/paolash-logo-transparent.png",
