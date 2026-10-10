@@ -10,17 +10,15 @@ export function useEditorialMotion(rootRef: RefObject<HTMLDivElement | null>) {
     const root = rootRef.current;
     if (!root) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-    const desktop = matchMedia("(min-width: 1000px) and (min-height: 650px)");
+    const desktop = matchMedia("(min-height: 640px)");
     const header = root.querySelector<HTMLElement>(".site-header");
-    const rail = root.querySelector<HTMLElement>(".collection-rail");
-    const track = root.querySelector<HTMLElement>(".collection-track");
+    const looks = Array.from(root.querySelectorAll<HTMLElement>("[data-look]"));
     const collection = root.querySelector<HTMLElement>(".collection");
     const scenes = Array.from(root.querySelectorAll<HTMLElement>("[data-scene]"));
     const words = Array.from(root.querySelectorAll<HTMLElement>("[data-word]"));
     let measurements: { element: HTMLElement; top: number; height: number }[] = [];
     let frame = 0;
     let measureFrame = 0;
-    let travel = 0;
     let viewportHeight = innerHeight;
     let active = -1;
     let disposed = false;
@@ -53,14 +51,25 @@ export function useEditorialMotion(rootRef: RefObject<HTMLDivElement | null>) {
           element.style.setProperty("--hero-person", `${progress * 135}px`);
           element.style.setProperty("--hero-detail", `${progress * -85}px`);
           element.style.setProperty("--hero-fade", `${1 - progress * .8}`);
-        } else if (name === "collection" && track && pinned) {
+        } else if (name === "collection" && pinned) {
           const progress = clamp(local / Math.max(1, height - viewportHeight));
-          track.style.transform = `translate3d(${-travel * progress}px,0,0)`;
-          element.style.setProperty("--gallery-progress", String(progress));
+          const position = progress * (looks.length - 1);
+          looks.forEach((look, index) => {
+            const distance = index - position;
+            const amount = Math.min(1, Math.abs(distance));
+            look.style.setProperty("--look-alpha", String(1 - amount));
+            look.style.setProperty("--photo-y", `${distance > 0 ? amount * 85 : amount * -12}%`);
+            look.style.setProperty("--photo-angle", `${distance > 0 ? amount * 9 : amount * -5}deg`);
+            look.style.setProperty("--photo-scale", String(1 - amount * .1));
+            look.style.setProperty("--copy-y", `${distance > 0 ? amount * 45 : amount * -45}px`);
+          });
           const next = Math.round(progress * 3);
           if (next !== active) {
             active = next;
-            element.dispatchEvent(new CustomEvent("lookchange", { detail: next }));
+            looks.forEach((look, index) => {
+              look.classList.toggle("is-current", index === next);
+              look.inert = index !== next;
+            });
           }
         } else if (name === "artist") {
           element.style.setProperty("--portrait-rise", `${(1 - enter) * 80}px`);
@@ -88,22 +97,10 @@ export function useEditorialMotion(rootRef: RefObject<HTMLDivElement | null>) {
       measureFrame = 0;
       if (disposed) return;
       viewportHeight = innerHeight;
-      const wasPinned = pinned;
-      const selected = Math.max(0, active);
       pinned = desktop.matches && !reduced.matches;
       root.classList.toggle("motion-enabled", !reduced.matches);
       collection?.classList.toggle("is-pinned", pinned);
-      if (track && rail) {
-        travel = (track.lastElementChild as HTMLElement | null)?.offsetLeft ?? 0;
-        if (!pinned) {
-          track.style.transform = "";
-          if (wasPinned) rail.scrollLeft = (track.children[selected] as HTMLElement)?.offsetLeft ?? 0;
-          const cards = Array.from(track.children) as HTMLElement[];
-          const visible = cards.reduce((best, card, index) => Math.abs(card.offsetLeft - rail.scrollLeft) < Math.abs(cards[best].offsetLeft - rail.scrollLeft) ? index : best, 0);
-          collection?.dispatchEvent(new CustomEvent("lookchange", { detail: visible }));
-        }
-        else rail.scrollLeft = 0;
-      }
+      looks.forEach((look) => { if (!pinned) look.inert = false; });
       measurements = scenes.map((element) => ({ element, top: element.getBoundingClientRect().top + scrollY, height: element.offsetHeight }));
       active = -1;
       schedule();
@@ -133,7 +130,7 @@ export function useEditorialMotion(rootRef: RefObject<HTMLDivElement | null>) {
       desktop.removeEventListener("change", scheduleMeasure);
       root.classList.remove("reveal-ready", "motion-enabled");
       collection?.classList.remove("is-pinned");
-      if (track) track.style.transform = "";
+      looks.forEach((look) => { look.inert = false; look.removeAttribute("style"); });
     };
   }, [rootRef]);
 }

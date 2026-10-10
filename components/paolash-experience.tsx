@@ -36,20 +36,17 @@ function BookingLink({ children, className = "button" }: { children: ReactNode; 
   return <a className={className} href={BOOKING_URL} target="_blank" rel="noreferrer"><span>{children}</span><Arrow /></a>;
 }
 function Brand() { return <a className="brand" href="#top" aria-label="PaoLash home"><Image unoptimized src={LOGO} alt="PaoLash" width={1536} height={1024} /></a>; }
-function Label({ children, number }: { children: ReactNode; number?: string }) { return <p className="eyebrow" data-reveal>{number && <span>{number} /</span>}{children}</p>; }
+function Label({ children, number }: { children: ReactNode; number?: string }) { return <p className="eyebrow" data-reveal>{children}</p>; }
 function Heading({ children, id }: { children: ReactNode; id: string }) { return <h2 id={id} className="display" data-reveal="type">{children}</h2>; }
 
 export default function PaoLashExperience() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [activeService, setActiveService] = useState(0);
   const [activeCourse, setActiveCourse] = useState(0);
   const [verticalCourses, setVerticalCourses] = useState(true);
   const pageRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const collectionRef = useRef<HTMLElement>(null);
-  const railRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
   useEditorialMotion(pageRef);
 
   useEffect(() => {
@@ -69,12 +66,6 @@ export default function PaoLashExperience() {
   }, []);
 
   useEffect(() => {
-    const collection = collectionRef.current;
-    const onLook = (event: Event) => setActiveService((event as CustomEvent<number>).detail);
-    collection?.addEventListener("lookchange", onLook);
-    return () => collection?.removeEventListener("lookchange", onLook);
-  }, []);
-  useEffect(() => {
     if (!menuOpen) return;
     const menuButton = menuButtonRef.current;
     const originalOverflow = document.body.style.overflow;
@@ -92,26 +83,6 @@ export default function PaoLashExperience() {
     return () => { document.body.style.overflow = originalOverflow; removeEventListener("keydown", keydown); menuButton?.focus(); };
   }, [menuOpen]);
 
-  function selectService(index: number) {
-    const section = collectionRef.current;
-    const rail = railRef.current;
-    const track = trackRef.current;
-    if (!section || !rail || !track) return;
-    const next = Math.max(0, Math.min(3, index));
-    const behavior = matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth";
-    if (section.classList.contains("is-pinned")) window.scrollTo({ top: section.getBoundingClientRect().top + scrollY + (section.offsetHeight - innerHeight) * next / 3, behavior });
-    else rail.scrollTo({ left: (track.children[next] as HTMLElement).offsetLeft, behavior });
-    setActiveService(next);
-  }
-  function onGalleryScroll() {
-    if (collectionRef.current?.classList.contains("is-pinned")) return;
-    const rail = railRef.current;
-    const track = trackRef.current;
-    if (!rail || !track) return;
-    const cards = Array.from(track.children) as HTMLElement[];
-    const closest = cards.reduce((best, card, index) => Math.abs(card.offsetLeft - rail.scrollLeft) < Math.abs(cards[best].offsetLeft - rail.scrollLeft) ? index : best, 0);
-    setActiveService(closest);
-  }
   function courseKey(event: KeyboardEvent<HTMLButtonElement>, index: number) {
     let next = index;
     if (event.key === (verticalCourses ? "ArrowDown" : "ArrowRight")) next = (index + 1) % courses.length;
@@ -134,20 +105,27 @@ export default function PaoLashExperience() {
       <BookingLink className="button button-light">Make time for yourself</BookingLink><p className="menu-address">65 William St S · Dublin 2</p>
     </div>
     <main id="main" inert={menuOpen}>
-      <section className="hero leather" id="top" data-scene="hero" aria-labelledby="hero-title">
-        <div className="hero-topline"><span>Lash artistry & education</span><span>Dublin, Ireland</span></div>
-        <h1 className="hero-title" id="hero-title"><span className="hero-line"><span>The art of</span></span><span className="hero-line"><em>being you.</em></span></h1>
+      <section className="hero" id="top" data-scene="hero" aria-labelledby="hero-title">
+        <div className="hero-topline"><span>Lash lounge & academy</span><span>Dublin, Ireland</span></div>
+        <div className="hero-masthead" aria-hidden="true"><span>PAO</span><span>LASH</span></div>
         <div className="hero-portrait"><Image unoptimized src="/assets/hero.webp" alt="Paola Gutierrez, founder of PaoLash" width={900} height={1351} priority /></div>
-        <div className="hero-note"><span className="mini-rule" /><p>Your eyes. Your expression.<br />A signature of your own.</p><BookingLink className="text-link light">Find your look</BookingLink></div>
-        <a className="hero-detail" href="#services" aria-label="Explore PaoLash lash artistry"><Image unoptimized src="/assets/lash-hybrid.webp" alt="A closer look at PaoLash lash artistry" width={900} height={950} /><span>A closer look <Arrow down /></span></a>
-        <div className="hero-bottom"><span>By Paola Gutierrez</span><a href="#services"><span className="scroll-stroke" />Scroll to discover</a><span>Lounge & academy</span></div>
+        <div className="hero-intro"><h1 className="hero-title" id="hero-title"><span className="hero-line"><span>Lash artistry.</span></span><span className="hero-line"><em>Made personal.</em></span></h1><p>A signature of your own.</p></div>
+        <div className="hero-action"><span>Exceptional lashes.<br />Entirely you.</span><BookingLink className="button button-wine">Find your look</BookingLink></div>
+        <div className="hero-bottom"><span>By Paola Gutierrez</span><a href="#services"><span className="scroll-stroke" />Scroll to discover</a><span>Individual by nature</span></div>
       </section>
 
-      <section className="collection" id="services" ref={collectionRef} data-scene="collection" aria-labelledby="collection-title"><div className="collection-sticky">
-        <div className="collection-heading shell"><div><Label number="01">The signature collection</Label><Heading id="collection-title">An eye for <em>you.</em></Heading></div><p>Four expressions.<br />Always personal.</p></div>
-        <div className="collection-rail" ref={railRef} onScroll={onGalleryScroll}><div className="collection-track" ref={trackRef}>{services.map((service, index) => <article className={`look${activeService === index ? " is-current" : ""}`} key={service.name}><a href={BOOKING_URL} target="_blank" rel="noreferrer" onFocus={() => { const rect = (trackRef.current?.children[index] as HTMLElement)?.getBoundingClientRect(); if (rect && (rect.left < 0 || rect.right > innerWidth)) selectService(index); }} aria-label={`Book ${service.name} on Fresha`}><div className="look-image"><Image unoptimized src={`/assets/${service.image}`} alt={`PaoLash ${service.name.toLowerCase()} lash work, shown in full`} width={900} height={950} loading="lazy" /><span className="look-view">Discover this look <Arrow /></span></div><div className="look-caption"><span className="look-index">0{index + 1}</span><div><h3>{service.name}</h3><p>{service.note}</p></div><span className="look-mood">{service.mood}</span></div></a></article>)}</div></div>
-        <div className="collection-bottom shell"><div className="gallery-status"><span className="gallery-counter" aria-live="polite">0{activeService + 1}<small> / 04</small></span><span className="gallery-line"><i style={{ transform: `scaleX(${(activeService + 1) / 4})` }} /></span><div className="gallery-buttons"><button onClick={() => selectService(activeService - 1)} disabled={activeService === 0} aria-label="Previous look"><Arrow /></button><button onClick={() => selectService(activeService + 1)} disabled={activeService === 3} aria-label="Next look"><Arrow /></button></div></div><BookingLink className="text-link">All treatments</BookingLink></div>
-      </div></section>
+      <section className="collection" id="services" ref={collectionRef} data-scene="collection" aria-labelledby="collection-title">
+        <div className="collection-sticky">
+          <div className="collection-heading shell"><p className="eyebrow" data-reveal>The PaoLash edit</p><h2 id="collection-title" data-reveal="type">Find your <em>signature.</em></h2></div>
+          <div className="look-stage">
+            {services.map((service, index) => <article className={`look-chapter${index === 0 ? " is-current" : ""}`} key={service.name} data-look={index}>
+              <div className="look-copy"><p className="look-kicker">{service.mood}</p><h3>{service.name.split(" ").map((word, i) => <span key={i}>{word} </span>)}</h3><p>{service.note}</p><a className="look-book" href={BOOKING_URL} target="_blank" rel="noreferrer">Make it yours <Arrow /></a></div>
+              <figure className="look-photo"><Image unoptimized src={`/assets/${service.image}`} alt={`PaoLash ${service.name.toLowerCase()} lash work, shown in full`} width={900} height={950} loading="lazy" /></figure>
+            </article>)}
+          </div>
+          <p className="collection-scroll">Keep scrolling. Find your expression.<span aria-hidden="true" /></p>
+        </div>
+      </section>
 
       <section className="artist shell" id="story" data-scene="artist" aria-labelledby="artist-title"><div className="artist-top"><Label number="02">The artist, the individual</Label><span className="edition-note" data-reveal>A personal point of view</span></div><div className="artist-layout"><figure className="artist-visual" data-unfold><div className="artist-portrait"><Image unoptimized src="/assets/founder-night.webp" alt="Paola Gutierrez, the artist behind PaoLash" width={760} height={1049} loading="lazy" /></div><figcaption>Paola Gutierrez <span>Founder & educator</span></figcaption></figure><div className="artist-copy"><h2 id="artist-title" className="artist-statement">{statement.map((word, index) => <span data-word key={index}>{word}{" "}</span>)}</h2><p data-reveal>Your shape, your features, your way of being.<br />That’s where every PaoLash set begins.</p><div className="artist-signoff" data-reveal><span className="signature">Paola G.</span><span>Made with intention.<br />Always by hand.</span></div></div></div></section>
 
