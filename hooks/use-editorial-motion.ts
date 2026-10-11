@@ -46,6 +46,8 @@ export function useEditorialMotion(rootRef: RefObject<HTMLDivElement | null>) {
           element.style.setProperty("--hero-person", `${progress * 135}px`);
           element.style.setProperty("--hero-detail", `${progress * -85}px`);
           element.style.setProperty("--hero-fade", `${1 - progress * .8}`);
+        } else if (name === "collection") {
+          element.style.setProperty("--lookbook-rise", `${(1 - enter) * 65}px`);
         } else if (name === "artist") {
           element.style.setProperty("--portrait-rise", `${(1 - enter) * 80}px`);
           const reading = clamp((local + viewportHeight * .72) / (height * .6));
@@ -58,10 +60,12 @@ export function useEditorialMotion(rootRef: RefObject<HTMLDivElement | null>) {
           element.style.setProperty("--ritual-drift", `${(1 - enter) * 110}px`);
           element.style.setProperty("--ritual-rise", `${(1 - enter) * 90}px`);
           element.style.setProperty("--ritual-turn", `${(1 - enter) * -8}deg`);
-        } else if (name === "academy") {
-          const spread = clamp((local + viewportHeight * .55) / (height * .6));
+        } else if (name === "studies") {
+          const spread = clamp((local + viewportHeight * .9) / (viewportHeight * .55));
           element.style.setProperty("--study-spread", String(spread));
           element.style.setProperty("--academy-lift", `${(1 - spread) * 65}px`);
+        } else if (name === "academy") {
+          const spread = clamp((local + viewportHeight * .55) / viewportHeight);
           element.style.setProperty("--academy-type", `${(1 - spread) * -70}px`);
         } else if (name === "visit") {
           element.style.setProperty("--closing-drift", `${(1 - passage) * 80}px`);

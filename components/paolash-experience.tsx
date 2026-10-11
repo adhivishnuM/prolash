@@ -35,6 +35,14 @@ function Heading({ children, id }: { children: ReactNode; id: string }) { return
 export default function PaoLashExperience() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [selectedLook, setSelectedLook] = useState(0);
+  const looksRef = useRef<HTMLDivElement>(null);
+  const goToLook = (index: number) => {
+    const track = looksRef.current;
+    const item = track?.children[index] as HTMLElement | undefined;
+    const first = track?.children[0] as HTMLElement | undefined;
+    if (!track || !item || !first) return;
+    track.scrollTo({ left: item.offsetLeft - first.offsetLeft, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+  };
   const notesRef = useRef<HTMLDialogElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -90,19 +98,22 @@ export default function PaoLashExperience() {
         <div className="hero-intro"><h1 className="hero-title" id="hero-title"><span className="hero-line"><span>Entirely</span></span><span className="hero-line"><em>you.</em></span></h1><BookingLink className="button button-wine">Find your look</BookingLink></div>
       </section>
 
-      <section className="collection" id="services" aria-labelledby="collection-title">
+      <section className="collection" id="services" data-scene="collection" aria-labelledby="collection-title">
         <div className="collection-editorial">
           <div className="collection-heading shell"><h2 id="collection-title" data-reveal="type">The lash edit.</h2><p className="collection-hint" data-reveal>Four ways to make it yours.</p></div>
-          <div className="lash-gallery shell" data-reveal>
-            <figure className="lash-exhibit" aria-live="polite">
-              <div className="lash-exhibit-image" key={services[selectedLook].image}><Image unoptimized src={`/assets/${services[selectedLook].image}`} alt={`PaoLash ${services[selectedLook].name.toLowerCase()} lash work, shown in full`} width={900} height={950} loading="eager" /></div>
-              <figcaption><h3>{services[selectedLook].name}</h3><p>{services[selectedLook].note}</p></figcaption>
-            </figure>
-            <div className="lash-index" role="group" aria-label="Choose a lash treatment">
-              <p className="lash-index-label">Explore the looks <Arrow down /></p>
-              {services.map((service,index) => <button className="lash-option" key={service.name} type="button" aria-pressed={index === selectedLook} onClick={() => setSelectedLook(index)}><Image unoptimized src={`/assets/${service.image}`} alt="" width={90} height={95} /><span className="lash-option-copy"><span>{service.name}</span><small>{index === selectedLook ? "Now viewing" : "View look"}</small></span><Arrow /></button>)}
-            </div>
+          <div className="lookbook" ref={looksRef} role="region" aria-label="Lash lookbook" tabIndex={0} data-reveal onScroll={(event) => {
+            const track = event.currentTarget;
+            const items = Array.from(track.children) as HTMLElement[];
+            const origin = items[0]?.offsetLeft ?? 0;
+            const closest = items.reduce((best, item, index) => Math.abs(item.offsetLeft - origin - track.scrollLeft) < Math.abs(items[best].offsetLeft - origin - track.scrollLeft) ? index : best, 0);
+            setSelectedLook(closest);
+          }}>
+            {services.map((service, index) => <figure className="lookbook-study" key={service.name}>
+              <a className="lookbook-image" href={`/assets/${service.image}`} target="_blank" rel="noreferrer" aria-label={`View ${service.name.toLowerCase()} photograph in full`}><Image unoptimized src={`/assets/${service.image}`} alt={`PaoLash ${service.name.toLowerCase()} lash work`} width={900} height={950} loading="lazy" /><span className="lookbook-open" aria-hidden="true"><Arrow /></span></a>
+              <figcaption><span className="lookbook-number" aria-hidden="true">0{index + 1}</span><div><h3>{service.name}</h3><p>{service.mood}</p></div></figcaption>
+            </figure>)}
           </div>
+          <div className="lookbook-controls shell"><span>Swipe to explore</span><div><button type="button" aria-label="Previous lash look" disabled={selectedLook === 0} onClick={() => goToLook(selectedLook - 1)}><Arrow /></button><button type="button" aria-label="Next lash look" disabled={selectedLook === services.length - 1} onClick={() => goToLook(selectedLook + 1)}><Arrow /></button></div><span className="sr-only" aria-live="polite">{services[selectedLook].name}, look {selectedLook + 1} of {services.length}</span></div>
         </div>
       </section>
 
@@ -122,7 +133,7 @@ export default function PaoLashExperience() {
 
       <section className="academy" id="academy" data-scene="academy" aria-labelledby="academy-title">
         <div className="academy-intro shell"><Label>For the next generation of artists</Label><h2 id="academy-title">The art.<br /><em>In your hands.</em></h2><p>PaoLash Academy<br />Learn with Paola Gutierrez.</p></div>
-        <div className="academy-contact-sheet" aria-label="Lash artistry taught at PaoLash Academy">
+        <div className="academy-contact-sheet" data-scene="studies" aria-label="Lash artistry taught at PaoLash Academy">
           <figure className="academy-study study-one"><Image unoptimized src="/assets/lash-classic.webp" alt="Classic lash technique by PaoLash" width={900} height={900} loading="lazy" /><figcaption>The foundation</figcaption></figure>
           <figure className="academy-study study-two"><Image unoptimized src="/assets/lash-russian.webp" alt="Volume lash technique by PaoLash" width={900} height={950} loading="lazy" /><figcaption>The precision</figcaption></figure>
           <figure className="academy-study study-three"><Image unoptimized src="/assets/lash-hybrid.webp" alt="Wispy lash technique by PaoLash" width={900} height={950} loading="lazy" /><figcaption>The expression</figcaption></figure>
