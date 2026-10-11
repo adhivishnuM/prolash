@@ -7,7 +7,7 @@ Typography uses Manrope throughout: a modern sans-serif with upright, lighter-we
 | Section | Composition and movement |
 | --- | --- |
 | Hero | Unframed founder portrait against a large brand masthead. Fade-and-rise typography with unclipped glyphs and opposing scroll depth; stronger portrait movement on phones. |
-| Collection | Four staggered complete photographs on desktop. Native snap-scrolling lookbook on phones with next/previous buttons, visible next-image preview and accessible current-look announcements. No pinning or extra vertical scroll distance. |
+| Collection | Standalone “Find your finish” experience. Four original lash-line illustrations draw on entry. Hover/focus lifts each study; selecting a mood replaces the chooser with its treatment, real photograph and booking action. Two-column phone chooser, compact result, no carousel, scroll pinning or horizontal overflow. |
 | Artist | Full founder portrait and short statement. Words fill with burgundy as the section passes. |
 | Recognition | Complete certificate and trophy rise independently and settle level. Both link to original images. |
 | Aftercare | Oversized AFTER / CARE typography, independently moving product photograph and small annotations. |
@@ -20,7 +20,7 @@ Typography uses Manrope throughout: a modern sans-serif with upright, lighter-we
 - Collection is a compact responsive section on all screens, with full photos and accessible mobile navigation buttons.
 - Photos use object-fit: contain; certificates are never cropped.
 - Native scrolling schedules one requestAnimationFrame callback. Layout geometry is measured on resize, image loading and font readiness; only nearby scenes receive animation writes.
-- Mobile lookbook announces the current look and disables unavailable previous/next actions. Reduced-motion disables transforms, smooth programmatic scrolling and transitions.
+- Finish selection focuses the result heading without scrolling; returning restores focus to the chosen button. A stable stage and disabled scroll anchoring avoid layout jumps. Reduced-motion shows completed lash drawings and removes reveal/movement effects.
 - Academy photo spreading is measured on the contact sheet itself, independently of the longer certificate section. Mobile wordmarks use vertical motion and safe side margins.
 - Navigation includes a skip link, visible focus treatment, mobile focus trap and Escape handling.
 - Appointment dialog uses native focus containment and Escape dismissal, with an explicit close control.

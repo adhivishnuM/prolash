@@ -3,15 +3,10 @@
 import Image from "next/image";
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { useEditorialMotion } from "@/hooks/use-editorial-motion";
+import LashFinder from "@/components/lash-finder";
 
 const BOOKING_URL = "https://www.fresha.com/book-now/paolash-lounge-au1el382/services?lid=2674229&share=true&pId=2588624";
 const LOGO = "/assets/paolash-paper-logo.png";
-const services = [
-  { name: "Wispy hybrid", note: "Softness, with a little intrigue.", image: "lash-hybrid.webp", mood: "Soft & expressive" },
-  { name: "Russian volume", note: "Full, featherlight, unmistakable.", image: "lash-russian.webp", mood: "Full & featherlight" },
-  { name: "Eyeliner effect", note: "A lifted line. A lasting impression.", image: "lash-line.webp", mood: "Lifted & sculpted" },
-  { name: "Lash lift", note: "Your own lashes, beautifully lifted.", image: "lash-lift.webp", mood: "Naturally yours" },
-];
 const policies = [
   { title: "Booking & deposits", text: "A €20 non-refundable deposit secures your appointment and is deducted from your salon balance. Please arrive on time; after 10 minutes, a €10 late fee or cancellation may apply." },
   { title: "Your first appointment", text: "New clients need a patch test up to 48 hours before their appointment. Arrive without eye makeup, mascara, oils, strip lashes or lash glue. A cleaning fee may apply if removal is needed." },
@@ -34,15 +29,6 @@ function Heading({ children, id }: { children: ReactNode; id: string }) { return
 
 export default function PaoLashExperience() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [selectedLook, setSelectedLook] = useState(0);
-  const looksRef = useRef<HTMLDivElement>(null);
-  const goToLook = (index: number) => {
-    const track = looksRef.current;
-    const item = track?.children[index] as HTMLElement | undefined;
-    const first = track?.children[0] as HTMLElement | undefined;
-    if (!track || !item || !first) return;
-    track.scrollTo({ left: item.offsetLeft - first.offsetLeft, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
-  };
   const notesRef = useRef<HTMLDialogElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -98,24 +84,7 @@ export default function PaoLashExperience() {
         <div className="hero-intro"><h1 className="hero-title" id="hero-title"><span className="hero-line"><span>Entirely</span></span><span className="hero-line"><em>you.</em></span></h1><BookingLink className="button button-wine">Find your look</BookingLink></div>
       </section>
 
-      <section className="collection" id="services" data-scene="collection" aria-labelledby="collection-title">
-        <div className="collection-editorial">
-          <div className="collection-heading shell"><h2 id="collection-title" data-reveal="type">The lash edit.</h2><p className="collection-hint" data-reveal>Four ways to make it yours.</p></div>
-          <div className="lookbook" ref={looksRef} role="region" aria-label="Lash lookbook" tabIndex={0} data-reveal onScroll={(event) => {
-            const track = event.currentTarget;
-            const items = Array.from(track.children) as HTMLElement[];
-            const origin = items[0]?.offsetLeft ?? 0;
-            const closest = items.reduce((best, item, index) => Math.abs(item.offsetLeft - origin - track.scrollLeft) < Math.abs(items[best].offsetLeft - origin - track.scrollLeft) ? index : best, 0);
-            setSelectedLook(closest);
-          }}>
-            {services.map((service, index) => <figure className="lookbook-study" key={service.name}>
-              <a className="lookbook-image" href={`/assets/${service.image}`} target="_blank" rel="noreferrer" aria-label={`View ${service.name.toLowerCase()} photograph in full`}><Image unoptimized src={`/assets/${service.image}`} alt={`PaoLash ${service.name.toLowerCase()} lash work`} width={900} height={950} loading="lazy" /><span className="lookbook-open" aria-hidden="true"><Arrow /></span></a>
-              <figcaption><span className="lookbook-number" aria-hidden="true">0{index + 1}</span><div><h3>{service.name}</h3><p>{service.mood}</p></div></figcaption>
-            </figure>)}
-          </div>
-          <div className="lookbook-controls shell"><span>Swipe to explore</span><div><button type="button" aria-label="Previous lash look" disabled={selectedLook === 0} onClick={() => goToLook(selectedLook - 1)}><Arrow /></button><button type="button" aria-label="Next lash look" disabled={selectedLook === services.length - 1} onClick={() => goToLook(selectedLook + 1)}><Arrow /></button></div><span className="sr-only" aria-live="polite">{services[selectedLook].name}, look {selectedLook + 1} of {services.length}</span></div>
-        </div>
-      </section>
+      <LashFinder bookingUrl={BOOKING_URL} />
 
       <section className="artist shell" id="story" data-scene="artist" aria-labelledby="artist-title"><div className="artist-top"><Label number="02">The artist, the individual</Label><span className="edition-note" data-reveal>A personal point of view</span></div><div className="artist-layout"><figure className="artist-visual" data-unfold><div className="artist-portrait"><Image unoptimized src="/assets/founder-night.webp" alt="Paola Gutierrez, the artist behind PaoLash" width={760} height={1049} loading="lazy" /></div><figcaption>Paola Gutierrez <span>Founder & educator</span></figcaption></figure><div className="artist-copy"><h2 id="artist-title" className="artist-statement">{statement.map((word, index) => <span data-word key={index}>{word}{" "}</span>)}</h2><p data-reveal>Your shape, your features, your way of being.<br />That’s where every PaoLash set begins.</p><div className="artist-signoff" data-reveal><span className="signature">Paola G.</span><span>Made with intention.<br />Always by hand.</span></div></div></div></section>
 

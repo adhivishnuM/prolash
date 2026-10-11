@@ -46,8 +46,6 @@ export function useEditorialMotion(rootRef: RefObject<HTMLDivElement | null>) {
           element.style.setProperty("--hero-person", `${progress * 135}px`);
           element.style.setProperty("--hero-detail", `${progress * -85}px`);
           element.style.setProperty("--hero-fade", `${1 - progress * .8}`);
-        } else if (name === "collection") {
-          element.style.setProperty("--lookbook-rise", `${(1 - enter) * 65}px`);
         } else if (name === "artist") {
           element.style.setProperty("--portrait-rise", `${(1 - enter) * 80}px`);
           const reading = clamp((local + viewportHeight * .72) / (height * .6));

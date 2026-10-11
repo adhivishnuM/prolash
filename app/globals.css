@@ -112,27 +112,6 @@ em { font-family: inherit; font-style: normal; font-weight: 400; }
 @keyframes mastheadEnter { from { opacity: 0; transform: translateY(45px); letter-spacing: -.12em; } to { opacity: 1; transform: none; } }
 @keyframes portraitReveal { from { opacity: 0; clip-path: inset(14% 0 0); transform: translateY(35px) scale(1.035); } to { opacity: 1; clip-path: inset(0); transform: none; } }
 
-/* Collection — compact interactive editorial, no pinned scroll distance. */
-.collection { background: var(--wine-deep); padding-block: 85px 95px; }
-.collection-heading { display: flex; align-items: center; justify-content: space-between; gap: 25px; margin-bottom: 45px; }
-.collection-heading h2 { font-size: clamp(35px,3.4vw,55px); letter-spacing: -.055em; line-height: 1.05; }
-.collection-heading h2 em { color: var(--champagne); }
-.collection-hint { font-size: 13px; color: var(--muted); }
-.lookbook { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); align-items: start; gap: clamp(18px,2.4vw,40px); padding: 20px var(--gutter) 0; }
-.lookbook-study { min-width: 0; }
-.lookbook-study:nth-child(even) { margin-top: 65px; }
-.lookbook-image { display: block; position: relative; transform: translate3d(0,var(--lookbook-rise,0px),0); }
-.lookbook-image img { width: 100%; height: auto; aspect-ratio: 900 / 950; object-fit: contain; transition: filter .5s; }
-.lookbook-open { position: absolute; right: 12px; bottom: 12px; width: 38px; height: 38px; display: grid; place-items: center; border-radius: 50%; background: var(--wine-deep); color: var(--ink); border: 1px solid var(--line); }
-.lookbook-open .arrow { width: 18px; transform: rotate(-45deg); transition: transform .4s; }
-.lookbook-image:hover .lookbook-open .arrow { transform: rotate(-45deg) translateX(3px); }
-.lookbook-study figcaption { display: flex; gap: 14px; padding-top: 23px; }
-.lookbook-number { font-size: 10px; color: var(--champagne); padding-top: 7px; }
-.lookbook-study h3 { font-size: clamp(19px,1.8vw,30px); font-weight: 500; line-height: 1.25; letter-spacing: -.04em; }
-.lookbook-study figcaption p { font-size: 11px; color: var(--muted); margin-top: 8px; }
-.lookbook-controls { display: none; }
-@media (min-width: 601px) and (max-width: 999px) { .lookbook { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 35px; } .lookbook-study:nth-child(even) { margin-top: 40px; } .lookbook-study h3 { font-size: 24px; } }
-@keyframes photoChange { from { opacity: 0; clip-path: inset(0 0 12%); transform: translateY(18px); } to { opacity: 1; clip-path: inset(0); transform: none; } }
 
 /* 02 — a personal statement, illuminated word by word. */
 .artist { padding-block: 105px 120px; border-top: 1px solid var(--line); background: #501020; border-radius: 0; }
@@ -433,7 +412,6 @@ em { font-family: inherit; font-style: normal; font-weight: 400; }
   .hero-intro { max-width: 45%; }
   .hero-title { font-size: 10vw; }
   .hero-portrait { width: 59%; right: 1%; height: 80%; }
-  .collection-heading { align-items: flex-start; flex-direction: column; gap: 16px; }
 }
 @media (max-width: 600px) {
   .site-header,.site-header.is-scrolled { inset: 12px 16px auto; height: 64px; padding-inline: 18px; }
@@ -447,16 +425,13 @@ em { font-family: inherit; font-style: normal; font-weight: 400; }
   .hero-line { display: inline-block; padding: 0 2px 12px; margin: 0; }
   .hero-line + .hero-line { margin-left: .1em; }
   .hero-intro .button { display: flex; width: fit-content; margin: 12px auto 0; min-height: 49px; padding: 12px 24px; font-size: 12px; }
-  .collection { padding-block: 60px 65px; }
-  .collection-heading { gap: 12px; margin-bottom: 30px; }
-  .collection-heading h2 { font-size: 9.6vw; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-title,.hero-masthead,.hero-portrait { transform: none !important; }
   .menu-panel { transition-duration: .01ms; }
 }
 
-/* Phone art direction: native swipe, stronger depth, and independently timed studies. */
+/* Phone art direction: stronger depth, and independently timed studies. */
 @media (max-width: 600px) {
   .hero { min-height: 680px; max-height: 850px; }
   .hero-masthead { top: 19%; }
@@ -465,26 +440,6 @@ em { font-family: inherit; font-style: normal; font-weight: 400; }
   .hero-line { overflow: visible; }
   .motion-enabled .hero-masthead { transform: translateY(calc(var(--hero-text,0px) * .3)); }
   .motion-enabled .hero-portrait { transform: translateY(calc(var(--hero-person,0px) * .5)); }
-  .collection { padding-block: 58px 55px; }
-  .collection-heading { gap: 10px; margin-bottom: 24px; }
-  .collection-heading h2 { font-size: 11vw; }
-  .collection-hint { font-size: 12px; }
-  .lookbook { position: relative; display: flex; align-items: start; gap: 18px; padding: 12px var(--gutter) 4px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--gutter); overscroll-behavior-x: contain; scrollbar-width: none; }
-  .lookbook::-webkit-scrollbar { display: none; }
-  .lookbook-study { flex: 0 0 calc(100% - 26px); scroll-snap-align: start; scroll-snap-stop: always; }
-  .lookbook-study:nth-child(even) { margin-top: 0; }
-  .lookbook-study:last-child { flex-basis: 100%; padding-right: 26px; }
-  .lookbook-image img { aspect-ratio: 900 / 950; height: auto; }
-  .lookbook-study figcaption { padding-top: 19px; gap: 13px; }
-  .lookbook-study h3 { font-size: 24px; }
-  .lookbook-study figcaption p { font-size: 12px; margin-top: 5px; }
-  .lookbook-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 26px; }
-  .lookbook-controls > span:not(.sr-only) { font-size: 11px; color: var(--muted); }
-  .lookbook-controls > div { display: flex; gap: 9px; }
-  .lookbook-controls button { display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid var(--champagne); border-radius: 50%; background: transparent; transition: background .25s,opacity .25s; }
-  .lookbook-controls button:active { background: var(--paper); }
-  .lookbook-controls button:disabled { opacity: .3; cursor: default; }
-  .lookbook-controls button:first-child .arrow { transform: rotate(180deg); }
   .artist { border-radius: 0; }
   .artist-statement { font-size: clamp(39px,11.5vw,66px); line-height: 1.08; }
   .artist-layout { gap: 30px; }
@@ -506,6 +461,5 @@ em { font-family: inherit; font-style: normal; font-weight: 400; }
   .motion-enabled .closing h2 > em { transform: translate3d(0,calc(var(--closing-drift,0px) * .35),0); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .lookbook-image,.academy-word,.academy-study,.proof,.closing h2 > span,.closing h2 > em { transform: none !important; }
-  .lookbook { scroll-behavior: auto; }
+  .academy-word,.academy-study,.proof,.closing h2 > span,.closing h2 > em { transform: none !important; }
 }
