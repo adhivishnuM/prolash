@@ -14,3 +14,13 @@
 
 Social preview: generated campaign artwork inspired by the supplied visual reference;
 the site's original photography has not been replaced or altered.
+
+## Photographic revision — 12 October 2026
+
+- Removed all four lash illustrations and the ornamental star. The chooser now displays the existing treatment photographs, without generated art or asset edits.
+- Added per-item intersection reveals, caption staggering, image zoom settling, frame-batched scroll drift and sequential result transitions. The phone grid uses the same effects without scroll pinning.
+- Production build, TypeScript and whitespace checks pass.
+- All four photo choices activate the matching result; keyboard Enter and return-focus checks pass.
+- Checked 320 × 740, 390 × 844 and 1440 × 900 layouts for overflow. Scroll-transform values were verified to change after actual mobile scrolling.
+- Reduced-motion CSS reviewed: static visible photos, no entry/selection animation or scroll drift. OS preference not changed.
+- Changes are scoped to the collection component and its stylesheet; other sections and social preview remain unchanged.

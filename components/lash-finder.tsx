@@ -15,27 +15,64 @@ function Direction({ back = false }: { back?: boolean }) {
   return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style={back ? { transform: "rotate(180deg)" } : undefined}><path d="M4 12h15m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }
 
-/** Original, intentionally illustrative lash strokes—not simulated treatment results. */
-function LashStudy({ variant }: { variant: number }) {
-  const count = variant === 1 ? 33 : variant === 3 ? 13 : 21;
-  return <svg className={styles.study} viewBox="0 0 240 125" fill="none" aria-hidden="true">
-    <path className={styles.baseline} d="M22 97 Q120 148 218 89" pathLength="1" />
-    {Array.from({ length: count }, (_, i) => {
-      const t = i / (count - 1);
-      const x = 23 + t * 193;
-      const y = 98 + Math.sin(t * Math.PI) * 19 - t * 8;
-      const length = variant === 0 ? 43 + (i % 4 === 0 ? 28 : 5) : variant === 1 ? 67 + Math.sin(t * Math.PI) * 10 : variant === 2 ? 30 + t * 54 : 36 + Math.sin(t * Math.PI) * 17;
-      const lean = (t - .4) * (variant === 2 ? 51 : 35);
-      return <path className={styles.lash} key={i} d={`M${x} ${y} Q${x + lean * .9} ${y - length * .38} ${x + lean} ${y - length}`} pathLength="1" style={{ "--stroke-delay": `${i * 16}ms` } as CSSProperties} />;
-    })}
-  </svg>;
-}
-
 export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
   const [selected, setSelected] = useState<number | null>(null);
   const resultHeading = useRef<HTMLHeadingElement>(null);
   const choiceButtons = useRef<(HTMLButtonElement | null)[]>([]);
   const previous = useRef<number | null>(null);
+
+  // Each photo reveals when it enters view, including the second row on phones.
+  // Scroll movement is frame-batched; geometry is measured only on layout changes.
+  useEffect(() => {
+    if (selected !== null) return;
+    const buttons = choiceButtons.current.filter((item): item is HTMLButtonElement => !!item);
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    let frame = 0;
+    let measureFrame = 0;
+    let disposed = false;
+    let positions: { element: HTMLButtonElement; top: number; height: number }[] = [];
+    const paint = () => {
+      frame = 0;
+      positions.forEach(({ element, top, height }) => {
+        const distance = top - scrollY;
+        if (distance > innerHeight + 100 || distance + height < -100) return;
+        const progress = Math.max(0, Math.min(1, (innerHeight - distance) / (innerHeight + height)));
+        element.style.setProperty("--photo-drift", reduced.matches ? "0px" : `${(progress - .5) * -22}px`);
+      });
+    };
+    const schedule = () => { if (!frame) frame = requestAnimationFrame(paint); };
+    const measure = () => {
+      measureFrame = 0;
+      positions = buttons.map((element) => ({ element, top: element.getBoundingClientRect().top + scrollY, height: element.offsetHeight }));
+      schedule();
+    };
+    const scheduleMeasure = () => { if (!measureFrame) measureFrame = requestAnimationFrame(measure); };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(({ target, isIntersecting }) => {
+        if (!isIntersecting) return;
+        (target as HTMLElement).dataset.entered = "true";
+        observer.unobserve(target);
+      });
+    }, { threshold: .16 });
+    buttons.forEach((button) => observer.observe(button));
+    const resize = new ResizeObserver(scheduleMeasure);
+    buttons.forEach((button) => resize.observe(button));
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", scheduleMeasure, { passive: true });
+    reduced.addEventListener("change", schedule);
+    void document.fonts.ready.then(() => { if (!disposed) scheduleMeasure(); });
+    measure();
+    return () => {
+      disposed = true;
+      cancelAnimationFrame(frame);
+      cancelAnimationFrame(measureFrame);
+      observer.disconnect();
+      resize.disconnect();
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", scheduleMeasure);
+      reduced.removeEventListener("change", schedule);
+    };
+  }, [selected]);
 
   useEffect(() => {
     if (selected !== null) {
@@ -56,11 +93,11 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
       {finish === null ? <div className={styles.choose} key="choose">
         <div className={styles.intro}>
           <h2 id="finish-title">Find your<br /><span>finish.</span></h2>
-          <div className={styles.invitation}><span className={styles.spark} aria-hidden="true">✳</span><p>Start with a feeling.<br />We’ll take it from there.</p><span className={styles.instruction}>Choose a finish below <span aria-hidden="true">↙</span></span></div>
+          <div className={styles.invitation}><p>Start with a feeling.<br /> We’ll take it from there.</p><span className={styles.instruction}>Choose a finish below <span aria-hidden="true">↙</span></span></div>
         </div>
         <div className={styles.choices}>
-          {finishes.map((item, index) => <button key={item.name} ref={(node) => { choiceButtons.current[index] = node; }} className={styles.choice} type="button" onClick={() => setSelected(index)} aria-label={`${item.mood} — explore ${item.name}`}>
-            <LashStudy variant={index} />
+          {finishes.map((item, index) => <button key={item.name} ref={(node) => { choiceButtons.current[index] = node; }} className={styles.choice} style={{ "--photo-delay": `${(index % 2) * 130}ms` } as CSSProperties} type="button" onClick={() => setSelected(index)} aria-label={`${item.mood} — explore ${item.name}`}>
+            <span className={styles.photoReveal}><span className={styles.photoWindow}><Image className={styles.choicePhoto} unoptimized src={`/assets/${item.image}`} alt={`Real ${item.name.toLowerCase()} lashes by PaoLash`} width={900} height={950} loading="lazy" /><span className={styles.photoAction} aria-hidden="true">Explore this look <Direction /></span></span></span>
             <span className={styles.choiceName}>{item.mood}<span className={styles.choiceArrow}><Direction /></span></span>
             <span className={styles.treatment}>{item.name}</span>
           </button>)}
