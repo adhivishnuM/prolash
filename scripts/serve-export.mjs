@@ -4,7 +4,7 @@ import { resolve, extname, sep } from "node:path";
 
 const root = resolve("out");
 const port = Number(process.env.PORT || 5173);
-const types = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".png": "image/png", ".webp": "image/webp", ".svg": "image/svg+xml", ".woff2": "font/woff2", ".txt": "text/plain", ".xml": "application/xml" };
+const types = { ".html": "text/html; charset=utf-8", ".js": "text/javascript", ".mjs": "text/javascript", ".wasm": "application/wasm", ".glb": "model/gltf-binary", ".css": "text/css", ".json": "application/json", ".png": "image/png", ".webp": "image/webp", ".svg": "image/svg+xml", ".woff2": "font/woff2", ".txt": "text/plain", ".xml": "application/xml" };
 createServer(async (req, res) => {
   try {
     const pathname = decodeURIComponent(new URL(req.url || "/", "http://localhost").pathname);
@@ -12,6 +12,8 @@ createServer(async (req, res) => {
     if (file !== root && !file.startsWith(root + sep)) throw new Error("Invalid path");
     if ((await stat(file)).isDirectory()) file = resolve(file, "index.html");
     res.setHeader("Content-Type", types[extname(file)] || "application/octet-stream");
+    res.setHeader("Permissions-Policy", "camera=(self), microphone=()");
+    res.setHeader("X-Content-Type-Options", "nosniff");
     res.end(await readFile(file));
   } catch {
     res.statusCode = 404;

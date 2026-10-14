@@ -1,0 +1,108 @@
+{
+  "assetVersion": "1.3.0-prototype",
+  "approvalStatus": "prototype-requires-live-calibration-and-artist-approval",
+  "authoringSource": "lib/ar/lash-geometry.ts",
+  "generator": "scripts/generate-lash-assets.mjs (three 0.186.1)",
+  "sourceSha256": "b15534e07c3980563be0efb5aca7f86dabd5e724245fd151415b62b7809978bf",
+  "coordinateConvention": "Y up, Z out of the face, neutral eye width = 1. Left/right are anatomical, before selfie mirroring.",
+  "runtime": "Procedural geometry is generated locally from the same source. GLBs are portable reference meshes; the browser does not fetch them.",
+  "deformation": "Roots run inner-to-outer on nine upper-lid landmarks. Each fibre has a root u and contiguous vertex range. Lid-aperture closure rotates profile 0..1.4 radians without shortening it. Runtime rasterizes the same 3D centrelines with feathered camera-facing fibres. Root maps are mesh extras.",
+  "styles": [
+    {
+      "styleId": "wispy-hybrid",
+      "tier": "standard",
+      "url": "/ar/lashes/wispy-hybrid.v1.glb",
+      "bytes": 328916,
+      "sha256": "fc6fad60f35e7840493f6ba88f43fe2fdacdf4dcacad9474e23f414c91d81248",
+      "preview": {
+        "url": "/ar/lashes/wispy-hybrid.preview.svg",
+        "bytes": 31191,
+        "sha256": "f246b623b08622ce05202aab1f186b8fd59f77b5400d4fe5300f81bce346f854"
+      },
+      "strandsPerEye": 112,
+      "trianglesPerPair": 16128,
+      "drawCalls": 2,
+      "textures": 0
+    },
+    {
+      "styleId": "russian-volume",
+      "tier": "standard",
+      "url": "/ar/lashes/russian-volume.v1.glb",
+      "bytes": 561908,
+      "sha256": "f5dd4d59ee37ebd37e3732a8dd2a3d998533ff29191067ad9cb661c1385bc7ac",
+      "preview": {
+        "url": "/ar/lashes/russian-volume.preview.svg",
+        "bytes": 52897,
+        "sha256": "e22071ffb8ee9727d8931ec8c04dd2ed3d879bc8d291802d7ca30f0c4f010417"
+      },
+      "strandsPerEye": 192,
+      "trianglesPerPair": 27648,
+      "drawCalls": 2,
+      "textures": 0
+    },
+    {
+      "styleId": "eyeliner-effect",
+      "tier": "standard",
+      "url": "/ar/lashes/eyeliner-effect.v1.glb",
+      "bytes": 352208,
+      "sha256": "4b063b33e51ba8e55d9c0c9d0838893e7683506613d10adfa43daa86b00badab",
+      "preview": {
+        "url": "/ar/lashes/eyeliner-effect.preview.svg",
+        "bytes": 33586,
+        "sha256": "3473fa1944887b84d7916f91c4a338e81b09a199007db0559791be41d237987f"
+      },
+      "strandsPerEye": 120,
+      "trianglesPerPair": 17280,
+      "drawCalls": 2,
+      "textures": 0
+    },
+    {
+      "styleId": "natural-classic",
+      "tier": "standard",
+      "url": "/ar/lashes/natural-classic.v1.glb",
+      "bytes": 212408,
+      "sha256": "96d2d84df3a3201770e630fc5e82245072fab3cc9318fd02b5b76171d4025a2b",
+      "preview": {
+        "url": "/ar/lashes/natural-classic.preview.svg",
+        "bytes": 20194,
+        "sha256": "6f409ae59a75a273c0b3f8c336679dc795cc585393cb94dea619ac9b42346438"
+      },
+      "strandsPerEye": 72,
+      "trianglesPerPair": 10368,
+      "drawCalls": 2,
+      "textures": 0
+    },
+    {
+      "styleId": "doll-eye",
+      "tier": "standard",
+      "url": "/ar/lashes/doll-eye.v1.glb",
+      "bytes": 328868,
+      "sha256": "59d8d76175998ab3b465be1dedd98ab5647b82a8d8d4ca8e26168a6aa25cf1a2",
+      "preview": {
+        "url": "/ar/lashes/doll-eye.preview.svg",
+        "bytes": 31185,
+        "sha256": "bea94aed273e77e6da51b2d062f8037671ca673235bdf1768e1b7545f7ab76c7"
+      },
+      "strandsPerEye": 112,
+      "trianglesPerPair": 16128,
+      "drawCalls": 2,
+      "textures": 0
+    },
+    {
+      "styleId": "wet-look",
+      "tier": "standard",
+      "url": "/ar/lashes/wet-look.v1.glb",
+      "bytes": 235692,
+      "sha256": "509b55e728fb57edb5bd6708b656b95c605f5b168f177781d95f7f2816a9b6e2",
+      "preview": {
+        "url": "/ar/lashes/wet-look.preview.svg",
+        "bytes": 22173,
+        "sha256": "6246dc799057de7ef323ad02e1811d0ab8ece1baa0bbe8d874824f0cac8c881c"
+      },
+      "strandsPerEye": 80,
+      "trianglesPerPair": 11520,
+      "drawCalls": 2,
+      "textures": 0
+    }
+  ]
+}

@@ -12,6 +12,12 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Byte-for-byte upstream runtime assets, verified by ar:prepare.
+    "public/ar/vendor/**",
+    // Generated browser traces can contain bundled third-party worker sources.
+    "test-results/**",
+    "playwright-report/**",
+    "outputs/**",
   ]),
   {
     files: ["components/ui/**/*.{ts,tsx}", "hooks/use-mobile.ts"],

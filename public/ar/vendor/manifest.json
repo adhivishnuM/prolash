@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "runtime": {
+    "package": "@mediapipe/tasks-vision",
+    "version": "1.1.0",
+    "license": "Apache-2.0"
+  },
+  "model": {
+    "name": "MediaPipe Face Landmarker",
+    "version": "float16/1",
+    "documentation": "https://developers.google.com/edge/mediapipe/solutions/vision/face_landmarker"
+  },
+  "files": [
+    {
+      "path": "mediapipe-1.1.0/vision_bundle.js",
+      "bytes": 156161,
+      "sha256": "022cbbfcdb74bae18e4bbc722e429e046d5fdd35f6183f1359c56b652b8b87f7",
+      "source": "npm:@mediapipe/tasks-vision@1.1.0/vision_bundle.js"
+    },
+    {
+      "path": "mediapipe-1.1.0/wasm/vision_wasm_internal.js",
+      "bytes": 335393,
+      "sha256": "7c652617b5bef832f42878ce8c5f752b0724bca6054e4bc1013a37d4b1949723",
+      "source": "npm:@mediapipe/tasks-vision@1.1.0/wasm/vision_wasm_internal.js"
+    },
+    {
+      "path": "mediapipe-1.1.0/wasm/vision_wasm_internal.wasm",
+      "bytes": 12997248,
+      "sha256": "782eda3ec1f414fdb4f1d66a8b59093eb4d5ab437e06117796abf05962d68eef",
+      "source": "npm:@mediapipe/tasks-vision@1.1.0/wasm/vision_wasm_internal.wasm"
+    },
+    {
+      "path": "mediapipe-1.1.0/wasm/vision_wasm_nosimd_internal.js",
+      "bytes": 335196,
+      "sha256": "510fc70a170eb8b46767a7abab2af89a7a8341fa5b3ebfb8a5de41a79b7fa9df",
+      "source": "npm:@mediapipe/tasks-vision@1.1.0/wasm/vision_wasm_nosimd_internal.js"
+    },
+    {
+      "path": "mediapipe-1.1.0/wasm/vision_wasm_nosimd_internal.wasm",
+      "bytes": 12168316,
+      "sha256": "b802041d105876865d6a0806f2ff7c4419a7f1b80bc01340fe36e759c2030011",
+      "source": "npm:@mediapipe/tasks-vision@1.1.0/wasm/vision_wasm_nosimd_internal.wasm"
+    },
+    {
+      "path": "face-landmarker-f16-v1-64184e229b26.task",
+      "bytes": 3758596,
+      "sha256": "64184e229b263107bc2b804c6625db1341ff2bb731874b0bcc2fe6544e0bc9ff",
+      "source": "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task"
+    }
+  ]
+}
