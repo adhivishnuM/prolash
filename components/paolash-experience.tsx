@@ -122,9 +122,20 @@ export default function PaoLashExperience() {
       </section>
 
       <section className="studio-notes shell" data-scene="notes" aria-labelledby="essentials-title">
-        <div className="studio-ticket" data-reveal>
-          <div className="ticket-main"><Label>Your studio invitation</Label><h2 id="essentials-title">Make time<br />for <em>you.</em></h2><p>65 William St S<br />Dublin 2 · D02 AW81</p><button className="notes-open" type="button" onClick={() => notesRef.current?.showModal()}>Before your appointment <span aria-hidden="true">+</span></button></div>
-          <div className="ticket-stub"><span className="ticket-city">DUBLIN</span><span className="ticket-district">2</span><span className="ticket-studio">PaoLash<br />Lounge & Academy</span><BookingLink className="ticket-book">Save your date</BookingLink></div>
+        <div className="studio-visit" data-reveal>
+          <div className="studio-visit-intro">
+            <Label>Visit PaoLash · Dublin 2</Label>
+            <h2 id="essentials-title">Come as you are.<br /><em>Leave feeling like you.</em></h2>
+            <p>Quiet appointments, thoughtful artistry,<br />and a set shaped around you.</p>
+          </div>
+          <div className="studio-visit-actions">
+            <BookingLink className="button button-light">Choose your time</BookingLink>
+            <button className="notes-open" type="button" onClick={() => notesRef.current?.showModal()}>Before you arrive <span aria-hidden="true">+</span></button>
+          </div>
+          <div className="studio-visit-details">
+            <a className="studio-detail" href="https://www.google.com/maps/search/?api=1&query=65+William+St+S+Dublin+2+D02+AW81" target="_blank" rel="noreferrer"><span>The studio</span><strong>65 William St S</strong><small>Dublin 2 · D02 AW81</small><Arrow /></a>
+            <div className="studio-detail"><span>Contact</span><a href="tel:+353838119207">083 811 9207</a><a href="mailto:support@paolash.com">support@paolash.com</a></div>
+          </div>
         </div>
         <dialog ref={notesRef} className="studio-dialog" aria-labelledby="studio-notes-title" onClick={(event) => { if (event.target === event.currentTarget) notesRef.current?.close(); }}>
           <div className="notes-sheet"><div className="notes-sheet-head"><h2 id="studio-notes-title">Before we meet.</h2><button type="button" aria-label="Close studio notes" onClick={() => notesRef.current?.close()}>×</button></div><div className="notes-content">{policies.map((policy) => <article key={policy.title}><h3>{policy.title}</h3><p>{policy.text}</p></article>)}</div><p className="notes-help">A question? <a href="mailto:support@paolash.com">Ask the studio.</a></p></div>
