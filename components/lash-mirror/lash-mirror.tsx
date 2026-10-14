@@ -107,7 +107,7 @@ export default function LashMirror() {
         <span className={styles.headerTitle}>THE LASH MIRROR</span>
         <div className={styles.headerActions}>
           <button className={styles.helpButton} onClick={() => setDialog("help")} aria-label="Help with your lash preview"><Icon name="help" /><span>A little help</span></button>
-          <Link href="/#services" className={styles.iconButton} onClick={exit} aria-label="Close lash mirror"><Icon name="close" /></Link>
+          <Link href="/collection/" className={styles.iconButton} onClick={exit} aria-label="Close lash mirror"><Icon name="close" /></Link>
         </div>
       </header>
 
@@ -163,7 +163,7 @@ export default function LashMirror() {
               <h2 ref={stateHeadingRef} tabIndex={-1} className={styles.stateTitle}>{status === "paused" ? "Your mirror is paused." : error?.title || "The preview is unavailable."}</h2>
               <p className={styles.stateBody}>{status === "paused" ? "Your camera is off. Take your time, then return whenever you’re ready." : error?.detail || "You can still explore our real lash work and find a finish you love."}</p>
               {(status === "paused" || error?.retryable) && <button className={styles.primaryButton} onClick={() => void start()}><span>{status === "paused" ? "Resume camera" : "Try again"}</span><Icon name="refresh" /></button>}
-              <Link href="/#services" className={styles.quietButton} onClick={exit}>Explore real results <Icon name="arrow" /></Link>
+              <Link href="/collection/" className={styles.quietButton} onClick={exit}>Explore real results <Icon name="arrow" /></Link>
             </div>
           )}
 
@@ -232,7 +232,7 @@ export default function LashMirror() {
             <div className={styles.introActions}>
               <button className={styles.primaryButton} onClick={() => void start()}><span>Open camera</span><Icon name="camera" /></button>
               <p className={styles.privacyNote}><Icon name="lock" /><span>Your camera stays on your device.<br />No account. Just you.</span></p>
-              <Link href="/#services" className={styles.browseLink} onClick={exit}>Prefer to browse real results? <Icon name="arrow" /></Link>
+              <Link href="/collection/" className={styles.browseLink} onClick={exit}>Prefer to browse real results? <Icon name="arrow" /></Link>
             </div>
           ) : isReview ? (
             <div className={styles.reviewActions}>
@@ -281,7 +281,7 @@ export default function LashMirror() {
             </ol>
             <div className={styles.helpPrivacy}><Icon name="lock" /><div><h3>A private little moment.</h3><p>Camera images are processed on your device. Saving is optional and downloads an image to your device.</p></div></div>
             <p className={styles.dialogFootnote}>Camera access off? Allow it in your browser’s site settings, then try again. If you’re inside another app, opening this page in Safari or Chrome may help.</p>
-            <Link className={styles.browseLink} href="/#services" onClick={exit}>Explore real results instead <Icon name="arrow" /></Link>
+            <Link className={styles.browseLink} href="/collection/" onClick={exit}>Explore real results instead <Icon name="arrow" /></Link>
           </>
         )}
       </dialog>

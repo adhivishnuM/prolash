@@ -148,16 +148,17 @@ em { font-family: inherit; font-style: normal; font-weight: 400; }
 .artist { padding-block: 105px 120px; background: var(--cream); border-radius: 0; }
 .artist-top,.detail-top { display: flex; align-items: center; justify-content: space-between; gap: 30px; }
 .edition-note { font-size: 12px; color: var(--muted); }
-.artist-layout { display: grid; grid-template-columns: .65fr 1.35fr; align-items: center; gap: 9%; margin-top: 65px; }
-.artist-visual { min-width: 0; }
-.artist-portrait { height: min(52vw,700px); transform: translate3d(0,var(--portrait-rise,0px),0); }
-.artist-portrait img { height: 100%; width: 100%; object-fit: contain; object-position: bottom; }
+.artist-layout { display: grid; grid-template-columns: minmax(300px,.72fr) minmax(0,1.28fr); align-items: center; gap: clamp(56px,7vw,130px); margin-top: 48px; }
+.artist-visual { min-width: 0; align-self: center; }
+.artist-portrait { height: min(45vw,680px); overflow: visible; background: transparent; transform: translate3d(0,var(--portrait-rise,0px),0); }
+.artist-portrait img { height: 100%; width: 100%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 24px 34px rgb(70 10 25 / .12)); }
 .artist-visual figcaption { display: flex; justify-content: space-between; gap: 20px; font-size: 12px; padding-top: 18px; }
 .artist-visual figcaption > span { color: var(--muted); }
-.artist-statement { font-size: clamp(58px,6.4vw,105px); line-height: .98; letter-spacing: -.07em; }
+.artist-copy { min-width: 0; padding-block: 18px; }
+.artist-statement { max-width: 1000px; font-size: clamp(54px,5.8vw,96px); line-height: .98; letter-spacing: -.07em; }
 .artist-statement > span { background: linear-gradient(to right,var(--ink) var(--word-fill,100%),#b28c90 var(--word-fill,100%)); background-clip: text; color: transparent; }
-.artist-copy > p { margin-top: 32px; font-size: 16px; line-height: 1.8; color: var(--muted); }
-.artist-signoff { display: flex; align-items: center; justify-content: space-between; gap: 25px; margin-top: 40px; padding-top: 24px; }
+.artist-copy > p { max-width: 600px; margin-top: 32px; font-size: 16px; line-height: 1.8; color: var(--muted); }
+.artist-signoff { display: flex; align-items: center; justify-content: flex-start; gap: clamp(70px,8vw,150px); max-width: 720px; margin-top: 40px; padding-top: 24px; }
 .signature { font: 500 38px/1 var(--font-work-sans),sans-serif; letter-spacing: -.05em; }
 .artist-signoff > span:last-child { font-size: 12px; color: var(--muted); }
 

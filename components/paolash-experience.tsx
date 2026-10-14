@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { useEditorialMotion } from "@/hooks/use-editorial-motion";
 import LashFinder from "@/components/lash-finder";
@@ -13,7 +14,14 @@ const policies = [
   { title: "Changing your appointment", text: "Please cancel or reschedule at least 48 hours in advance. Late changes may require full payment before another booking." },
   { title: "Finding the studio", text: "Find PaoLash at 65 William St S, Dublin 2, D02 AW81. For help with your appointment, call 083 811 9207 or email support@paolash.com." },
 ];
-const navigation = [{ id: "services", name: "The collection" }, { id: "story", name: "The artist" }, { id: "academy", name: "Academy" }, { id: "visit", name: "Visit us" }];
+const navigation = [
+  { id: "services", name: "The collection", href: "/collection/" },
+  { id: "story", name: "The artist", href: "/artist/" },
+  { id: "academy", name: "Academy", href: "/academy/" },
+  { id: "visit", name: "Visit us", href: "/visit/" },
+] as const;
+const sectionTargets = { top: "top", collection: "services", artist: "story", academy: "academy", visit: "visit" } as const;
+export type SectionRoute = keyof typeof sectionTargets;
 const statement = "Every eye is different. Every set should be, too.".split(" ");
 const delay = (index: number) => ({ "--delay": `${index * 85}ms` } as CSSProperties);
 
@@ -23,17 +31,31 @@ function Arrow({ down = false }: { down?: boolean }) {
 function BookingLink({ children, className = "button" }: { children: ReactNode; className?: string }) {
   return <a className={className} href={BOOKING_URL} target="_blank" rel="noreferrer"><span>{children}</span><Arrow /></a>;
 }
-function Brand() { return <a className="brand" href="#top" aria-label="PaoLash home"><Image unoptimized src={LOGO} alt="PaoLash" width={1536} height={1024} /></a>; }
+function Brand() { return <Link className="brand" href="/" scroll={false} aria-label="PaoLash home"><Image unoptimized src={LOGO} alt="PaoLash" width={1536} height={1024} /></Link>; }
 function Label({ children }: { children: ReactNode; number?: string }) { return <p className="eyebrow" data-reveal>{children}</p>; }
 function Heading({ children, id }: { children: ReactNode; id: string }) { return <h2 id={id} className="display" data-reveal="type">{children}</h2>; }
 
-export default function PaoLashExperience() {
+export default function PaoLashExperience({ initialSection = "top" }: { initialSection?: SectionRoute }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const notesRef = useRef<HTMLDialogElement>(null);
   const pageRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   useEditorialMotion(pageRef);
+
+  useEffect(() => {
+    const previousRestoration = window.history.scrollRestoration;
+    window.history.scrollRestoration = "manual";
+    const timer = window.setTimeout(() => {
+      const target = document.getElementById(sectionTargets[initialSection]);
+      if (initialSection === "top") window.scrollTo({ top: 0, behavior: "auto" });
+      else target?.scrollIntoView({ behavior: "auto", block: "start" });
+    }, 120);
+    return () => {
+      window.clearTimeout(timer);
+      window.history.scrollRestoration = previousRestoration;
+    };
+  }, [initialSection]);
 
   useEffect(() => {
     const desktop = matchMedia("(min-width: 1000px)");
@@ -70,11 +92,11 @@ export default function PaoLashExperience() {
     <a className="skip-link" href="#main">Skip to content</a>
     <header className={`site-header${menuOpen ? " menu-is-open" : ""}`}>
       <div inert={menuOpen}><Brand /></div>
-      <nav className="desktop-nav" aria-label="Primary navigation" inert={menuOpen}>{navigation.map((item) => <a href={`#${item.id}`} key={item.id}>{item.name}</a>)}</nav>
+      <nav className="desktop-nav" aria-label="Primary navigation" inert={menuOpen}>{navigation.map((item) => <Link href={item.href} scroll={false} key={item.id}>{item.name}</Link>)}</nav>
       <div className="header-actions"><div className="desktop-booking" inert={menuOpen}><BookingLink className="header-booking">Book a visit</BookingLink></div><button ref={menuButtonRef} className="menu-toggle" type="button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-menu" onClick={() => setMenuOpen((value) => !value)}><i /><i /></button></div>
     </header>
     <div ref={menuRef} className={`menu-panel${menuOpen ? " is-open" : ""}`} id="mobile-menu" inert={!menuOpen} role="dialog" tabIndex={-1} aria-modal={menuOpen ? true : undefined} aria-label="Navigation">
-      <div className="menu-content"><p className="menu-caption">Explore PaoLash</p><nav aria-label="Mobile navigation">{navigation.map((item, index) => <a key={item.id} href={`#${item.id}`} style={delay(index)} onClick={() => setMenuOpen(false)}>{item.name}<Arrow /></a>)}</nav>
+      <div className="menu-content"><p className="menu-caption">Explore PaoLash</p><nav aria-label="Mobile navigation">{navigation.map((item, index) => <Link key={item.id} href={item.href} scroll={false} style={delay(index)} onClick={() => setMenuOpen(false)}>{item.name}<Arrow /></Link>)}</nav>
       <div className="menu-bottom"><BookingLink className="button button-light">Book a visit</BookingLink><p className="menu-address">65 William St S<br />Dublin 2</p></div></div>
     </div>
     <main id="main" inert={menuOpen}>
@@ -87,7 +109,7 @@ export default function PaoLashExperience() {
 
       <LashFinder bookingUrl={BOOKING_URL} />
 
-      <section className="artist shell" id="story" data-scene="artist" aria-labelledby="artist-title"><div className="artist-top"><Label number="02">The artist, the individual</Label><span className="edition-note" data-reveal>A personal point of view</span></div><div className="artist-layout"><figure className="artist-visual" data-unfold><div className="artist-portrait"><Image unoptimized src="/assets/founder-night.webp" alt="Paola Gutierrez, the artist behind PaoLash" width={760} height={1049} loading="lazy" /></div><figcaption>Paola Gutierrez <span>Founder & educator</span></figcaption></figure><div className="artist-copy"><h2 id="artist-title" className="artist-statement">{statement.map((word, index) => <span data-word key={index}>{word}{" "}</span>)}</h2><p data-reveal>Your shape, your features, your way of being.<br />That’s where every PaoLash set begins.</p><div className="artist-signoff" data-reveal><span className="signature">Paola G.</span><span>Made with intention.<br />Always by hand.</span></div></div></div></section>
+      <section className="artist shell" id="story" data-scene="artist" aria-labelledby="artist-title"><div className="artist-top"><Label number="02">The artist, the individual</Label><span className="edition-note" data-reveal>A personal point of view</span></div><div className="artist-layout"><figure className="artist-visual" data-unfold><div className="artist-portrait"><Image unoptimized src="/assets/paola-original-cutout.png" alt="Paola Gutierrez, the artist behind PaoLash" width={1073} height={1465} loading="lazy" /></div><figcaption>Paola Gutierrez <span>Founder & educator</span></figcaption></figure><div className="artist-copy"><h2 id="artist-title" className="artist-statement">{statement.map((word, index) => <span data-word key={index}>{word}{" "}</span>)}</h2><p data-reveal>Your shape, your features, your way of being.<br />That’s where every PaoLash set begins.</p><div className="artist-signoff" data-reveal><span className="signature">Paola G.</span><span>Made with intention.<br />Always by hand.</span></div></div></div></section>
 
       <section className="recognition shell" id="recognition" data-scene="recognition" aria-labelledby="recognition-title"><div className="recognition-copy"><Label number="03">Beyond the studio</Label><Heading id="recognition-title">A little<br /><em>recognition.</em></Heading><div className="award-number" data-reveal>3<sup>rd</sup></div><p data-reveal>Creative Effects · Master category<br />Lash Star Elite, Dubai · 2025</p></div><div className="recognition-gallery"><figure className="proof proof-certificate"><a href="/assets/award.webp" target="_blank" rel="noreferrer"><div className="proof-mat"><Image unoptimized src="/assets/award.webp" alt="Full competition certificate: Paola Gutierrez, third place, Creative Effects, Master category, Lash Star Elite Dubai 2025" width={720} height={1019} loading="lazy" /></div><figcaption><span>The recognition</span><span>View certificate <Arrow /></span></figcaption></a></figure><figure className="proof proof-trophy"><a href="/assets/trophy.webp" target="_blank" rel="noreferrer"><div className="proof-mat"><Image unoptimized src="/assets/trophy.webp" alt="Paola’s trophy at the Dubai competition, shown in full" width={900} height={1200} loading="lazy" /></div><figcaption><span>The moment</span><span>Dubai, 2025 <Arrow /></span></figcaption></a></figure></div></section>
 
@@ -143,6 +165,6 @@ export default function PaoLashExperience() {
       </section>
     </main>
 
-    <footer className="footer leather" id="visit" data-scene="visit" inert={menuOpen}><div className="closing shell"><Label>A little time, just for you</Label><h2><span>Your next</span><em>favourite look.</em></h2><BookingLink className="button button-light">Reserve your appointment</BookingLink><div className="closing-brand"><Image unoptimized src={LOGO} alt="PaoLash Lounge & Academy" width={1536} height={1024} loading="lazy" /></div></div><div className="footer-details shell"><div data-reveal><span className="footer-label">The studio</span><a href="https://www.google.com/maps/search/?api=1&query=65+William+St+S+Dublin+2+D02+AW81" target="_blank" rel="noreferrer">65 William St S<br />Dublin 2 · D02 AW81</a></div><div data-reveal style={delay(1)}><span className="footer-label">Say hello</span><a href="tel:+353838119207">083 811 9207</a><a href="mailto:support@paolash.com">support@paolash.com</a></div><div data-reveal style={delay(2)}><span className="footer-label">Follow the artistry</span><a href="https://www.instagram.com/paolash_lounge" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.tiktok.com/@paolash_0" target="_blank" rel="noreferrer">TikTok</a><a href="https://wa.me/353838119207" target="_blank" rel="noreferrer">WhatsApp</a></div><a className="back-top" href="#top" data-reveal>Back to top <Arrow /></a></div><div className="footer-bottom shell"><span>© {new Date().getFullYear()} PaoLash Lounge & Academy</span><span>Dublin. With love.</span></div></footer>
+    <footer className="footer leather" id="visit" data-scene="visit" inert={menuOpen}><div className="closing shell"><Label>A little time, just for you</Label><h2><span>Your next</span><em>favourite look.</em></h2><BookingLink className="button button-light">Reserve your appointment</BookingLink><div className="closing-brand"><Image unoptimized src={LOGO} alt="PaoLash Lounge & Academy" width={1536} height={1024} loading="lazy" /></div></div><div className="footer-details shell"><div data-reveal><span className="footer-label">The studio</span><a href="https://www.google.com/maps/search/?api=1&query=65+William+St+S+Dublin+2+D02+AW81" target="_blank" rel="noreferrer">65 William St S<br />Dublin 2 · D02 AW81</a></div><div data-reveal style={delay(1)}><span className="footer-label">Say hello</span><a href="tel:+353838119207">083 811 9207</a><a href="mailto:support@paolash.com">support@paolash.com</a></div><div data-reveal style={delay(2)}><span className="footer-label">Follow the artistry</span><a href="https://www.instagram.com/paolash_lounge" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.tiktok.com/@paolash_0" target="_blank" rel="noreferrer">TikTok</a><a href="https://wa.me/353838119207" target="_blank" rel="noreferrer">WhatsApp</a></div><Link className="back-top" href="/" scroll={false} data-reveal>Back to top <Arrow /></Link></div><div className="footer-bottom shell"><span>© {new Date().getFullYear()} PaoLash Lounge & Academy</span><span>Dublin. With love.</span></div></footer>
   </div>;
 }
