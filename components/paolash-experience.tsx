@@ -52,17 +52,18 @@ export default function PaoLashExperience() {
     const menuButton = menuButtonRef.current;
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    menuRef.current?.querySelector<HTMLAnchorElement>("a")?.focus();
+    menuRef.current?.focus({ preventScroll: true });
     const keydown = (event: globalThis.KeyboardEvent) => {
       if (event.key === "Escape") setMenuOpen(false);
       if (event.key !== "Tab") return;
       const links = Array.from(menuRef.current?.querySelectorAll<HTMLElement>("a, button") ?? []);
       const elements = [menuButton, ...links].filter((element): element is HTMLElement => !!element);
+      if (document.activeElement === menuRef.current) { event.preventDefault(); (event.shiftKey ? elements[0] : links[0])?.focus(); return; }
       if (event.shiftKey && document.activeElement === elements[0]) { event.preventDefault(); elements.at(-1)?.focus(); }
       if (!event.shiftKey && document.activeElement === elements.at(-1)) { event.preventDefault(); elements[0]?.focus(); }
     };
     addEventListener("keydown", keydown);
-    return () => { document.body.style.overflow = originalOverflow; removeEventListener("keydown", keydown); menuButton?.focus(); };
+    return () => { document.body.style.overflow = originalOverflow; removeEventListener("keydown", keydown); menuButton?.focus({ preventScroll: true }); };
   }, [menuOpen]);
 
   return <div className="site" ref={pageRef}>
@@ -70,11 +71,11 @@ export default function PaoLashExperience() {
     <header className={`site-header${menuOpen ? " menu-is-open" : ""}`}>
       <div inert={menuOpen}><Brand /></div>
       <nav className="desktop-nav" aria-label="Primary navigation" inert={menuOpen}>{navigation.map((item) => <a href={`#${item.id}`} key={item.id}>{item.name}</a>)}</nav>
-      <div className="header-actions"><BookingLink className="header-booking">Book a visit</BookingLink><button ref={menuButtonRef} className="menu-toggle" type="button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-menu" onClick={() => setMenuOpen((value) => !value)}><span>{menuOpen ? "Close" : "Menu"}</span><i /><i /></button></div>
+      <div className="header-actions"><div className="desktop-booking" inert={menuOpen}><BookingLink className="header-booking">Book a visit</BookingLink></div><button ref={menuButtonRef} className="menu-toggle" type="button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-menu" onClick={() => setMenuOpen((value) => !value)}><i /><i /></button></div>
     </header>
-    <div ref={menuRef} className={`menu-panel leather${menuOpen ? " is-open" : ""}`} id="mobile-menu" inert={!menuOpen} role="dialog" aria-modal={menuOpen ? true : undefined} aria-label="Navigation">
-      <p className="eyebrow">PaoLash · Dublin</p><nav aria-label="Mobile navigation">{navigation.map((item, index) => <a key={item.id} href={`#${item.id}`} style={delay(index)} onClick={() => setMenuOpen(false)}><span>0{index + 1}</span>{item.name}<Arrow /></a>)}</nav>
-      <BookingLink className="button button-light">Make time for yourself</BookingLink><p className="menu-address">65 William St S · Dublin 2</p>
+    <div ref={menuRef} className={`menu-panel${menuOpen ? " is-open" : ""}`} id="mobile-menu" inert={!menuOpen} role="dialog" tabIndex={-1} aria-modal={menuOpen ? true : undefined} aria-label="Navigation">
+      <div className="menu-content"><p className="menu-caption">Explore PaoLash</p><nav aria-label="Mobile navigation">{navigation.map((item, index) => <a key={item.id} href={`#${item.id}`} style={delay(index)} onClick={() => setMenuOpen(false)}>{item.name}<Arrow /></a>)}</nav>
+      <div className="menu-bottom"><BookingLink className="button button-light">Book a visit</BookingLink><p className="menu-address">65 William St S<br />Dublin 2</p></div></div>
     </div>
     <main id="main" inert={menuOpen}>
       <section className="hero" id="top" data-scene="hero" aria-labelledby="hero-title">

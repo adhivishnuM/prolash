@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState, useEffect, type CSSProperties } from "react";
+import { useRef, useState, useEffect, useCallback, type CSSProperties } from "react";
 import styles from "./lash-finder.module.css";
 
 const finishes = [
@@ -29,6 +29,13 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
   const choiceButtons = useRef<(HTMLButtonElement | null)[]>([]);
   const deckScene = useRef<HTMLDivElement>(null);
   const previous = useRef<number | null>(null);
+  const movingUntil = useRef(0);
+  const move = useCallback((direction: number) => {
+    const now = performance.now();
+    if (now < movingUntil.current) return;
+    movingUntil.current = now + (matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 900);
+    setActive(current => current + direction);
+  }, []);
 
   // Rotate only while the collection is visible and the visitor is not using it.
   useEffect(() => {
@@ -40,7 +47,7 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
     const sync = () => {
       clearInterval(timer);
       if (visible && !document.hidden && !reduced.matches) {
-        timer = setInterval(() => setActive(current => (current + 1) % finishes.length), 5500);
+        timer = setInterval(() => move(1), 5500);
       }
     };
     const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); }, { threshold: .35 });
@@ -48,51 +55,8 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
     document.addEventListener("visibilitychange", sync);
     reduced.addEventListener("change", sync);
     return () => { clearInterval(timer); observer.disconnect(); document.removeEventListener("visibilitychange", sync); reduced.removeEventListener("change", sync); };
-  }, [selected, paused, interacting, active]);
+  }, [selected, paused, interacting, active, move]);
 
-  // A small amount of scroll depth keeps the deck alive without pinning the page.
-  useEffect(() => {
-    if (selected !== null) return;
-    const scene = deckScene.current;
-    if (!scene) return;
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-    let frame = 0;
-    let measureFrame = 0;
-    let disposed = false;
-    let top = 0;
-    let height = 0;
-    const paint = () => {
-      frame = 0;
-      const distance = top - scrollY;
-      if (distance > innerHeight + 140 || distance + height < -140) return;
-      const progress = Math.max(0, Math.min(1, (innerHeight - distance) / (innerHeight + height)));
-      scene.style.setProperty("--deck-shift", reduced.matches ? "0px" : `${(progress - .5) * -24}px`);
-    };
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(paint); };
-    const measure = () => {
-      measureFrame = 0;
-      top = scene.getBoundingClientRect().top + scrollY;
-      height = scene.offsetHeight;
-      schedule();
-    };
-    const scheduleMeasure = () => { if (!measureFrame) measureFrame = requestAnimationFrame(measure); };
-    const resize = new ResizeObserver(scheduleMeasure);
-    resize.observe(scene);
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", scheduleMeasure, { passive: true });
-    reduced.addEventListener("change", schedule);
-    void document.fonts.ready.then(() => { if (!disposed) scheduleMeasure(); });
-    measure();
-    return () => {
-      disposed = true;
-      cancelAnimationFrame(frame);
-      cancelAnimationFrame(measureFrame);
-      resize.disconnect();
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", scheduleMeasure);
-      reduced.removeEventListener("change", schedule);
-    };
-  }, [selected]);
 
   useEffect(() => {
     if (selected !== null) {
@@ -104,11 +68,9 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
   }, [selected]);
 
   const finish = selected === null ? null : finishes[selected];
-  const move = (direction: number) => setActive((current) => (current + direction + finishes.length) % finishes.length);
-  const cardPosition = (index: number) => {
-    const forward = (index - active + finishes.length) % finishes.length;
-    return forward > finishes.length / 2 ? forward - finishes.length : forward;
-  };
+  const activeIndex = ((active % finishes.length) + finishes.length) % finishes.length;
+  // Stable virtual neighbours move one slot at a time, including the last-to-first loop.
+  const slots = [-2, -1, 0, 1, 2].map(offset => active + offset);
 
   return <section id="services" className={styles.finder} aria-labelledby="finish-title">
     <div className={styles.masthead} data-reveal>
@@ -130,26 +92,29 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
           role="region" aria-roledescription="carousel" aria-label="Lash collection">
           <div className={styles.halo} aria-hidden="true" />
           <div className={styles.deck} aria-label="PaoLash treatment collection">
-            {finishes.map((item, index) => {
-              const position = cardPosition(index);
+            {slots.map(slot => {
+              const index = ((slot % finishes.length) + finishes.length) % finishes.length;
+              const item = finishes[index];
+              const position = slot - active;
               const isActive = position === 0;
               return <button
-                key={item.name}
-                ref={(node) => { choiceButtons.current[index] = node; }}
+                key={slot}
+                ref={(node) => { if (isActive) choiceButtons.current[index] = node; }}
                 className={`${styles.deckCard} ${isActive ? styles.cardActive : ""}`}
-                style={{ "--card-offset": position, "--card-distance": Math.abs(position), "--card-order": 10 - Math.abs(position), "--card-delay": `${index * 85}ms` } as CSSProperties}
+                style={{ "--card-offset": position, "--card-distance": Math.abs(position), "--card-order": 10 - Math.abs(position) } as CSSProperties}
                 type="button"
-                onClick={() => { setPaused(true); if (isActive) setSelected(index); else setActive(index); }}
+                onClick={() => { setPaused(true); if (isActive) setSelected(index); else move(position); }}
                 aria-label={isActive ? `Open ${item.name}` : `Bring ${item.name} to the front`}
                 aria-current={isActive ? "true" : undefined}
                 tabIndex={isActive ? 0 : -1}
                 aria-hidden={Math.abs(position) > 1 || undefined}
               >
-                <Image className={styles.cardPhoto} unoptimized src={`/assets/${item.image}`} alt={`Real ${item.name.toLowerCase()} lashes by PaoLash`} width={900} height={950} loading={index === 0 ? "eager" : "lazy"} />
+                <Image className={styles.cardPhoto} unoptimized src={`/assets/${item.image}`} alt={`Real ${item.name.toLowerCase()} lashes by PaoLash`} width={900} height={950} loading="eager" />
+                <span className={styles.cardShade} aria-hidden="true" />
               </button>;
             })}
           </div>
-          <p className={styles.activeName} aria-live={paused || interacting ? "polite" : "off"}><span key={active}>{finishes[active].name}</span></p>
+          <p className={styles.activeName} aria-live={paused || interacting ? "polite" : "off"}><span key={active}>{finishes[activeIndex].name}</span></p>
           <button className={`${styles.deckArrow} ${styles.previous}`} type="button" onClick={() => { setPaused(true); move(-1); }} aria-label="Previous treatment"><Chevron back /></button>
           <button className={`${styles.deckArrow} ${styles.next}`} type="button" onClick={() => { setPaused(true); move(1); }} aria-label="Next treatment"><Chevron /></button>
         </div>

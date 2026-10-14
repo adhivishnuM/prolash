@@ -1,5 +1,5 @@
-.finder { padding: 58px var(--gutter) 68px; background: #310912; color: var(--ink); overflow: hidden; overflow-anchor: none; scroll-margin-top: 88px; }
-.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 25px; border-bottom: 1px solid var(--line); color: var(--champagne); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.finder { padding: 58px var(--gutter) 68px; background: #310912; color: var(--ink); overflow: hidden; overflow-anchor: none; scroll-margin-top: 0; }
+.masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 25px; color: var(--champagne); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
 .stage { min-height: 0; }
 .choose,.result { animation: arrive .7s var(--ease) both; }
 .intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 50px; padding-top: 45px; position: relative; z-index: 15; }
@@ -7,18 +7,16 @@
 .intro h2 { font-size: clamp(64px,7vw,108px); line-height: .88; letter-spacing: -.065em; font-weight: 500; }
 .intro h2 span { color: var(--champagne); }
 
-.deckScene { --deck-shift: 0px; position: relative; height: 590px; margin-top: 62px; transform: translate3d(0,var(--deck-shift),0); will-change: transform; }
+.deckScene { position: relative; height: 590px; margin-top: 62px; }
 .halo { position: absolute; left: 50%; top: 49%; width: min(88vw,1080px); height: 500px; translate: -50% -50%; background: radial-gradient(ellipse,#a66d4933 0%,#6e243024 42%,transparent 72%); filter: blur(18px); pointer-events: none; }
-.deck { position: relative; width: min(100%,1180px); height: 590px; margin-inline: auto; perspective: 1400px; isolation: isolate; }
-.deckCard { position: absolute; left: 50%; top: 36px; z-index: var(--card-order); width: clamp(360px,37vw,450px); aspect-ratio: .9 / 1; padding: 0; overflow: hidden; border: 1px solid #edcf9d2b; border-radius: 36px; background: #150307; color: var(--ink); text-align: left; cursor: pointer; box-shadow: 0 32px 80px #12020699,0 8px 24px #00000042; opacity: calc(1 - var(--card-distance) * .23); transform: translateX(-50%) translateX(calc(var(--card-offset) * clamp(245px,25vw,360px))) translateY(calc(var(--card-distance) * 26px)) rotateY(calc(var(--card-offset) * -7deg)) rotateZ(calc(var(--card-offset) * 1.5deg)) scale(calc(1 - var(--card-distance) * .1)); transform-origin: center bottom; transition: transform 1s var(--ease),opacity .7s ease,box-shadow .7s ease,filter .7s ease; animation: deckArrive 1.05s var(--ease) var(--card-delay) both; will-change: transform; }
-.deckCard:not(.cardActive) { filter: saturate(.72) brightness(.72); }
-.deckCard:focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 5px; }
-.cardActive { box-shadow: 0 42px 105px #120206c4,0 10px 30px #00000052; }
-.cardPhoto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.015); transition: transform 1.3s var(--ease),filter .8s ease; }
-@media (hover: hover) and (pointer: fine) {
-  .cardActive:hover .cardPhoto { transform: scale(1.045); }
-  .deckCard:not(.cardActive):hover { filter: saturate(.9) brightness(.87); }
-}
+.deck { position: relative; width: min(100%,1180px); height: 590px; margin-inline: auto; isolation: isolate; }
+.deckCard { position: absolute; left: 50%; top: 36px; z-index: var(--card-order); width: clamp(360px,37vw,450px); aspect-ratio: .9 / 1; padding: 0; overflow: hidden; border: 0; border-radius: 36px; background: #150307; color: var(--ink); text-align: left; cursor: pointer; box-shadow: 0 24px 60px #12020655; opacity: calc(1 - var(--card-distance) * .23); transform: translateX(-50%) translateX(calc(var(--card-offset) * clamp(245px,25vw,360px))) translateY(calc(var(--card-distance) * 26px)) scale(calc(1 - var(--card-distance) * .1)); transform-origin: center bottom; transition: transform 900ms cubic-bezier(.4,0,.2,1),opacity 900ms cubic-bezier(.4,0,.2,1); will-change: transform,opacity; }
+.cardShade { position: absolute; inset: 0; border-radius: inherit; background: #230910; opacity: .2; transition: opacity 900ms cubic-bezier(.4,0,.2,1); pointer-events: none; }
+.cardActive .cardShade { opacity: 0; }
+.deckCard:focus-visible { outline: none; }
+.deckCard:focus-visible::after { content: 'View treatment ↗'; position: absolute; left: 50%; bottom: 18px; translate: -50% 0; padding: 10px 18px; border-radius: 99px; background: #310912e8; color: #fff8ee; font-size: 13px; white-space: nowrap; pointer-events: none; }
+.cardPhoto { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.015);  }
+
 
 .result { display: grid; grid-template-columns: .9fr 1.1fr; column-gap: 10%; align-items: center; padding-top: 22px; }
 .resultTop { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 28px; }
@@ -43,11 +41,11 @@
 .reserve svg { width: 22px; transition: transform .3s; }
 .reserve:hover svg { transform: translateX(4px); }
 .consultation { color: var(--muted); font-size: 10px; margin-top: 18px; line-height: 1.6; }
-.mirrorInvitation { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 38px; padding-top: 27px; border-top: 1px solid var(--line); }
+.mirrorInvitation { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-top: 38px; padding-top: 27px; }
 .mirrorEyebrow { color: var(--champagne); font-size: 10px; text-transform: uppercase; letter-spacing: .15em; }
 .mirrorInvitation p { font-size: clamp(23px,3vw,36px); letter-spacing: -.04em; margin-top: 7px; }
 .mirrorInvitation em { color: var(--champagne); }
-.mirrorLink { display: inline-flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 48px; border: 1px solid #d8b77965; border-radius: 999px; padding: 12px 20px; color: var(--gold-soft); font-size: 13px; }
+.mirrorLink { display: inline-flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 48px; border: 0; background: #ffffff0b; border-radius: 999px; padding: 12px 20px; color: var(--gold-soft); font-size: 13px; }
 .mirrorLink svg,.tryOn svg,.bookingSecondary svg { width: 20px; height: 20px; }
 .mirrorLink:hover { background: #d8b77915; }
 .tryOn { display: flex; align-items: center; justify-content: space-between; gap: 24px; min-height: 52px; margin-top: 28px; padding: 14px 23px; max-width: 330px; background: var(--gold-soft); color: var(--wine-deep); border-radius: 999px; font-size: 13px; }
@@ -56,7 +54,6 @@
 
 @keyframes arrive { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
 @keyframes photograph { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0); } }
-@keyframes deckArrive { from { opacity: 0; translate: 0 75px; } to { translate: 0 0; } }
 
 @media (max-width: 999px) {
   .stage { min-height: 0; }
@@ -77,7 +74,7 @@
   .deckScene { height: clamp(340px,96vw,460px); margin-top: 58px; }
   .halo { width: 520px; height: 390px; }
   .deck { height: 100%; width: 100%; }
-  .deckCard { top: 12px; width: min(74vw,340px); height: clamp(305px,86vw,415px); aspect-ratio: auto; border-radius: 28px; transform: translateX(-50%) translateX(calc(var(--card-offset) * 72%)) translateY(calc(var(--card-distance) * 16px)) rotateY(calc(var(--card-offset) * -5deg)) rotateZ(calc(var(--card-offset) * 1.2deg)) scale(calc(1 - var(--card-distance) * .08)); }
+  .deckCard { top: 12px; width: min(74vw,340px); height: clamp(305px,86vw,415px); aspect-ratio: auto; border-radius: 28px; transform: translateX(-50%) translateX(calc(var(--card-offset) * 72%)) translateY(calc(var(--card-distance) * 16px)) scale(calc(1 - var(--card-distance) * .08)); }
   .cardPhoto { transform: scale(1.015); }
   .mirrorInvitation { align-items: flex-start; flex-direction: column; gap: 16px; margin-top: 25px; padding-top: 22px; }
   .mirrorLink,.tryOn { width: 100%; max-width: none; }
@@ -106,7 +103,7 @@
 @media (prefers-reduced-motion: reduce) {
   .choose,.result,.resultCopy > *,.photograph img,.deckCard { animation: none; }
   .deckScene { transform: none !important; }
-  .deckCard,.cardPhoto,.deckArrow { transition: none !important; }
+  .deckCard,.cardPhoto,.cardShade,.deckArrow { transition: none !important; }
 }
 
 /* Photo-only collection: controls float over the flanking images. */
@@ -116,7 +113,7 @@
 .previous { left: max(0px,calc(50% - 475px)); }
 .next { right: max(0px,calc(50% - 475px)); }
 .deckArrow:hover { transform: scale(1.12); }
-.deckArrow:focus-visible { outline: 2px solid var(--gold-soft); outline-offset: 4px; background: #310912aa; }
+.deckArrow:focus-visible { outline: none; background: #310912dd; color: var(--gold-soft); transform: scale(1.12); }
 @media (max-width: 600px) {
   .deckArrow { width: 48px; height: 68px; top: 42%; padding: 10px; }
   .deckArrow svg { width: 23px; height: 44px; }
@@ -128,6 +125,8 @@
 }
 
 .activeName { position: absolute; top: -15px; left: 0; right: 0; text-align: center; color: var(--ink); font-size: clamp(17px,1.7vw,25px); letter-spacing: -.035em; font-weight: 400; pointer-events: none; }
-.activeName span { display: inline-block; animation: arrive .65s var(--ease) both; }
+.activeName span { display: inline-block; animation: captionIn 600ms ease both; }
 @media (max-width: 600px) { .activeName { top: -27px; font-size: 18px; } }
 @media (prefers-reduced-motion: reduce) { .activeName span { animation: none; } }
+
+@keyframes captionIn { from { opacity: 0; } to { opacity: 1; } }
