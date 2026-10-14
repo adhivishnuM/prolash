@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState, useEffect, type CSSProperties } from "react";
+import { useRef, useState, useEffect, useCallback, type CSSProperties } from "react";
 import styles from "./lash-finder.module.css";
 
 const finishes = [
@@ -15,64 +15,47 @@ function Direction({ back = false }: { back?: boolean }) {
   return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style={back ? { transform: "rotate(180deg)" } : undefined}><path d="M4 12h15m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 }
 
+function Chevron({ back = false }: { back?: boolean }) {
+  return <svg viewBox="0 0 40 64" fill="none" aria-hidden="true" style={back ? { transform: "rotate(180deg)" } : undefined}><path d="M10 8Q20 22 30 32Q20 42 10 56" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" /></svg>;
+}
+
 export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
   const [selected, setSelected] = useState<number | null>(null);
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [interacting, setInteracting] = useState(false);
   const resultHeading = useRef<HTMLHeadingElement>(null);
   const choiceButtons = useRef<(HTMLButtonElement | null)[]>([]);
+  const deckScene = useRef<HTMLDivElement>(null);
   const previous = useRef<number | null>(null);
+  const movingUntil = useRef(0);
+  const move = useCallback((direction: number) => {
+    const now = performance.now();
+    if (now < movingUntil.current) return;
+    movingUntil.current = now + (matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 900);
+    setActive(current => current + direction);
+  }, []);
 
-  // Each photo reveals when it enters view, including the second row on phones.
-  // Scroll movement is frame-batched; geometry is measured only on layout changes.
+  // Rotate only while the collection is visible and the visitor is not using it.
   useEffect(() => {
-    if (selected !== null) return;
-    const buttons = choiceButtons.current.filter((item): item is HTMLButtonElement => !!item);
+    const scene = deckScene.current;
+    if (!scene || selected !== null || paused || interacting) return;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-    let frame = 0;
-    let measureFrame = 0;
-    let disposed = false;
-    let positions: { element: HTMLButtonElement; top: number; height: number }[] = [];
-    const paint = () => {
-      frame = 0;
-      positions.forEach(({ element, top, height }) => {
-        const distance = top - scrollY;
-        if (distance > innerHeight + 100 || distance + height < -100) return;
-        const progress = Math.max(0, Math.min(1, (innerHeight - distance) / (innerHeight + height)));
-        element.style.setProperty("--photo-drift", reduced.matches ? "0px" : `${(progress - .5) * -22}px`);
-      });
+    let visible = false;
+    let timer: ReturnType<typeof setInterval> | undefined;
+    const sync = () => {
+      clearInterval(timer);
+      if (visible && !document.hidden && !reduced.matches) {
+        timer = setInterval(() => move(1), 5500);
+      }
     };
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(paint); };
-    const measure = () => {
-      measureFrame = 0;
-      positions = buttons.map((element) => ({ element, top: element.getBoundingClientRect().top + scrollY, height: element.offsetHeight }));
-      schedule();
-    };
-    const scheduleMeasure = () => { if (!measureFrame) measureFrame = requestAnimationFrame(measure); };
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(({ target, isIntersecting }) => {
-        if (!isIntersecting) return;
-        (target as HTMLElement).dataset.entered = "true";
-        observer.unobserve(target);
-      });
-    }, { threshold: .16 });
-    buttons.forEach((button) => observer.observe(button));
-    const resize = new ResizeObserver(scheduleMeasure);
-    buttons.forEach((button) => resize.observe(button));
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", scheduleMeasure, { passive: true });
-    reduced.addEventListener("change", schedule);
-    void document.fonts.ready.then(() => { if (!disposed) scheduleMeasure(); });
-    measure();
-    return () => {
-      disposed = true;
-      cancelAnimationFrame(frame);
-      cancelAnimationFrame(measureFrame);
-      observer.disconnect();
-      resize.disconnect();
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", scheduleMeasure);
-      reduced.removeEventListener("change", schedule);
-    };
-  }, [selected]);
+    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync(); }, { threshold: .35 });
+    observer.observe(scene);
+    document.addEventListener("visibilitychange", sync);
+    reduced.addEventListener("change", sync);
+    return () => { clearInterval(timer); observer.disconnect(); document.removeEventListener("visibilitychange", sync); reduced.removeEventListener("change", sync); };
+  }, [selected, paused, interacting, active, move]);
+
 
   useEffect(() => {
     if (selected !== null) {
@@ -84,6 +67,9 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
   }, [selected]);
 
   const finish = selected === null ? null : finishes[selected];
+  const activeIndex = ((active % finishes.length) + finishes.length) % finishes.length;
+  // Stable virtual neighbours move one slot at a time, including the last-to-first loop.
+  const slots = [-2, -1, 0, 1, 2].map(offset => active + offset);
 
   return <section id="services" className={styles.finder} aria-labelledby="finish-title">
     <div className={styles.masthead} data-reveal>
@@ -92,17 +78,45 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
     <div className={styles.stage} data-reveal>
       {finish === null ? <div className={styles.choose} key="choose">
         <div className={styles.intro}>
-          <h2 id="finish-title">Find your<br /><span>finish.</span></h2>
-          <div className={styles.invitation}><p>Start with a feeling.<br /> We’ll take it from there.</p><span className={styles.instruction}>Choose a finish below <span aria-hidden="true">↙</span></span></div>
+          <div><span className={styles.eyebrow}>Four signatures. One made for you.</span><h2 id="finish-title">The lash<br /><span>edit.</span></h2></div>
         </div>
-        <div className={styles.choices}>
-          {finishes.map((item, index) => <button key={item.name} ref={(node) => { choiceButtons.current[index] = node; }} className={styles.choice} style={{ "--photo-delay": `${(index % 2) * 130}ms` } as CSSProperties} type="button" onClick={() => setSelected(index)} aria-label={`${item.mood} — explore ${item.name}`}>
-            <span className={styles.photoReveal}><span className={styles.photoWindow}><Image className={styles.choicePhoto} unoptimized src={`/assets/${item.image}`} alt={`Real ${item.name.toLowerCase()} lashes by PaoLash`} width={900} height={950} loading="lazy" /><span className={styles.photoAction} aria-hidden="true">Explore this look <Direction /></span></span></span>
-            <span className={styles.choiceName}>{item.mood}<span className={styles.choiceArrow}><Direction /></span></span>
-            <span className={styles.treatment}>{item.name}</span>
-          </button>)}
+        <div className={styles.deckScene} ref={deckScene}
+          onPointerEnter={event => { if (event.pointerType === "mouse") setInteracting(true); }}
+          onPointerLeave={event => setInteracting(event.currentTarget.contains(document.activeElement))}
+          onFocusCapture={() => setInteracting(true)}
+          onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setInteracting(false); }}
+          onKeyDown={event => {
+            if (event.key === "ArrowLeft" || event.key === "ArrowRight") { event.preventDefault(); setPaused(true); move(event.key === "ArrowLeft" ? -1 : 1); }
+          }}
+          role="region" aria-roledescription="carousel" aria-label="Lash collection">
+          <div className={styles.halo} aria-hidden="true" />
+          <div className={styles.deck} aria-label="PaoLash treatment collection">
+            {slots.map(slot => {
+              const index = ((slot % finishes.length) + finishes.length) % finishes.length;
+              const item = finishes[index];
+              const position = slot - active;
+              const isActive = position === 0;
+              return <button
+                key={slot}
+                ref={(node) => { if (isActive) choiceButtons.current[index] = node; }}
+                className={`${styles.deckCard} ${isActive ? styles.cardActive : ""}`}
+                style={{ "--card-offset": position, "--card-distance": Math.abs(position), "--card-order": 10 - Math.abs(position) } as CSSProperties}
+                type="button"
+                onClick={() => { setPaused(true); if (isActive) setSelected(index); else move(position); }}
+                aria-label={isActive ? `Open ${item.name}` : `Bring ${item.name} to the front`}
+                aria-current={isActive ? "true" : undefined}
+                tabIndex={isActive ? 0 : -1}
+                aria-hidden={Math.abs(position) > 1 || undefined}
+              >
+                <Image className={styles.cardPhoto} unoptimized src={`/assets/${item.image}`} alt={`Real ${item.name.toLowerCase()} lashes by PaoLash`} width={900} height={950} loading="eager" />
+                <span className={styles.cardShade} aria-hidden="true" />
+              </button>;
+            })}
+          </div>
+          <p className={styles.activeName} aria-live={paused || interacting ? "polite" : "off"}><span key={active}>{finishes[activeIndex].name}</span></p>
+          <button className={`${styles.deckArrow} ${styles.previous}`} type="button" onClick={() => { setPaused(true); move(-1); }} aria-label="Previous treatment"><Chevron back /></button>
+          <button className={`${styles.deckArrow} ${styles.next}`} type="button" onClick={() => { setPaused(true); move(1); }} aria-label="Next treatment"><Chevron /></button>
         </div>
-        <div className={styles.bottom}><span>Four finishes. Never a one-size-fits-all set.</span><a href={bookingUrl} target="_blank" rel="noreferrer">Browse all treatments <Direction /></a></div>
       </div> : <div className={styles.result} key={finish.name}>
         <div className={styles.resultTop}><button className={styles.back} onClick={() => setSelected(null)} type="button"><Direction back /> Choose another finish</button><span>{finish.label} / PaoLash</span></div>
         <figure className={styles.photograph}><Image unoptimized src={`/assets/${finish.image}`} alt={`${finish.name} lash work by PaoLash`} width={900} height={950} /><figcaption>Real work. By PaoLash.</figcaption></figure>
