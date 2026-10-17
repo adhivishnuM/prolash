@@ -40,14 +40,7 @@ export function useEditorialMotion(rootRef: RefObject<HTMLDivElement | null>) {
         const enter = clamp((local + viewportHeight * .85) / (viewportHeight * .95));
         const passage = clamp((local + viewportHeight) / (height + viewportHeight));
         const name = element.dataset.scene;
-        if (name === "hero") {
-          const progress = clamp(local / height);
-          element.style.setProperty("--hero-text", `${progress * -100}px`);
-          element.style.setProperty("--hero-person", `${progress * 135}px`);
-          element.style.setProperty("--hero-detail", `${progress * -85}px`);
-          element.style.setProperty("--hero-fade", `${1 - progress * .8}`);
-        } else if (name === "artist") {
-          element.style.setProperty("--portrait-rise", `${(1 - enter) * 80}px`);
+        if (name === "artist") {
           const reading = clamp((local + viewportHeight * .72) / (height * .6));
           words.forEach((word, index) => word.style.setProperty("--word-fill", `${clamp(reading * (words.length + 2) - index) * 100}%`));
         } else if (name === "recognition") {
@@ -58,13 +51,6 @@ export function useEditorialMotion(rootRef: RefObject<HTMLDivElement | null>) {
           element.style.setProperty("--ritual-drift", `${(1 - enter) * 110}px`);
           element.style.setProperty("--ritual-rise", `${(1 - enter) * 90}px`);
           element.style.setProperty("--ritual-turn", `${(1 - enter) * -8}deg`);
-        } else if (name === "studies") {
-          const spread = clamp((local + viewportHeight * .9) / (viewportHeight * .55));
-          element.style.setProperty("--study-spread", String(spread));
-          element.style.setProperty("--academy-lift", `${(1 - spread) * 65}px`);
-        } else if (name === "academy") {
-          const spread = clamp((local + viewportHeight * .55) / viewportHeight);
-          element.style.setProperty("--academy-type", `${(1 - spread) * -70}px`);
         } else if (name === "visit") {
           element.style.setProperty("--closing-drift", `${(1 - passage) * 80}px`);
           element.style.setProperty("--logo-rise", `${(1 - enter) * 70}px`);

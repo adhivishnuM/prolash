@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: { params: Promise<{ section: 
       title: `${page.title} | PaoLash Dublin`,
       description: page.description,
       url: `/${section}/`,
-      images: [{ url: "/paolash-social-clean.png", width: 1200, height: 630, alt: "PaoLash Lounge & Academy in Dublin 2" }],
+      images: [{ url: "/paolash-social-portraits.png", width: 1200, height: 630, alt: "PaoLash Lounge & Academy in Dublin 2" }],
     },
   };
 }
