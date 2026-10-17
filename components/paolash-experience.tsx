@@ -100,18 +100,43 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
       <div className="menu-bottom"><BookingLink className="button button-light">Book a visit</BookingLink><p className="menu-address">65 William St S<br />Dublin 2</p></div></div>
     </div>
     <main id="main" inert={menuOpen}>
-      <section className="hero" id="top" data-scene="hero" aria-labelledby="hero-title">
-        <p className="hero-location">Lash artistry · Dublin</p>
-        <div className="hero-masthead" aria-hidden="true"><span>PAO</span><span>LASH</span></div>
-        <div className="hero-portrait"><Image unoptimized src="/assets/hero.webp" alt="Paola Gutierrez, founder of PaoLash" width={900} height={1351} priority /></div>
-        <div className="hero-intro"><h1 className="hero-title" id="hero-title"><span className="hero-line"><span>Entirely</span></span><span className="hero-line"><em>you.</em></span></h1><BookingLink className="button button-wine">Find your look</BookingLink></div>
+      <section className="hero shell" id="top" data-scene="hero" aria-labelledby="hero-title">
+        <div className="hero-intro">
+          <p className="hero-location">PaoLash · Lash artistry · Dublin</p>
+          <h1 className="hero-title" id="hero-title"><span className="hero-line"><span>Entirely</span></span><span className="hero-line"><em>you.</em></span></h1>
+          <p className="hero-description">Lashes that feel like you.<br />Artistry that makes the difference.</p>
+          <Link className="button button-wine" href="/collection/" scroll={false}>Find your look <Arrow /></Link>
+        </div>
+        <figure className="hero-portrait">
+          <Image unoptimized src="/assets/portraits/paola-seated-cutout.webp" alt="Paola Gutierrez, founder of PaoLash, seated with her lash tweezers in hand" width={879} height={1483} preload />
+          <figcaption>Paola Gutierrez <span>Founder of PaoLash</span></figcaption>
+        </figure>
       </section>
 
       <LashFinder bookingUrl={BOOKING_URL} />
 
-      <section className="artist shell" id="story" data-scene="artist" aria-labelledby="artist-title"><div className="artist-top"><Label number="02">The artist, the individual</Label><span className="edition-note" data-reveal>A personal point of view</span></div><div className="artist-layout"><figure className="artist-visual" data-unfold><div className="artist-portrait"><Image unoptimized src="/assets/paola-original-cutout.png" alt="Paola Gutierrez, the artist behind PaoLash" width={1073} height={1465} loading="lazy" /></div><figcaption>Paola Gutierrez <span>Founder & educator</span></figcaption></figure><div className="artist-copy"><h2 id="artist-title" className="artist-statement">{statement.map((word, index) => <span data-word key={index}>{word}{" "}</span>)}</h2><p data-reveal>Your shape, your features, your way of being.<br />That’s where every PaoLash set begins.</p><div className="artist-signoff" data-reveal><span className="signature">Paola G.</span><span>Made with intention.<br />Always by hand.</span></div></div></div></section>
+      <section className="artist shell" id="story" data-scene="artist" aria-labelledby="artist-title">
+        <div className="artist-top"><Label>The artist, the individual</Label><span className="edition-note" data-reveal>A personal point of view</span></div>
+        <div className="artist-layout">
+          <figure className="artist-visual" data-unfold>
+            <div className="artist-portrait"><Image unoptimized src="/assets/portraits/paola-standing-cutout.webp" alt="Paola Gutierrez, the artist behind PaoLash, in her signature burgundy suit" width={573} height={1487} loading="lazy" /></div>
+            <figcaption>Paola Gutierrez <span>Founder & educator</span></figcaption>
+          </figure>
+          <div className="artist-copy">
+            <h2 id="artist-title" className="artist-statement">{statement.map((word, index) => <span data-word key={index}>{word}{" "}</span>)}</h2>
+            <p data-reveal>Your shape, your features, your way of being. That’s where every PaoLash set begins.</p>
+            <div className="artist-signoff" data-reveal><span className="signature">Paola G.</span><span>Made with intention.<br />Always by hand.</span></div>
+          </div>
+        </div>
+      </section>
 
-      <section className="recognition shell" id="recognition" data-scene="recognition" aria-labelledby="recognition-title"><div className="recognition-copy"><Label number="03">Beyond the studio</Label><Heading id="recognition-title">A little<br /><em>recognition.</em></Heading><div className="award-number" data-reveal>3<sup>rd</sup></div><p data-reveal>Creative Effects · Master category<br />Lash Star Elite, Dubai · 2025</p></div><div className="recognition-gallery"><figure className="proof proof-certificate"><a href="/assets/award.webp" target="_blank" rel="noreferrer"><div className="proof-mat"><Image unoptimized src="/assets/award.webp" alt="Full competition certificate: Paola Gutierrez, third place, Creative Effects, Master category, Lash Star Elite Dubai 2025" width={720} height={1019} loading="lazy" /></div><figcaption><span>The recognition</span><span>View certificate <Arrow /></span></figcaption></a></figure><figure className="proof proof-trophy"><a href="/assets/trophy.webp" target="_blank" rel="noreferrer"><div className="proof-mat"><Image unoptimized src="/assets/trophy.webp" alt="Paola’s trophy at the Dubai competition, shown in full" width={900} height={1200} loading="lazy" /></div><figcaption><span>The moment</span><span>Dubai, 2025 <Arrow /></span></figcaption></a></figure></div></section>
+      <section className="recognition shell" id="recognition" data-scene="recognition" aria-labelledby="recognition-title">
+        <div className="recognition-copy"><Label>Beyond the studio</Label><Heading id="recognition-title">A little<br /><em>recognition.</em></Heading><div className="award-number" data-reveal>3<sup>rd</sup></div><p data-reveal>Creative Effects · Master category<br />Lash Star Elite, Dubai · 2025</p></div>
+        <div className="recognition-gallery">
+          <figure className="proof proof-trophy"><a href="/assets/portraits/paola-award.webp" target="_blank" rel="noreferrer"><div className="proof-mat"><Image unoptimized src="/assets/portraits/paola-award.webp" alt="Paola Gutierrez in a red sari, holding her competition trophy at the Dubai award event" width={1086} height={1448} loading="lazy" /></div><figcaption><span>A moment to remember</span><span>Dubai, 2025 <Arrow /></span></figcaption></a></figure>
+          <figure className="proof proof-certificate"><a href="/assets/award.webp" target="_blank" rel="noreferrer"><div className="proof-mat"><Image unoptimized src="/assets/award.webp" alt="Full competition certificate: Paola Gutierrez, third place, Creative Effects, Master category, Lash Star Elite Dubai 2025" width={720} height={1019} loading="lazy" /></div><figcaption><span>The recognition</span><span>View certificate <Arrow /></span></figcaption></a></figure>
+        </div>
+      </section>
 
       <section className="ritual" data-scene="detail" aria-labelledby="detail-title">
         <div className="ritual-caption shell"><Label>The PaoLash ritual</Label><span>Care, beyond the studio.</span></div>
@@ -124,14 +149,19 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
       </section>
 
       <section className="academy" id="academy" data-scene="academy" aria-labelledby="academy-title">
-        <div className="academy-intro shell"><Label>For the next generation of artists</Label><h2 id="academy-title">The art.<br /><em>In your hands.</em></h2><p>PaoLash Academy<br />Learn with Paola Gutierrez.</p></div>
-        <div className="academy-contact-sheet" data-scene="studies" aria-label="Lash artistry taught at PaoLash Academy">
-          <figure className="academy-study study-one"><Image unoptimized src="/assets/lash-classic.webp" alt="Classic lash technique by PaoLash" width={900} height={900} loading="lazy" /><figcaption>The foundation</figcaption></figure>
-          <figure className="academy-study study-two"><Image unoptimized src="/assets/lash-russian.webp" alt="Volume lash technique by PaoLash" width={900} height={950} loading="lazy" /><figcaption>The precision</figcaption></figure>
-          <figure className="academy-study study-three"><Image unoptimized src="/assets/lash-hybrid.webp" alt="Wispy lash technique by PaoLash" width={900} height={950} loading="lazy" /><figcaption>The expression</figcaption></figure>
+        <div className="academy-layout shell">
+          <div className="academy-copy">
+            <Label>PaoLash Academy</Label>
+            <h2 id="academy-title" data-reveal>The art.<br /><em>In your hands.</em></h2>
+            <p data-reveal>Learn with the artist behind the work. Lash education with Paola Gutierrez, for your next chapter.</p>
+            <p className="academy-techniques" data-reveal>Classic · Hybrid · Volume · Wispy</p>
+            <a className="button button-wine" href="mailto:support@paolash.com?subject=PaoLash%20Academy%20interest" data-reveal>Let’s talk training <Arrow /></a>
+          </div>
+          <figure className="academy-portrait" data-unfold>
+            <Image unoptimized src="/assets/portraits/paola-educator-cutout.webp" alt="Paola Gutierrez walking towards the camera in a burgundy suit, lash tweezers in hand" width={427} height={1198} loading="lazy" />
+            <figcaption>Learn with Paola <span>Artistry, shared.</span></figcaption>
+          </figure>
         </div>
-        <div className="academy-word" aria-hidden="true">ACADEMY</div>
-        <div className="academy-invite shell"><p>Classic · Hybrid · Volume · Wispy</p><a className="button button-wine" href="mailto:support@paolash.com?subject=PaoLash%20Academy%20interest">Let’s talk training <Arrow /></a></div>
         <div className="trainer-credential shell" data-reveal>
           <div className="trainer-credential-copy">
             <p className="eyebrow">Your educator’s credentials</p>

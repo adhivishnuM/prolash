@@ -1,4 +1,4 @@
-.finder { padding: 58px var(--gutter) 68px; background: #310912; color: var(--ink); overflow: hidden; overflow-anchor: none; scroll-margin-top: 0; }
+.finder { padding: 58px var(--gutter) 68px; background: transparent; color: var(--ink); overflow: hidden; overflow-anchor: none; scroll-margin-top: 0; }
 .masthead { display: flex; justify-content: space-between; gap: 20px; padding-bottom: 25px; color: var(--champagne); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
 .stage { min-height: 0; }
 .choose,.result { animation: arrive .7s var(--ease) both; }
@@ -8,7 +8,7 @@
 .intro h2 span { color: var(--champagne); }
 
 .deckScene { position: relative; height: 590px; margin-top: 62px; }
-.halo { position: absolute; left: 50%; top: 49%; width: min(88vw,1080px); height: 500px; translate: -50% -50%; background: radial-gradient(ellipse,#a66d4933 0%,#6e243024 42%,transparent 72%); filter: blur(18px); pointer-events: none; }
+.halo { display: none; }
 .deck { position: relative; width: min(100%,1180px); height: 590px; margin-inline: auto; isolation: isolate; }
 .deckCard { position: absolute; left: 50%; top: 36px; z-index: var(--card-order); width: clamp(360px,37vw,450px); aspect-ratio: .9 / 1; padding: 0; overflow: hidden; border: 0; border-radius: 36px; background: #150307; color: var(--ink); text-align: left; cursor: pointer; box-shadow: 0 24px 60px #12020655; opacity: calc(1 - var(--card-distance) * .23); transform: translateX(-50%) translateX(calc(var(--card-offset) * clamp(245px,25vw,360px))) translateY(calc(var(--card-distance) * 26px)) scale(calc(1 - var(--card-distance) * .1)); transform-origin: center bottom; transition: transform 900ms cubic-bezier(.4,0,.2,1),opacity 900ms cubic-bezier(.4,0,.2,1); will-change: transform,opacity; }
 .cardShade { position: absolute; inset: 0; border-radius: inherit; background: #230910; opacity: .2; transition: opacity 900ms cubic-bezier(.4,0,.2,1); pointer-events: none; }
