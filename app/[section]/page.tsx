@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PaoLashExperience, { type SectionRoute } from "@/components/paolash-experience";
+import { socialPreview } from "@/lib/social-preview";
 
 const sections = {
   collection: { title: "The Collection", description: "Explore PaoLash signature lash finishes, tailored to your eyes." },
@@ -26,10 +27,19 @@ export async function generateMetadata({ params }: { params: Promise<{ section: 
     description: page.description,
     alternates: { canonical: `/${section}/` },
     openGraph: {
+      type: "website",
+      siteName: "PaoLash Lounge & Academy",
+      locale: "en_IE",
       title: `${page.title} | PaoLash Dublin`,
       description: page.description,
       url: `/${section}/`,
-      images: [{ url: "/paolash-social-portraits.png", width: 1200, height: 630, alt: "PaoLash Lounge & Academy in Dublin 2" }],
+      images: [socialPreview],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${page.title} | PaoLash Dublin`,
+      description: page.description,
+      images: [{ url: socialPreview.url, alt: socialPreview.alt }],
     },
   };
 }

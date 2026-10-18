@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Manrope } from "next/font/google";
 import FirebaseAnalytics from "@/components/firebase-analytics";
+import { socialPreview } from "@/lib/social-preview";
 import "./globals.css";
 
 const manrope = Manrope({ subsets: ["latin"], display: "swap", variable: "--font-work-sans" });
@@ -13,7 +14,7 @@ const structuredData = {
   name: "PaoLash Lounge & Academy",
   url: "https://prolash-ec7ba.web.app/",
   logo: "https://prolash-ec7ba.web.app/assets/paolash-paper-logo.png",
-  image: "https://prolash-ec7ba.web.app/paolash-social-portraits.png",
+  image: new URL(socialPreview.url, "https://prolash-ec7ba.web.app").href,
   description: "Bespoke lash artistry, signature sets and professional education in Dublin 2.",
   telephone: "+353838119207",
   email: "support@paolash.com",
@@ -47,13 +48,13 @@ export const metadata: Metadata = {
     locale: "en_IE",
     title: "PaoLash — The art of being you.",
     description: "Bespoke lash artistry and professional education in Dublin 2.",
-    images: [{ url: "/paolash-social-portraits.png", width: 1200, height: 630, alt: "PaoLash Lounge & Academy — bespoke lash artistry in Dublin 2, featuring founder Paola Gutierrez." }],
+    images: [socialPreview],
   },
   twitter: {
     card: "summary_large_image",
     title: "PaoLash — The art of being you.",
     description: "Bespoke lash artistry and professional education in Dublin 2.",
-    images: ["/paolash-social-portraits.png"],
+    images: [{ url: socialPreview.url, alt: socialPreview.alt }],
   },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
   icons: {
