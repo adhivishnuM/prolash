@@ -89,6 +89,14 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
   }, [menuOpen]);
 
   return <div className="site" ref={pageRef}>
+    <div className="ambient-waves" aria-hidden="true">
+      <svg viewBox="0 0 1440 1000" fill="none" preserveAspectRatio="none">
+        <defs><linearGradient id="rose-ribbon" x1="0" y1="0" x2="1440" y2="1000" gradientUnits="userSpaceOnUse"><stop stopColor="#b57160" /><stop offset=".36" stopColor="#f1cbbc" /><stop offset=".7" stopColor="#c58a78" /><stop offset="1" stopColor="#f5dcd1" /></linearGradient></defs>
+        <g className="wave wave-left"><path d="M-100-80C180 160-150 490 230 780" /><path className="wave-sheen" d="M-105-74C165 165-140 500 230 780" /></g>
+        <g className="wave wave-top"><path d="M950-140C880 120 1320 100 1540 270" /><path className="wave-sheen" d="M956-136C888 126 1324 108 1544 276" /></g>
+        <g className="wave wave-right"><path d="M1520 530C1150 660 1300 900 1030 1120" /><path className="wave-sheen" d="M1525 536C1170 670 1310 910 1035 1125" /></g>
+      </svg>
+    </div>
     <a className="skip-link" href="#main">Skip to content</a>
     <header className={`site-header${menuOpen ? " menu-is-open" : ""}`}>
       <div inert={menuOpen}><Brand /></div>

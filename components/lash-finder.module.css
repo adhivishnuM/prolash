@@ -118,3 +118,24 @@
 @media (prefers-reduced-motion: reduce) { .activeName span { animation: none; } }
 
 @keyframes captionIn { from { opacity: 0; } to { opacity: 1; } }
+
+/* Touch and mouse movement use the same continuous card positions. */
+.deckScene { touch-action: pan-y pinch-zoom; }
+.deckCard { touch-action: pan-y pinch-zoom; user-select: none; cursor: grab; background: var(--paper); box-shadow: 0 18px 45px #481c2614; }
+.cardPhoto { pointer-events: none; }
+.dragging .deckCard { transition: none; cursor: grabbing; }
+.dragging .cardShade { transition: none; }
+.deckCard:active { cursor: grabbing; }
+.gestureHint { position: absolute; bottom: -12px; inset-inline: 0; text-align: center; color: var(--muted); font-size: 11px; letter-spacing: .025em; pointer-events: none; }
+.intro { justify-content: center; padding-top: 24px; text-align: center; }
+.intro h2 { font-size: clamp(48px,5.8vw,84px); line-height: 1.12; }
+.intro h2 br { display: none; }
+.intro h2 span::before { content: " "; }
+.masthead { color: var(--muted); }
+.detail { color: var(--wine); }
+.reserve { background: var(--rose-metal); }
+.deckArrow:focus-visible { outline: 2px solid var(--wine); background: #ffffffeb; color: var(--wine); }
+@media (max-width: 600px) {
+  .intro h2 { font-size: clamp(44px,12vw,66px); }
+  .gestureHint { bottom: -26px; font-size: 10px; }
+}

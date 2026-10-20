@@ -22,25 +22,25 @@ const font = (await readFile(fontPath)).toString("base64");
 // texture edits, colour grading or upscaling of the source file.
 const photo = await dataUrl("assets/portraits/paola-seated.jpeg", "image/jpeg");
 const logo = await dataUrl("public/assets/paolash-paper-logo.png", "image/png");
-const outputPath = path.join(root, "public/paolash-social-studio.png");
+const outputPath = path.join(root, "public/paolash-social-white.png");
 const browser = await chromium.launch();
 try {
   const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });
   await page.setContent(`<!doctype html><html><head><style>
     @font-face { font-family: Manrope; src: url(data:font/woff2;base64,${font}) format('woff2'); font-weight: 200 800; }
-    * { box-sizing: border-box; } body { margin: 0; width: 1200px; height: 630px; background: #420c19; color: #f6eadb; font-family: Manrope,sans-serif; }
+    * { box-sizing: border-box; } body { margin: 0; width: 1200px; height: 630px; background: #fff; color: #481c26; font-family: Manrope,sans-serif; }
     main { position: relative; width: 100%; height: 100%; overflow: hidden; }
     .photograph { position: absolute; inset: 0 0 0 auto; width: 560px; overflow: hidden; mask-image: linear-gradient(to right,transparent 0%,#000 23%); }
     .portrait { position: absolute; left: -120px; top: -16px; width: 780px; height: 1170px; max-width: none; }
     .logo { position: absolute; z-index: 1; left: 62px; top: 42px; width: 148px; height: 99px; object-fit: contain; }
     h1 { position: absolute; z-index: 1; left: 68px; top: 220px; margin: 0; font-size: 88px; font-weight: 500; letter-spacing: -4.8px; line-height: 1.08; }
-    h1 span { display: block; color: #e6cf9c; }
-    .description { position: absolute; left: 72px; top: 442px; margin: 0; font-size: 23px; font-weight: 400; color: #f6eadb; }
-    .location { position: absolute; left: 72px; bottom: 49px; margin: 0; font-size: 16px; color: #d3bfc0; }
+    h1 span { display: block; color: #a9695c; }
+    .description { position: absolute; left: 72px; top: 442px; margin: 0; font-size: 23px; font-weight: 400; color: #776367; }
+    .location { position: absolute; left: 72px; bottom: 49px; margin: 0; font-size: 16px; color: #7d1f2d; }
   </style></head><body><main>
     <div class="photograph"><img class="portrait" src="${photo}" alt="Original studio photograph of Paola Gutierrez" /></div>
     <img class="logo" src="${logo}" alt="PaoLash" />
-    <h1>The art of<span>being you.</span></h1>
+    <h1>Entirely<span>you.</span></h1>
     <p class="description">Lash artistry &amp; academy</p>
     <p class="location">Dublin, Ireland</p>
   </main></body></html>`);
