@@ -6,7 +6,7 @@ import "./globals.css";
 
 const manrope = Manrope({ subsets: ["latin"], display: "swap", variable: "--font-work-sans" });
 
-export const viewport: Viewport = { themeColor: "#420c19" };
+export const viewport: Viewport = { themeColor: "#ffffff" };
 
 const structuredData = {
   "@context": "https://schema.org",

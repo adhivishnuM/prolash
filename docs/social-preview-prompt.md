@@ -2,18 +2,18 @@
 
 ## Current social preview
 
-Asset: `public/paolash-social-studio.png`, 1200 × 630 pixels, opaque PNG.
+Asset: `public/paolash-social-white.png`, 1200 × 630 pixels, opaque PNG.
 
 The composition uses the client's original `assets/portraits/paola-seated.jpeg`
 photograph, the real PaoLash logo, and the site's Manrope font. The portrait is
 cropped to the upper body for a recognisable face at small sharing sizes. Its
-studio background softly blends into maroon at the left edge using CSS.
+studio background softly blends into white at the left edge using CSS.
 No image generation, retouching, enhancement, texture changes, background
 extraction, or colour grading is used in this social image.
 
-The headline is “The art of being you.” Supporting text is “Lash artistry &
-academy” and “Dublin, Ireland”. The composition has been visually reviewed at
-1200 × 630, 600 × 315, and 360 × 189.
+The headline is “Entirely you.” Supporting text is “Lash artistry &
+academy” and “Dublin, Ireland”. Burgundy #7D1F2D and rose-gold details
+match the client's white website direction.
 
 Recreate from the original assets:
 

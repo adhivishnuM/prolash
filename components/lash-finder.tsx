@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRef, useState, useEffect, useCallback, type CSSProperties } from "react";
+import { useRef, useState, useEffect, useCallback, type CSSProperties, type PointerEvent } from "react";
 import styles from "./lash-finder.module.css";
 
 const finishes = [
@@ -30,12 +30,57 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
   const deckScene = useRef<HTMLDivElement>(null);
   const previous = useRef<number | null>(null);
   const movingUntil = useRef(0);
+  const gesture = useRef<{ id: number; x: number; y: number; time: number; dx: number; spacing: number; horizontal: boolean } | null>(null);
+  const suppressClick = useRef(false);
+  const [drag, setDrag] = useState(0);
+  const [dragging, setDragging] = useState(false);
   const move = useCallback((direction: number) => {
     const now = performance.now();
     if (now < movingUntil.current) return;
     movingUntil.current = now + (matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 900);
     setActive(current => current + direction);
   }, []);
+
+  const startDrag = (event: PointerEvent<HTMLDivElement>) => {
+    if (!event.isPrimary || event.button !== 0 || performance.now() < movingUntil.current) return;
+    suppressClick.current = false;
+    if ((event.target as HTMLElement).closest(`.${styles.deckArrow}`)) return;
+    const cards = event.currentTarget.querySelectorAll<HTMLElement>(`.${styles.deckCard}`);
+    const center = cards[2].getBoundingClientRect();
+    const next = cards[3].getBoundingClientRect();
+    const spacing = Math.abs(next.x + next.width / 2 - center.x - center.width / 2);
+    gesture.current = { id: event.pointerId, x: event.clientX, y: event.clientY, time: performance.now(), dx: 0, spacing, horizontal: false };
+    setInteracting(true);
+  };
+  const updateDrag = (event: PointerEvent<HTMLDivElement>) => {
+    const current = gesture.current;
+    if (!current || current.id !== event.pointerId) return;
+    const dx = event.clientX - current.x;
+    const dy = event.clientY - current.y;
+    if (!current.horizontal) {
+      if (Math.abs(dy) > 8 && Math.abs(dy) > Math.abs(dx)) { gesture.current = null; setInteracting(false); return; }
+      if (Math.abs(dx) < 8) return;
+      current.horizontal = true;
+      suppressClick.current = true;
+      event.currentTarget.setPointerCapture(event.pointerId);
+      setDragging(true);
+    }
+    current.dx = dx;
+    setDrag(Math.max(-1, Math.min(1, dx / current.spacing)));
+  };
+  const endDrag = (event: PointerEvent<HTMLDivElement>, cancelled = false) => {
+    const current = gesture.current;
+    if (!current || current.id !== event.pointerId) return;
+    gesture.current = null;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+    setDragging(false);
+    setDrag(0);
+    setInteracting(event.pointerType === "mouse" || event.currentTarget.contains(document.activeElement));
+    if (!current.horizontal) return;
+    setPaused(true);
+    const velocity = Math.abs(current.dx) / Math.max(1, performance.now() - current.time);
+    if (!cancelled && (Math.abs(current.dx) > 48 || (Math.abs(current.dx) > 16 && velocity > .35))) move(current.dx < 0 ? 1 : -1);
+  };
 
   // Rotate only while the collection is visible and the visitor is not using it.
   useEffect(() => {
@@ -81,9 +126,15 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
         <div className={styles.intro}>
           <div><span className={styles.eyebrow}>Four signatures. One made for you.</span><h2 id="finish-title">The lash<br /><span>edit.</span></h2></div>
         </div>
-        <div className={styles.deckScene} ref={deckScene}
+        <div className={`${styles.deckScene} ${dragging ? styles.dragging : ""}`} ref={deckScene}
+          onPointerDown={startDrag}
+          onPointerMove={updateDrag}
+          onPointerUp={event => endDrag(event)}
+          onPointerCancel={event => endDrag(event, true)}
+          onLostPointerCapture={event => endDrag(event, true)}
+          onClickCapture={event => { if (suppressClick.current) { event.preventDefault(); event.stopPropagation(); suppressClick.current = false; } }}
           onPointerEnter={event => { if (event.pointerType === "mouse") setInteracting(true); }}
-          onPointerLeave={event => setInteracting(event.currentTarget.contains(document.activeElement))}
+          onPointerLeave={event => { if (!gesture.current) setInteracting(event.currentTarget.contains(document.activeElement)); }}
           onFocusCapture={() => setInteracting(true)}
           onBlurCapture={event => { if (!event.currentTarget.contains(event.relatedTarget)) setInteracting(false); }}
           onKeyDown={event => {
@@ -101,7 +152,7 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
                 key={slot}
                 ref={(node) => { if (isActive) choiceButtons.current[index] = node; }}
                 className={`${styles.deckCard} ${isActive ? styles.cardActive : ""}`}
-                style={{ "--card-offset": position, "--card-distance": Math.abs(position), "--card-order": 10 - Math.abs(position) } as CSSProperties}
+                style={{ "--card-offset": position + drag, "--card-distance": Math.abs(position + drag), "--card-order": 10 - Math.abs(position) } as CSSProperties}
                 type="button"
                 onClick={() => { setPaused(true); if (isActive) setSelected(index); else move(position); }}
                 aria-label={isActive ? `Open ${item.name}` : `Bring ${item.name} to the front`}
@@ -109,7 +160,7 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
                 tabIndex={isActive ? 0 : -1}
                 aria-hidden={Math.abs(position) > 1 || undefined}
               >
-                <Image className={styles.cardPhoto} unoptimized src={`/assets/${item.image}`} alt={`Real ${item.name.toLowerCase()} lashes by PaoLash`} width={900} height={950} loading="eager" />
+                <Image className={styles.cardPhoto} draggable={false} unoptimized src={`/assets/${item.image}`} alt={`Real ${item.name.toLowerCase()} lashes by PaoLash`} width={900} height={950} loading="eager" />
                 <span className={styles.cardShade} aria-hidden="true" />
               </button>;
             })}
@@ -117,6 +168,7 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
           <p className={styles.activeName} aria-live={paused || interacting ? "polite" : "off"}><span key={active}>{finishes[activeIndex].name}</span></p>
           <button className={`${styles.deckArrow} ${styles.previous}`} type="button" onClick={() => { setPaused(true); move(-1); }} aria-label="Previous treatment"><Chevron back /></button>
           <button className={`${styles.deckArrow} ${styles.next}`} type="button" onClick={() => { setPaused(true); move(1); }} aria-label="Next treatment"><Chevron /></button>
+          <p className={styles.gestureHint}>Swipe to discover. Tap to explore.</p>
         </div>
         <div className={styles.mirrorInvitation}><div><span className={styles.mirrorEyebrow}>The Lash Mirror</span><p>See your finish.<em> On you.</em></p></div><Link href="/try-on/" prefetch={false} className={styles.mirrorLink}>Try on our looks <Direction /></Link></div>
       </div> : <div className={styles.result} key={finish.name}>
