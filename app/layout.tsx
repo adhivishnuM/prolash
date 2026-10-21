@@ -17,12 +17,13 @@ const structuredData = {
   image: new URL(socialPreview.url, "https://prolash-ec7ba.web.app").href,
   description: "Bespoke lash artistry, signature sets and professional education in Dublin 2.",
   telephone: "+353838119207",
-  email: "support@paolash.com",
+  email: "paolashacademy@gmail.com",
   address: {
     "@type": "PostalAddress",
-    streetAddress: "65 William St S",
-    addressLocality: "Dublin 2",
-    postalCode: "D02 AW81",
+    streetAddress: "6 St Andrew’s St, 3rd Floor",
+    addressLocality: "Dublin",
+    addressRegion: "Co. Dublin",
+    postalCode: "D02 VW40",
     addressCountry: "IE",
   },
   sameAs: [

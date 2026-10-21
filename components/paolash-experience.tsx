@@ -12,7 +12,7 @@ const policies = [
   { title: "Booking & deposits", text: "A €20 non-refundable deposit secures your appointment and is deducted from your salon balance. Please arrive on time; after 10 minutes, a €10 late fee or cancellation may apply." },
   { title: "Your first appointment", text: "New clients need a patch test up to 48 hours before their appointment. Arrive without eye makeup, mascara, oils, strip lashes or lash glue. A cleaning fee may apply if removal is needed." },
   { title: "Changing your appointment", text: "Please cancel or reschedule at least 48 hours in advance. Late changes may require full payment before another booking." },
-  { title: "Finding the studio", text: "Find PaoLash at 65 William St S, Dublin 2, D02 AW81. For help with your appointment, call 083 811 9207 or email support@paolash.com." },
+  { title: "Finding the studio", text: "Find PaoLash at 6 St Andrew’s St, 3rd Floor, Co. Dublin, D02 VW40. For help with your appointment, call 083 811 9207 or email paolashacademy@gmail.com." },
 ];
 const navigation = [
   { id: "services", name: "The collection", href: "/collection/" },
@@ -105,7 +105,7 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
     </header>
     <div ref={menuRef} className={`menu-panel${menuOpen ? " is-open" : ""}`} id="mobile-menu" inert={!menuOpen} role="dialog" tabIndex={-1} aria-modal={menuOpen ? true : undefined} aria-label="Navigation">
       <div className="menu-content"><p className="menu-caption">Explore PaoLash</p><nav aria-label="Mobile navigation">{navigation.map((item, index) => <Link key={item.id} href={item.href} scroll={false} style={delay(index)} onClick={() => setMenuOpen(false)}>{item.name}<Arrow /></Link>)}</nav>
-      <div className="menu-bottom"><BookingLink className="button button-light">Book a visit</BookingLink><p className="menu-address">65 William St S<br />Dublin 2</p></div></div>
+      <div className="menu-bottom"><BookingLink className="button button-light">Book a visit</BookingLink><p className="menu-address">6 St Andrew’s St<br />3rd Floor · Dublin</p></div></div>
     </div>
     <main id="main" inert={menuOpen}>
       <section className="hero shell" id="top" data-scene="hero" aria-labelledby="hero-title">
@@ -163,7 +163,7 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
             <h2 id="academy-title" data-reveal>The art.<br /><em>In your hands.</em></h2>
             <p data-reveal>Learn with the artist behind the work. Lash education with Paola Gutierrez, for your next chapter.</p>
             <p className="academy-techniques" data-reveal>Classic · Hybrid · Volume · Wispy</p>
-            <a className="button button-wine" href="mailto:support@paolash.com?subject=PaoLash%20Academy%20interest" data-reveal>Let’s talk training <Arrow /></a>
+            <a className="button button-wine" href="mailto:paolashacademy@gmail.com?subject=PaoLash%20Academy%20interest" data-reveal>Let’s talk training <Arrow /></a>
           </div>
           <figure className="academy-portrait" data-unfold>
             <Image unoptimized src="/assets/portraits/paola-educator-cutout.webp" alt="Paola Gutierrez walking towards the camera in a burgundy suit, lash tweezers in hand" width={427} height={1198} loading="lazy" />
@@ -193,16 +193,16 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
             <button className="notes-open" type="button" onClick={() => notesRef.current?.showModal()}>Before you arrive <span aria-hidden="true">+</span></button>
           </div>
           <div className="studio-visit-details">
-            <a className="studio-detail" href="https://www.google.com/maps/search/?api=1&query=65+William+St+S+Dublin+2+D02+AW81" target="_blank" rel="noreferrer"><span>The studio</span><strong>65 William St S</strong><small>Dublin 2 · D02 AW81</small><Arrow /></a>
-            <div className="studio-detail"><span>Contact</span><a href="tel:+353838119207">083 811 9207</a><a href="mailto:support@paolash.com">support@paolash.com</a></div>
+            <a className="studio-detail" href="https://www.google.com/maps/search/?api=1&query=6+St+Andrew%27s+St+3rd+Floor+Co.+Dublin+D02+VW40" target="_blank" rel="noreferrer"><span>The studio</span><strong>6 St Andrew’s St</strong><small>3rd Floor · Co. Dublin · D02 VW40</small><Arrow /></a>
+            <div className="studio-detail"><span>Contact</span><a href="tel:+353838119207">083 811 9207</a><a href="mailto:paolashacademy@gmail.com">paolashacademy@gmail.com</a></div>
           </div>
         </div>
         <dialog ref={notesRef} className="studio-dialog" aria-labelledby="studio-notes-title" onClick={(event) => { if (event.target === event.currentTarget) notesRef.current?.close(); }}>
-          <div className="notes-sheet"><div className="notes-sheet-head"><h2 id="studio-notes-title">Before we meet.</h2><button type="button" aria-label="Close studio notes" onClick={() => notesRef.current?.close()}>×</button></div><div className="notes-content">{policies.map((policy) => <article key={policy.title}><h3>{policy.title}</h3><p>{policy.text}</p></article>)}</div><p className="notes-help">A question? <a href="mailto:support@paolash.com">Ask the studio.</a></p></div>
+          <div className="notes-sheet"><div className="notes-sheet-head"><h2 id="studio-notes-title">Before we meet.</h2><button type="button" aria-label="Close studio notes" onClick={() => notesRef.current?.close()}>×</button></div><div className="notes-content">{policies.map((policy) => <article key={policy.title}><h3>{policy.title}</h3><p>{policy.text}</p></article>)}</div><p className="notes-help">A question? <a href="mailto:paolashacademy@gmail.com">Ask the studio.</a></p></div>
         </dialog>
       </section>
     </main>
 
-    <footer className="footer leather" id="visit" data-scene="visit" inert={menuOpen}><div className="closing shell"><Label>A little time, just for you</Label><h2><span>Your next</span><em>favourite look.</em></h2><BookingLink className="button button-light">Reserve your appointment</BookingLink><div className="closing-brand"><Image unoptimized src={LOGO} alt="PaoLash Lounge & Academy" width={1536} height={1024} loading="lazy" /></div></div><div className="footer-details shell"><div data-reveal><span className="footer-label">The studio</span><a href="https://www.google.com/maps/search/?api=1&query=65+William+St+S+Dublin+2+D02+AW81" target="_blank" rel="noreferrer">65 William St S<br />Dublin 2 · D02 AW81</a></div><div data-reveal style={delay(1)}><span className="footer-label">Say hello</span><a href="tel:+353838119207">083 811 9207</a><a href="mailto:support@paolash.com">support@paolash.com</a></div><div data-reveal style={delay(2)}><span className="footer-label">Follow the artistry</span><a href="https://www.instagram.com/paolash_lounge" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.tiktok.com/@paolash_0" target="_blank" rel="noreferrer">TikTok</a><a href="https://wa.me/353838119207" target="_blank" rel="noreferrer">WhatsApp</a></div><Link className="back-top" href="/" scroll={false} data-reveal>Back to top <Arrow /></Link></div><div className="footer-bottom shell"><span>© {new Date().getFullYear()} PaoLash Lounge & Academy</span><span>Dublin. With love.</span></div></footer>
+    <footer className="footer leather" id="visit" data-scene="visit" inert={menuOpen}><div className="closing shell"><Label>A little time, just for you</Label><h2><span>Your next</span><em>favourite look.</em></h2><BookingLink className="button button-light">Reserve your appointment</BookingLink><div className="closing-brand"><Image unoptimized src={LOGO} alt="PaoLash Lounge & Academy" width={1536} height={1024} loading="lazy" /></div></div><div className="footer-details shell"><div data-reveal><span className="footer-label">The studio</span><a href="https://www.google.com/maps/search/?api=1&query=6+St+Andrew%27s+St+3rd+Floor+Co.+Dublin+D02+VW40" target="_blank" rel="noreferrer">6 St Andrew’s St<br />3rd Floor · Co. Dublin · D02 VW40</a></div><div data-reveal style={delay(1)}><span className="footer-label">Say hello</span><a href="tel:+353838119207">083 811 9207</a><a href="mailto:paolashacademy@gmail.com">paolashacademy@gmail.com</a></div><div data-reveal style={delay(2)}><span className="footer-label">Follow the artistry</span><a href="https://www.instagram.com/paolash_lounge" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.tiktok.com/@paolash_0" target="_blank" rel="noreferrer">TikTok</a><a href="https://wa.me/353838119207" target="_blank" rel="noreferrer">WhatsApp</a></div><Link className="back-top" href="/" scroll={false} data-reveal>Back to top <Arrow /></Link></div><div className="footer-bottom shell"><span>© {new Date().getFullYear()} PaoLash Lounge & Academy</span><span>Dublin. With love.</span></div></footer>
   </div>;
 }
