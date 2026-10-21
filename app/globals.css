@@ -44,15 +44,21 @@ em { font-family: inherit; font-style: normal; font-weight: 400; }
 .site { position: relative; isolation: isolate; overflow: clip; }
 .ambient-waves { position: fixed; z-index: -1; inset: 0; overflow: hidden; pointer-events: none; opacity: .85; }
 .ambient-waves svg { display: block; width: 100%; height: 100%; }
-.wave { transform-box: fill-box; transform-origin: center; animation: ribbonFloat 32s ease-in-out infinite alternate; }
+.wave { transform-box: fill-box; transform-origin: center; animation: ribbonOrbit 32s cubic-bezier(.45,0,.55,1) infinite; will-change: transform; }
 .ribbon-foil { fill: url(#ribbon-foil); fill-opacity: .8; }
 .ribbon-edge { fill: none; stroke: url(#ribbon-edge); stroke-width: 1.1; stroke-opacity: .8; vector-effect: non-scaling-stroke; }
-.wave-top { animation-name: ribbonSweep; animation-duration: 38s; animation-delay: -14s; }
-.wave-right { animation-duration: 36s; animation-delay: -20s; animation-direction: alternate-reverse; }
-.wave-bottom { animation-name: ribbonSweep; animation-duration: 40s; animation-delay: -12s; }
+.wave-top { animation-duration: 38s; animation-delay: -14s; }
+.wave-right { animation-duration: 36s; animation-delay: -20s; animation-direction: reverse; }
+.wave-bottom { animation-duration: 40s; animation-delay: -12s; }
 .ambient-waves[data-paused="true"] .wave { animation-play-state: paused; }
-@keyframes ribbonFloat { from { transform: translate(-6px,-10px) rotate(-.35deg); } to { transform: translate(7px,12px) rotate(.5deg); } }
-@keyframes ribbonSweep { from { transform: translate(8px,-5px) rotate(.4deg); } to { transform: translate(-8px,9px) rotate(-.4deg); } }
+/* A closed orbit: the final frame exactly matches the first, including the
+   foil's orientation. Staggered phases keep the ribbons moving independently. */
+@keyframes ribbonOrbit {
+  0%,100% { transform: translate(-5px,-8px) rotate(-.35deg) scale(1); }
+  25% { transform: translate(9px,-3px) rotate(.15deg) scale(1.012); }
+  50% { transform: translate(5px,12px) rotate(.5deg) scale(1); }
+  75% { transform: translate(-9px,4px) rotate(.05deg) scale(.992); }
+}
 @media (min-width: 701px) {
   .ribbon-frame { transform-box: view-box; }
   .ribbon-frame-left { transform-origin: left center; transform: scaleX(.2); }
@@ -287,8 +293,18 @@ a.studio-detail:hover > .arrow { transform: translateX(4px); }
 .reveal-ready [data-reveal="type"] { clip-path: inset(0 0 70%); transform: translateY(35px); transition: clip-path 1.3s var(--ease),transform 1.3s var(--ease),opacity .9s; }
 .reveal-ready [data-reveal="row"] { transform: translateX(25px); }
 .reveal-ready [data-reveal].is-visible { opacity: 1; transform: none; clip-path: none; }
-.reveal-ready [data-unfold] { opacity: 0; clip-path: inset(0 0 20%); transition: opacity 1s,clip-path 1.4s var(--ease); }
+.reveal-ready [data-unfold] { opacity: 0; clip-path: inset(0 0 8%); transition: opacity .9s var(--ease) var(--delay,0ms),clip-path 1.3s var(--ease) var(--delay,0ms); }
 .reveal-ready [data-unfold].is-visible { opacity: 1; clip-path: inset(-20% -5%); }
+/* Individual translate composes with the existing reveals, so a scroll cannot
+   interrupt an entrance or reset the portrait's scale. */
+@media (prefers-reduced-motion: no-preference) {
+  .motion-enabled .hero-portrait img,
+  .motion-enabled .artist-portrait img,
+  .motion-enabled .academy-portrait > img { translate: 0 var(--portrait-drift,0px); }
+  .motion-enabled .recognition-copy,
+  .motion-enabled .ritual-caption,
+  .motion-enabled .studio-visit-intro { translate: 0 var(--scene-rise,0px); }
+}
 @keyframes titleEnter { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: none; } }
 @keyframes portraitEnter { from { opacity: 0; transform: translateY(65px) scale(1.035); } to { opacity: 1; transform: none; } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: none; } }
