@@ -22,26 +22,19 @@ try {
     await page.waitForTimeout(1000);
     await page.screenshot({ path: `outputs/motion/home-${width}.png` });
   }
-  // Confirm actual ribbon movement and identical endpoints of each loop.
-  const loops = await page.locator(".wave").evaluateAll(elements => elements.map(element => {
-    const animation = element.getAnimations()[0];
-    const frames = animation.effect.getKeyframes();
-    return { first: frames[0].transform, last: frames.at(-1).transform, state: animation.playState };
-  }));
-  assert.equal(loops.length, 4);
-  loops.forEach(loop => { assert.equal(loop.first, loop.last); assert.equal(loop.state, "running"); });
+  assert.equal(await page.locator(".ambient-waves, .wave").count(), 0, "Background ribbons must be absent");
   for (const route of ["/", "/collection/", "/artist/", "/academy/", "/visit/"]) {
     await page.goto(`${origin}${route}`, { waitUntil: "networkidle" });
-    assert.match(await page.locator('meta[property="og:image"]').getAttribute("content"), /paolash-social-burgundy-2026.png$/);
+    assert.match(await page.locator('meta[property="og:image"]').getAttribute("content"), /paolash-social-burgundy-v3.png$/);
     assert.equal(await page.locator('meta[name="twitter:card"]').getAttribute("content"), "summary_large_image");
   }
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.waitForTimeout(200);
-  assert.equal(await page.locator(".wave").first().evaluate(element => getComputedStyle(element).animationName), "none");
   assert.equal(await page.locator(".site").evaluate(element => element.classList.contains("motion-enabled")), false);
+  assert.ok(await page.locator("[data-reveal], [data-unfold]").evaluateAll(elements => elements.every(element => getComputedStyle(element).opacity === "1")), "Reduced motion must expose content");
   await page.emulateMedia({ reducedMotion: "no-preference" });
   await page.waitForTimeout(200);
   assert.equal(await page.locator(".site").evaluate(element => element.classList.contains("motion-enabled")), true);
   assert.deepEqual(errors, []);
-  console.log("PASS: 4 responsive sizes, 8 sections, seamless loops, 5 route previews, live reduced-motion switching, no browser errors.");
+  console.log("PASS: 4 responsive sizes, 8 sections, no background ribbons, 5 route previews, live reduced-motion switching, no browser errors.");
 } finally { await browser.close(); }

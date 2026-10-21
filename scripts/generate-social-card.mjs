@@ -20,9 +20,9 @@ if (!fontPath) throw new Error("Build the site first so the Manrope font is avai
 const font = (await readFile(fontPath)).toString("base64");
 // Use the approved transparent portrait and supplied logo unchanged. All
 // typography and decoration are rendered as layout, never generated faces.
-const photo = await dataUrl("public/assets/portraits/paola-seated-cutout.webp", "image/webp");
+const photo = await dataUrl("public/assets/portraits/paola-seated-cutout-v3.webp", "image/webp");
 const logo = await dataUrl("public/assets/brand/paolash-logo.png", "image/png");
-const outputPath = path.join(root, "public/paolash-social-burgundy-2026.png");
+const outputPath = path.join(root, "public/paolash-social-burgundy-v3.png");
 const browser = await chromium.launch();
 try {
   const page = await browser.newPage({ viewport: { width: 1200, height: 630 }, deviceScaleFactor: 1 });

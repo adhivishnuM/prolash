@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { useEditorialMotion } from "@/hooks/use-editorial-motion";
 import LashFinder from "@/components/lash-finder";
-import AmbientRibbons from "@/components/ambient-ribbons";
 
 const BOOKING_URL = "https://www.fresha.com/book-now/paolash-lounge-au1el382/services?lid=2674229&share=true&pId=2588624";
 const LOGO = "/assets/brand/paolash-logo.png";
@@ -90,7 +89,6 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
   }, [menuOpen]);
 
   return <div className="site" ref={pageRef}>
-    <AmbientRibbons />
     <a className="skip-link" href="#main">Skip to content</a>
     <header className={`site-header${menuOpen ? " menu-is-open" : ""}`}>
       <div inert={menuOpen}><Brand /></div>
@@ -110,7 +108,7 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
           <Link className="button button-wine" href="/collection/" scroll={false}>Find your look <Arrow /></Link>
         </div>
         <figure className="hero-portrait">
-          <Image unoptimized src="/assets/portraits/paola-seated-cutout.webp" alt="Paola Gutierrez, founder of PaoLash, seated with her lash tweezers in hand" width={879} height={1483} preload />
+          <Image unoptimized src="/assets/portraits/paola-seated-cutout-v3.webp" alt="Paola Gutierrez, founder of PaoLash, seated with her lash tweezers in hand" width={881} height={1489} preload />
           <figcaption>Paola Gutierrez <span>Founder of PaoLash</span></figcaption>
         </figure>
       </section>
@@ -121,7 +119,7 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
         <div className="artist-top"><Label>The artist, the individual</Label><span className="edition-note" data-reveal>A personal point of view</span></div>
         <div className="artist-layout">
           <figure className="artist-visual" data-unfold>
-            <div className="artist-portrait"><Image unoptimized src="/assets/portraits/paola-standing-cutout.webp" alt="Paola Gutierrez, the artist behind PaoLash, in her signature burgundy suit" width={573} height={1487} loading="lazy" /></div>
+            <div className="artist-portrait"><Image unoptimized src="/assets/portraits/paola-standing-cutout-v3.webp" alt="Paola Gutierrez, the artist behind PaoLash, in her signature burgundy suit" width={578} height={1500} loading="lazy" /></div>
             <figcaption>Paola Gutierrez <span>Founder & educator</span></figcaption>
           </figure>
           <div className="artist-copy">
@@ -144,7 +142,7 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
         <div className="ritual-caption shell"><Label>The PaoLash ritual</Label><span>Care, beyond the studio.</span></div>
         <div className="ritual-poster">
           <h2 id="detail-title"><span>AFTER</span><span>CARE.</span></h2>
-          <figure className="ritual-product"><Image unoptimized src="/assets/lashes/classic-900.webp" alt="A close-up of a Classic lash set by PaoLash, with soft definition and separated lashes" width={652} height={777} loading="lazy" /></figure>
+          <figure className="ritual-product"><Image unoptimized src="/assets/aftercare-product.webp" alt="PaoLash lash cleanser with a cleansing brush and spoolie, displayed with a burgundy ribbon" width={1254} height={1254} loading="lazy" /></figure>
           <div className="ritual-note"><span className="ritual-note-line" aria-hidden="true" /><p>Your daily ritual.<br />Our finishing touch.</p></div>
           <p className="ritual-footnote">Ask your artist about<br />caring for your set.</p>
         </div>
@@ -160,7 +158,7 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
             <a className="button button-wine" href="mailto:paolashacademy@gmail.com?subject=PaoLash%20Academy%20interest" data-reveal>Let’s talk training <Arrow /></a>
           </div>
           <figure className="academy-portrait" data-unfold>
-            <Image unoptimized src="/assets/portraits/paola-educator-cutout.webp" alt="Paola Gutierrez walking towards the camera in a burgundy suit, lash tweezers in hand" width={427} height={1198} loading="lazy" />
+            <Image unoptimized src="/assets/portraits/paola-educator-cutout-v3.webp" alt="Paola Gutierrez walking towards the camera in a burgundy suit, lash tweezers in hand" width={430} height={1203} loading="lazy" />
             <figcaption>Learn with Paola <span>Artistry, shared.</span></figcaption>
           </figure>
         </div>
@@ -197,6 +195,6 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
       </section>
     </main>
 
-    <footer className="footer leather" id="visit" data-scene="visit" inert={menuOpen}><div className="closing shell"><Label>A little time, just for you</Label><h2><span>Your next</span><em>favourite look.</em></h2><BookingLink className="button button-light">Reserve your appointment</BookingLink><div className="closing-brand"><Image unoptimized src={LOGO} alt="PaoLash Lounge & Academy" width={1536} height={1024} loading="lazy" /></div></div><div className="footer-details shell"><div data-reveal><span className="footer-label">The studio</span><a href="https://www.google.com/maps/search/?api=1&query=6+St+Andrew%27s+St+3rd+Floor+Co.+Dublin+D02+VW40" target="_blank" rel="noreferrer">6 St Andrew’s St<br />3rd Floor · Co. Dublin · D02 VW40</a></div><div data-reveal style={delay(1)}><span className="footer-label">Say hello</span><a href="tel:+353838119207">083 811 9207</a><a href="mailto:paolashacademy@gmail.com">paolashacademy@gmail.com</a></div><div data-reveal style={delay(2)}><span className="footer-label">Follow the artistry</span><a href="https://www.instagram.com/paolash_lounge" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.tiktok.com/@paolash_0" target="_blank" rel="noreferrer">TikTok</a><a href="https://wa.me/353838119207" target="_blank" rel="noreferrer">WhatsApp</a></div><Link className="back-top" href="/" scroll={false} data-reveal>Back to top <Arrow /></Link></div><div className="footer-bottom shell"><span>© {new Date().getFullYear()} PaoLash Lounge & Academy</span><span>Dublin. With love.</span></div></footer>
+    <footer className="footer leather" id="visit" data-scene="visit" inert={menuOpen}><div className="closing shell"><Label>A little time, just for you</Label><h2><span>Your next</span><em>favourite look.</em></h2><BookingLink className="button button-light">Reserve your appointment</BookingLink><div className="closing-brand"><Image unoptimized src={LOGO} alt="PaoLash Lounge & Academy" width={1536} height={1024} loading="lazy" /></div></div><div className="footer-details shell"><div data-reveal><span className="footer-label">The studio</span><a href="https://www.google.com/maps/search/?api=1&query=6+St+Andrew%27s+St+3rd+Floor+Co.+Dublin+D02+VW40" target="_blank" rel="noreferrer">6 St Andrew’s St<br />3rd Floor · Co. Dublin · D02 VW40</a></div><div data-reveal style={delay(1)}><span className="footer-label">Say hello</span><a href="tel:+353838119207">083 811 9207</a><a href="mailto:paolashacademy@gmail.com">paolashacademy@gmail.com</a></div><div data-reveal style={delay(2)}><span className="footer-label">Follow the artistry</span><a href="https://www.instagram.com/pao_lashesdublin" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.tiktok.com/@paolash_0" target="_blank" rel="noreferrer">TikTok</a><a href="https://wa.me/353838119207" target="_blank" rel="noreferrer">WhatsApp</a></div><Link className="back-top" href="/" scroll={false} data-reveal>Back to top <Arrow /></Link></div><div className="footer-bottom shell"><span>© {new Date().getFullYear()} PaoLash Lounge & Academy</span><span>Dublin. With love.</span></div></footer>
   </div>;
 }

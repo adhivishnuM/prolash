@@ -113,15 +113,15 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
   const slots = [-2, -1, 0, 1, 2].map(offset => active + offset);
 
   return <section id="services" className={styles.finder} aria-labelledby="finish-title">
-    <div className={styles.masthead} data-reveal>
+    <div className={styles.masthead} data-reveal data-motion="collection-label">
       <span>PaoLash / The collection</span><span>Made around your eyes</span>
     </div>
     <div className={styles.stage} data-reveal>
       {finish === null ? <div className={styles.choose} key="choose">
-        <div className={styles.intro}>
+        <div className={styles.intro} data-motion="collection-intro">
           <div><span className={styles.eyebrow}>Find your signature. Make it yours.</span><h2 id="finish-title">The lash<br /><span>edit.</span></h2></div>
         </div>
-        <div className={`${styles.deckScene} ${dragging ? styles.dragging : ""}`} ref={deckScene}
+        <div className={`${styles.deckScene} ${dragging ? styles.dragging : ""}`} ref={deckScene} data-motion="collection-deck"
           onPointerDown={startDrag}
           onPointerMove={updateDrag}
           onPointerUp={event => endDrag(event)}

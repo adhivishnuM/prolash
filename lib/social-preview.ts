@@ -1,5 +1,5 @@
 export const socialPreview = {
-  url: "/paolash-social-burgundy-2026.png",
+  url: "/paolash-social-burgundy-v3.png",
   width: 1200,
   height: 630,
   type: "image/png",

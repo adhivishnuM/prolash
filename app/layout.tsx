@@ -27,7 +27,7 @@ const structuredData = {
     addressCountry: "IE",
   },
   sameAs: [
-    "https://www.instagram.com/paolash_lounge",
+    "https://www.instagram.com/pao_lashesdublin",
     "https://www.tiktok.com/@paolash_0",
   ],
 };

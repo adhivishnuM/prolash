@@ -1,122 +1,149 @@
 "use client";
 
-import { useEffect, type RefObject } from "react";
+import { useLayoutEffect, type RefObject } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const clamp = (value: number) => Math.max(0, Math.min(1, value));
-
-/** One scroll listener; geometry is cached on resize, images and font loading. */
+/** Chapter-specific choreography. Native scrolling controls the timelines;
+ * no scroll interception, artificial document height, or pinned content. */
 export function useEditorialMotion(rootRef: RefObject<HTMLDivElement | null>) {
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root) return;
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+    gsap.registerPlugin(ScrollTrigger);
+    const media = gsap.matchMedia();
     const header = root.querySelector<HTMLElement>(".site-header");
-    const scenes = Array.from(root.querySelectorAll<HTMLElement>("[data-scene]"));
-    const words = Array.from(root.querySelectorAll<HTMLElement>("[data-word]"));
-    let measurements: { element: HTMLElement; top: number; height: number }[] = [];
-    let frame = 0;
-    let measureFrame = 0;
-    let viewportHeight = innerHeight;
-    let disposed = false;
-    let visualY = scrollY;
-    let previousTime = 0;
-    const compact = matchMedia("(max-width: 700px)");
+    const syncHeader = () => header?.classList.toggle("is-scrolled", scrollY > 40);
+    addEventListener("scroll", syncHeader, { passive: true });
+    syncHeader();
 
-    const reveal = new IntersectionObserver((entries) => {
-      entries.forEach(({ target, isIntersecting }) => {
-        if (!isIntersecting) return;
-        target.classList.add("is-visible");
-        reveal.unobserve(target);
-      });
-    }, { threshold: 0.12, rootMargin: "0px 0px -20px 0px" });
-    root.querySelectorAll<HTMLElement>("[data-reveal], [data-unfold]").forEach((element) => {
-      // Small, local staggers keep copy and imagery in the same visual phrase.
-      const siblings = Array.from(element.parentElement?.children ?? []);
-      if (!element.style.getPropertyValue("--delay")) {
-        element.style.setProperty("--delay", `${Math.min(siblings.indexOf(element), 3) * 65}ms`);
-      }
-      reveal.observe(element);
-    });
-
-    const paint = (time: number) => {
-      frame = 0;
-      header?.classList.toggle("is-scrolled", scrollY > 40);
-      if (reduced.matches || document.hidden) return;
-      const elapsed = previousTime ? Math.min(time - previousTime, 64) : 16;
-      previousTime = time;
-      // Dampen the artwork only. Native touch, wheel, keyboard and browser
-      // scrolling retain their normal position and response.
-      if (Math.abs(scrollY - visualY) > viewportHeight * 1.5) visualY = scrollY;
-      visualY += (scrollY - visualY) * (1 - Math.exp(-elapsed / 95));
-      const y = visualY;
-      const amplitude = compact.matches ? .45 : 1;
-      measurements.forEach(({ element, top, height }) => {
-        const local = y - top;
-        // Only write to scenes in or immediately beside the viewport.
-        if (local < -viewportHeight * 1.2 || local > height + viewportHeight * .2) return;
-        const enter = clamp((local + viewportHeight * .85) / (viewportHeight * .95));
-        const passage = clamp((local + viewportHeight) / (height + viewportHeight));
-        const name = element.dataset.scene;
-        element.style.setProperty("--scene-rise", `${(1 - enter) * 22 * amplitude}px`);
-        element.style.setProperty("--portrait-drift", `${(passage - .5) * -28 * amplitude}px`);
-        if (name === "artist") {
-          const reading = clamp((local + viewportHeight * .72) / (height * .6));
-          words.forEach((word, index) => word.style.setProperty("--word-fill", `${clamp(reading * (words.length + 2) - index) * 100}%`));
-        } else if (name === "recognition") {
-          element.style.setProperty("--award-left", `${(1 - enter) * 65 * amplitude}px`);
-          element.style.setProperty("--award-right", `${(1 - enter) * 100 * amplitude}px`);
-          element.style.setProperty("--award-angle", `${(1 - enter) * 3 * amplitude}deg`);
-        } else if (name === "detail") {
-          element.style.setProperty("--ritual-drift", `${(1 - enter) * 65 * amplitude}px`);
-          element.style.setProperty("--ritual-rise", `${(1 - enter) * 70 * amplitude}px`);
-          element.style.setProperty("--ritual-turn", `${(1 - enter) * -3 * amplitude}deg`);
-        } else if (name === "visit") {
-          element.style.setProperty("--closing-drift", `${(1 - passage) * 80}px`);
-          element.style.setProperty("--logo-rise", `${(1 - enter) * 70}px`);
-        }
-      });
-      if (Math.abs(scrollY - visualY) > .1) frame = requestAnimationFrame(paint);
-      else previousTime = 0;
-    };
-    const schedule = () => { if (!frame) frame = requestAnimationFrame(paint); };
-    const measure = () => {
-      measureFrame = 0;
-      if (disposed) return;
-      viewportHeight = innerHeight;
-      root.classList.toggle("motion-enabled", !reduced.matches);
-      if (reduced.matches) {
-        scenes.forEach((element) => {
-          ["--scene-rise", "--portrait-drift", "--award-left", "--award-right", "--award-angle", "--ritual-drift", "--ritual-rise", "--ritual-turn", "--closing-drift", "--logo-rise"].forEach((property) => element.style.removeProperty(property));
+    media.add({ desktop: "(min-width: 701px)", mobile: "(max-width: 700px)", reduce: "(prefers-reduced-motion: reduce)" }, context => {
+      if (context.conditions?.reduce) return;
+      const amount = context.conditions?.desktop ? 1 : .65;
+      const originalStyles = new Map<HTMLElement, string | null>();
+      const q = (selector: string) => {
+        const targets = Array.from(root.querySelectorAll<HTMLElement>(selector));
+        targets.forEach(element => {
+          if (!originalStyles.has(element)) originalStyles.set(element, element.getAttribute("style"));
         });
-      }
-      visualY = scrollY;
-      measurements = scenes.map((element) => ({ element, top: element.getBoundingClientRect().top + scrollY, height: element.offsetHeight }));
-      schedule();
-    };
-    const scheduleMeasure = () => { if (!measureFrame) measureFrame = requestAnimationFrame(measure); };
-    const resize = new ResizeObserver(scheduleMeasure);
-    resize.observe(root);
-    root.addEventListener("load", scheduleMeasure, true);
-    addEventListener("scroll", schedule, { passive: true });
-    addEventListener("resize", scheduleMeasure, { passive: true });
-    reduced.addEventListener("change", scheduleMeasure);
-    document.addEventListener("visibilitychange", scheduleMeasure);
-    void document.fonts.ready.then(() => { if (!disposed) scheduleMeasure(); });
-    root.classList.add("reveal-ready");
-    measure();
+        return targets;
+      };
+      root.classList.add("motion-enabled", "motion-chapters");
+      const entrance = (trigger: string, selector: string, distance = 48) => {
+        const targets = q(selector);
+        if (!targets.length) return;
+        gsap.set(targets, { y: distance * amount, opacity: 0 });
+        return gsap.to(targets, {
+          y: 0, opacity: 1, duration: 1.15, stagger: .14, ease: "power3.out",
+          scrollTrigger: { trigger: q(trigger)[0], start: "top 90%", once: true },
+          clearProps: "transform,opacity",
+        });
+      };
+      const scene = (trigger: string, start = "top 90%", end = "top 30%") =>
+        gsap.timeline({ defaults: { ease: "none" }, scrollTrigger: {
+          trigger: q(trigger)[0], start, end, scrub: .7, invalidateOnRefresh: true,
+        } });
 
+      // Hero: masked headline, staggered invitation, and portrait at a second depth.
+      gsap.set(q(".hero-line > *"), { yPercent: 105, opacity: 0 });
+      gsap.set(q(".hero-description, .hero-intro .button"), { y: 32, opacity: 0 });
+      gsap.timeline({ defaults: { ease: "power3.out" } })
+        .fromTo(q(".hero-location"), { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: .8 }, 0)
+        .to(q(".hero-line > *"), { yPercent: 0, opacity: 1, stagger: .13, duration: 1.25 }, .12)
+        .to(q(".hero-description, .hero-intro .button"), { y: 0, opacity: 1, duration: .9, stagger: .12 }, .4)
+        .fromTo(q(".hero-portrait"), { y: 75 * amount, opacity: 0, scale: .94 }, { y: 0, opacity: 1, scale: 1, duration: 1.5 }, .2);
+      scene(".hero", "top top", "bottom top")
+        .to(q(".hero-intro"), { y: -75 * amount }, 0)
+        .to(q(".hero-portrait"), { "--portrait-depth": `${75 * amount}px` }, 0);
+
+      // Collection: open the complete deck; card transforms belong to gestures.
+      entrance("#services", "[data-motion='collection-label'], [data-motion='collection-intro']");
+      if (q("[data-motion='collection-deck']").length) {
+        scene("[data-motion='collection-deck']", "top 95%", "top 32%")
+          .fromTo(q("[data-motion='collection-deck']"), { y: 110 * amount, scale: .88 }, { y: 0, scale: 1 });
+      }
+
+      // Artist: portrait enters from the edge, followed by the reading sequence.
+      entrance(".artist-top", ".artist-top > *", 28);
+      gsap.fromTo(q(".artist-visual"), { x: -75 * amount, opacity: 0, clipPath: "inset(0 0 16% 0)" }, {
+        x: 0, opacity: 1, clipPath: "inset(-12% -12% -12% -12%)", duration: 1.35, ease: "power3.out",
+        scrollTrigger: { trigger: q(".artist-visual")[0], start: "top 88%", once: true },
+      });
+      gsap.set(q("[data-word]"), { "--word-fill": "0%" });
+      scene(".artist-statement", "top 82%", "bottom 48%")
+        .to(q("[data-word]"), { "--word-fill": "100%", duration: 1, stagger: .22 });
+      entrance(".artist-copy > p", ".artist-copy > p, .artist-signoff", 38);
+      scene(".artist-visual", "top bottom", "bottom top").fromTo(q(".artist-visual"), { "--portrait-depth": `${35 * amount}px` }, { "--portrait-depth": `${-30 * amount}px` });
+
+      // Recognition: independent exhibits settle into place, full photos intact.
+      entrance(".recognition-copy", ".recognition-copy > *", 55);
+      gsap.set(q(".proof"), { y: 110 * amount, rotation: index => index ? 3 : -2, scale: .93, opacity: 0 });
+      gsap.to(q(".proof"), {
+        y: 0, rotation: 0, scale: 1, opacity: 1, duration: 1.4, stagger: .22, ease: "power3.out",
+        scrollTrigger: { trigger: q(".recognition-gallery")[0], start: "top 87%", once: true },
+      });
+
+      // Restore the original poster motion from 1d56bea: opposing type with
+      // an independently rising, rotating product, controlled by native scroll.
+      scene(".ritual", "top 85%", "top -10%")
+        .fromTo(q(".ritual"), {
+          "--ritual-drift": "110px", "--ritual-rise": "90px", "--ritual-turn": "-8deg",
+        }, {
+          "--ritual-drift": "0px", "--ritual-rise": "0px", "--ritual-turn": "0deg",
+        });
+
+      // Academy: copy, educator and credentials are three distinct beats.
+      entrance(".academy-copy", ".academy-copy > *", 60);
+      gsap.fromTo(q(".academy-portrait"), { y: 95 * amount, x: 40 * amount, opacity: 0 }, {
+        y: 0, x: 0, opacity: 1, duration: 1.4, ease: "power3.out",
+        scrollTrigger: { trigger: q(".academy-portrait")[0], start: "top 90%", once: true },
+      });
+      scene(".academy-portrait", "top bottom", "bottom top").fromTo(q(".academy-portrait"), { "--portrait-depth": `${35 * amount}px` }, { "--portrait-depth": `${-30 * amount}px` });
+      entrance(".trainer-credential-copy", ".trainer-credential-copy > *", 40);
+      entrance(".trainer-certificate", ".trainer-certificate", 75);
+
+      // Visit and closing: clear practical details, then the final brand reveal.
+      entrance(".studio-visit-intro", ".studio-visit-intro > *", 50);
+      entrance(".studio-visit-actions", ".studio-visit-actions > *", 30);
+      entrance(".studio-visit-details", ".studio-detail", 45);
+      entrance(".closing", ".closing > .eyebrow", 28);
+      scene(".closing h2", "top 95%", "top 40%")
+        .fromTo(q(".closing h2 > span"), { x: -90 * amount, y: 35 * amount }, { x: 0, y: 0 }, 0)
+        .fromTo(q(".closing h2 > em"), { x: 90 * amount, y: 55 * amount }, { x: 0, y: 0 }, 0);
+      entrance(".closing > .button", ".closing > .button", 35);
+      entrance(".closing-brand", ".closing-brand", 75);
+      entrance(".footer-details", ".footer-details > *", 35);
+
+      return () => {
+        root.classList.remove("motion-enabled", "motion-chapters");
+        // Completed, once-only triggers may already have released their
+        // timelines. Restore exact pre-animation styles on breakpoint changes
+        // and live reduced-motion toggles, including not-yet-entered content.
+        originalStyles.forEach((style, element) => {
+          if (style === null) element.removeAttribute("style");
+          else element.setAttribute("style", style);
+        });
+      };
+    }, root);
+
+    // Re-measure when images, fonts or collection details change page height.
+    let refreshTimer: ReturnType<typeof setTimeout>;
+    let disposed = false;
+    const refresh = () => {
+      clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(() => { if (!disposed) ScrollTrigger.refresh(); }, 120);
+    };
+    const resize = new ResizeObserver(refresh);
+    resize.observe(root);
+    root.addEventListener("load", refresh, true);
+    void document.fonts.ready.then(() => { if (!disposed) refresh(); });
     return () => {
       disposed = true;
-      cancelAnimationFrame(frame);
-      cancelAnimationFrame(measureFrame);
-      reveal.disconnect();
+      clearTimeout(refreshTimer);
       resize.disconnect();
-      root.removeEventListener("load", scheduleMeasure, true);
-      removeEventListener("scroll", schedule);
-      removeEventListener("resize", scheduleMeasure);
-      reduced.removeEventListener("change", scheduleMeasure);
-      document.removeEventListener("visibilitychange", scheduleMeasure);
-      root.classList.remove("reveal-ready", "motion-enabled");
+      root.removeEventListener("load", refresh, true);
+      removeEventListener("scroll", syncHeader);
+      media.revert();
     };
   }, [rootRef]);
 }

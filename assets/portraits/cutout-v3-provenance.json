@@ -1,0 +1,47 @@
+{
+  "seated": {
+    "source": "assets/portraits/paola-seated.jpeg",
+    "sourceSha256": "8b4aee64fb063c3f50453a20752ee8526507987768bfca0fc886bf6eeb680b2b",
+    "mask": "assets/portraits/paola-seated-mask-v3.png",
+    "fullCanvas": "assets/portraits/paola-seated-cutout-v3.png",
+    "delivery": "public/assets/portraits/paola-seated-cutout-v3.webp",
+    "crop": {
+      "left": 84,
+      "top": 46,
+      "width": 881,
+      "height": 1489
+    },
+    "visiblePixelsVerified": 739046,
+    "rgbDifference": 0
+  },
+  "standing": {
+    "source": "assets/portraits/paola-standing.jpeg",
+    "sourceSha256": "9c75e4479a19885f1c860cacc08620744cbb64ab8743ec8d96e79ef97e7b1915",
+    "mask": "assets/portraits/paola-standing-mask-v3.png",
+    "fullCanvas": "assets/portraits/paola-standing-cutout-v3.png",
+    "delivery": "public/assets/portraits/paola-standing-cutout-v3.webp",
+    "crop": {
+      "left": 273,
+      "top": 5,
+      "width": 578,
+      "height": 1500
+    },
+    "visiblePixelsVerified": 435496,
+    "rgbDifference": 0
+  },
+  "educator": {
+    "source": "assets/portraits/paola-educator.jpeg",
+    "sourceSha256": "bb26949a3bfd7ef21111812b3987e0d0ebf922eeb2498604d811aeaeeff9ef00",
+    "mask": "assets/portraits/paola-educator-mask-v3.png",
+    "fullCanvas": "assets/portraits/paola-educator-cutout-v3.png",
+    "delivery": "public/assets/portraits/paola-educator-cutout-v3.webp",
+    "crop": {
+      "left": 384,
+      "top": 12,
+      "width": 430,
+      "height": 1203
+    },
+    "visiblePixelsVerified": 248055,
+    "rgbDifference": 0
+  }
+}
