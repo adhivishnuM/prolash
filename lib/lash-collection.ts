@@ -1,0 +1,11 @@
+/** Client-supplied photographs. Names follow the supplied treatment labels. */
+export const lashFinishes = [
+  { name: "Wispy hybrid", image: "wispy-hybrid.webp", width: 1168, height: 1557, position: "50% 48%", label: "Texture", detail: "Soft volume. Airy texture. A little undone.", description: "A mix of lengths and definition, individually mapped for an expressive, textured finish." },
+  { name: "Volume", image: "volume.webp", width: 1086, height: 1448, position: "50% 42%", label: "Fullness", detail: "Fuller. Fluffier. Unmistakable.", description: "A full lash line with a soft, dimensional finish. We shape the density around your eyes." },
+  { name: "Line effect", image: "line-effect.webp", width: 603, height: 602, position: "50% 50%", label: "Definition", detail: "A little liner. All lashes.", description: "A defined lash line and a sweeping outer corner, tailored to your eye shape." },
+  { name: "Wispy lash lift", image: "wispy-lash-lift.webp", width: 668, height: 728, position: "50% 50%", label: "Lift", detail: "A lifted shape. An airy finish.", description: "A softly lifted look with visible separation and an open, expressive finish. Your artist will guide your treatment choice." },
+  { name: "Classic", image: "classic.webp", width: 652, height: 777, position: "50% 45%", label: "Everyday", detail: "Quiet definition. Beautifully you.", description: "A clean, separated lash line for a considered everyday finish, shaped around your natural features." },
+  { name: "Fox eye", image: "fox-eye.webp", width: 665, height: 842, position: "50% 43%", label: "Shape", detail: "Lengthened. Lifted. A little bold.", description: "An elongated shape that draws the eye outwards, with a bespoke map for your features." },
+  { name: "Anime volume", image: "anime-volume.webp", width: 1980, height: 3520, position: "50% 45%", label: "Expression", detail: "Distinctive spikes. A playful point of view.", description: "A statement finish with pronounced texture and separation, designed together with your artist." },
+  { name: "Brown set", image: "brown-set.webp", width: 1086, height: 1448, position: "50% 42%", label: "Softness", detail: "Softer colour. The same intention.", description: "Warm brown lashes create gentle definition and a softer contrast, individually styled for you." },
+] as const;

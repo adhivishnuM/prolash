@@ -471,7 +471,7 @@ a.studio-detail:hover > .arrow { transform: translateX(4px); }
 .ritual-poster { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 24px 8%; min-height: 0; height: auto; max-height: none; padding: 45px var(--gutter) 0; }
 .ritual-poster h2 { position: static; grid-column: 1; grid-row: 1; font-size: clamp(64px,8vw,120px); line-height: 1.03; letter-spacing: -.06em; }
 .ritual-poster h2 > span:last-child { text-align: left; }
-.ritual-product { position: relative; width: min(100%,370px); left: auto; top: auto; grid-column: 2; grid-row: 1 / 4; justify-self: center; }
+.ritual-product { position: relative; width: min(100%,370px); left: auto; top: auto; grid-column: 2; grid-row: 1 / 4; justify-self: center; transform: translate3d(0,calc(var(--ritual-rise,0px) * .25),0); }
 .ritual-product img { border-radius: 28px; box-shadow: none; }
 .ritual-note { position: static; grid-column: 1; font-size: 16px; color: var(--muted); text-align: left; }
 .ritual-note-line { display: none; }

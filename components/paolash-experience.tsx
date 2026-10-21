@@ -150,7 +150,7 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
         <div className="ritual-caption shell"><Label>The PaoLash ritual</Label><span>Care, beyond the studio.</span></div>
         <div className="ritual-poster">
           <h2 id="detail-title"><span>AFTER</span><span>CARE.</span></h2>
-          <figure className="ritual-product"><Image unoptimized src="/assets/aftercare.webp" alt="PaoLash’s complete lash aftercare kit" width={700} height={805} loading="lazy" /></figure>
+          <figure className="ritual-product"><Image unoptimized src="/assets/lashes/classic-900.webp" alt="A close-up of a Classic lash set by PaoLash, with soft definition and separated lashes" width={652} height={777} loading="lazy" /></figure>
           <div className="ritual-note"><span className="ritual-note-line" aria-hidden="true" /><p>Your daily ritual.<br />Our finishing touch.</p></div>
           <p className="ritual-footnote">Ask your artist about<br />caring for your set.</p>
         </div>
