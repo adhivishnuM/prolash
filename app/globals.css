@@ -268,7 +268,8 @@ a.studio-detail:hover > .arrow { transform: translateX(4px); }
 .closing-brand img { width: 100%; height: auto; object-fit: contain; }
 .footer-details { display: grid; grid-template-columns: 1.1fr 1.1fr 1fr auto; gap: 35px; padding-block: 50px 65px; }
 .footer-label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--champagne); margin-bottom: 20px; }
-.footer-details > div a { display: block; font-size: 14px; width: fit-content; line-height: 1.8; margin-top: 6px; }
+.footer-details > div { min-width: 0; }
+.footer-details > div a { display: block; font-size: 14px; width: fit-content; max-width: 100%; overflow-wrap: anywhere; line-height: 1.8; margin-top: 6px; }
 .footer-details a:hover { color: var(--champagne); }
 .back-top { display: flex; align-items: center; gap: 20px; align-self: flex-start; font-size: 13px; }
 .back-top .arrow { transform: rotate(-90deg); }
