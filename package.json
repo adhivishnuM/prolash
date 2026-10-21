@@ -8,7 +8,9 @@
   "scripts": {
     "install:ci": "node scripts/install-ci.mjs",
     "dev": "next dev --hostname 127.0.0.1 --port 5173",
+    "prebuild": "node scripts/check-production.mjs",
     "build": "next build",
+    "postbuild": "node scripts/check-production.mjs --export",
     "start": "node scripts/serve-export.mjs",
     "dev:sites": "node scripts/run-framework.mjs dev",
     "build:sites": "node scripts/run-framework.mjs build",
