@@ -13,7 +13,7 @@ const structuredData = {
   "@type": "BeautySalon",
   name: "PaoLash Lounge & Academy",
   url: "https://prolash-ec7ba.web.app/",
-  logo: "https://prolash-ec7ba.web.app/assets/paolash-paper-logo.png",
+  logo: "https://prolash-ec7ba.web.app/assets/brand/paolash-logo.png",
   image: new URL(socialPreview.url, "https://prolash-ec7ba.web.app").href,
   description: "Bespoke lash artistry, signature sets and professional education in Dublin 2.",
   telephone: "+353838119207",

@@ -5,9 +5,10 @@ import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { useEditorialMotion } from "@/hooks/use-editorial-motion";
 import LashFinder from "@/components/lash-finder";
+import AmbientRibbons from "@/components/ambient-ribbons";
 
 const BOOKING_URL = "https://www.fresha.com/book-now/paolash-lounge-au1el382/services?lid=2674229&share=true&pId=2588624";
-const LOGO = "/assets/paolash-paper-logo.png";
+const LOGO = "/assets/brand/paolash-logo.png";
 const policies = [
   { title: "Booking & deposits", text: "A €20 non-refundable deposit secures your appointment and is deducted from your salon balance. Please arrive on time; after 10 minutes, a €10 late fee or cancellation may apply." },
   { title: "Your first appointment", text: "New clients need a patch test up to 48 hours before their appointment. Arrive without eye makeup, mascara, oils, strip lashes or lash glue. A cleaning fee may apply if removal is needed." },
@@ -89,14 +90,7 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
   }, [menuOpen]);
 
   return <div className="site" ref={pageRef}>
-    <div className="ambient-waves" aria-hidden="true">
-      <svg viewBox="0 0 1440 1000" fill="none" preserveAspectRatio="none">
-        <defs><linearGradient id="rose-ribbon" x1="0" y1="0" x2="1440" y2="1000" gradientUnits="userSpaceOnUse"><stop stopColor="#b57160" /><stop offset=".36" stopColor="#f1cbbc" /><stop offset=".7" stopColor="#c58a78" /><stop offset="1" stopColor="#f5dcd1" /></linearGradient></defs>
-        <g className="wave wave-left"><path d="M-100-80C180 160-150 490 230 780" /><path className="wave-sheen" d="M-105-74C165 165-140 500 230 780" /></g>
-        <g className="wave wave-top"><path d="M950-140C880 120 1320 100 1540 270" /><path className="wave-sheen" d="M956-136C888 126 1324 108 1544 276" /></g>
-        <g className="wave wave-right"><path d="M1520 530C1150 660 1300 900 1030 1120" /><path className="wave-sheen" d="M1525 536C1170 670 1310 910 1035 1125" /></g>
-      </svg>
-    </div>
+    <AmbientRibbons />
     <a className="skip-link" href="#main">Skip to content</a>
     <header className={`site-header${menuOpen ? " menu-is-open" : ""}`}>
       <div inert={menuOpen}><Brand /></div>
