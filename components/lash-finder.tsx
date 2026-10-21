@@ -3,14 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRef, useState, useEffect, useCallback, type CSSProperties, type PointerEvent } from "react";
+import { lashFinishes } from "@/lib/lash-collection";
 import styles from "./lash-finder.module.css";
 
-const finishes = [
-  { mood: "A little texture", name: "Wispy hybrid", image: "lash-hybrid.webp", detail: "Soft volume. Airy texture. A little undone.", description: "A blend of definition and softness, with wispy lengths that give your set its own rhythm.", label: "Texture", tryOnId: "wispy-hybrid" },
-  { mood: "More drama", name: "Russian volume", image: "lash-russian.webp", detail: "Fuller. Fluffier. Unmistakable.", description: "Fine lash fans create a fuller finish. Your artist shapes the density around your eyes.", label: "Volume", tryOnId: "russian-volume" },
-  { mood: "A lifted line", name: "Eyeliner effect", image: "lash-line.webp", detail: "Clean definition. A sculpted finish.", description: "A defined lash line with an elongated effect, mapped individually by your artist.", label: "Definition", tryOnId: "eyeliner-effect" },
-  { mood: "Naturally me", name: "Lash lift", image: "lash-lift.webp", detail: "Your lashes. A new perspective.", description: "A lifted finish using your natural lashes, without adding extensions.", label: "Natural", tryOnId: null },
-];
+const finishes = lashFinishes.map((finish, index) => ({ ...finish, tryOnId: ["wispy-hybrid", "russian-volume", "eyeliner-effect"][index] ?? null }));
 
 function Direction({ back = false }: { back?: boolean }) {
   return <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" style={back ? { transform: "rotate(180deg)" } : undefined}><path d="M4 12h15m-6-6 6 6-6 6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" /></svg>;
@@ -124,7 +120,7 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
     <div className={styles.stage} data-reveal>
       {finish === null ? <div className={styles.choose} key="choose">
         <div className={styles.intro}>
-          <div><span className={styles.eyebrow}>Four signatures. One made for you.</span><h2 id="finish-title">The lash<br /><span>edit.</span></h2></div>
+          <div><span className={styles.eyebrow}>Find your signature. Make it yours.</span><h2 id="finish-title">The lash<br /><span>edit.</span></h2></div>
         </div>
         <div className={`${styles.deckScene} ${dragging ? styles.dragging : ""}`} ref={deckScene}
           onPointerDown={startDrag}
@@ -160,7 +156,10 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
                 tabIndex={isActive ? 0 : -1}
                 aria-hidden={Math.abs(position) > 1 || undefined}
               >
-                <Image className={styles.cardPhoto} draggable={false} unoptimized src={`/assets/${item.image}`} alt={`Real ${item.name.toLowerCase()} lashes by PaoLash`} width={900} height={950} loading="eager" />
+                {Math.abs(position) <= 1 && <picture>
+                  <source type="image/webp" srcSet={`/assets/lashes/${item.image.replace(".webp", "-480.webp")} ${Math.min(480, item.width)}w, /assets/lashes/${item.image.replace(".webp", "-900.webp")} ${Math.min(900, item.width)}w`} sizes="(max-width: 600px) 74vw, (max-width: 999px) 54vw, 450px" />
+                  <Image className={styles.cardPhoto} style={{ objectPosition: item.position }} draggable={false} unoptimized src={`/assets/lashes/${item.image}`} alt={`Real ${item.name.toLowerCase()} lashes by PaoLash`} width={item.width} height={item.height} loading="eager" />
+                </picture>}
                 <span className={styles.cardShade} aria-hidden="true" />
               </button>;
             })}
@@ -173,7 +172,7 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
         <div className={styles.mirrorInvitation}><div><span className={styles.mirrorEyebrow}>The Lash Mirror</span><p>See your finish.<em> On you.</em></p></div><Link href="/try-on/" prefetch={false} className={styles.mirrorLink}>Try on our looks <Direction /></Link></div>
       </div> : <div className={styles.result} key={finish.name}>
         <div className={styles.resultTop}><button className={styles.back} onClick={() => setSelected(null)} type="button"><Direction back /> Choose another finish</button><span>{finish.label} / PaoLash</span></div>
-        <figure className={styles.photograph}><Image unoptimized src={`/assets/${finish.image}`} alt={`${finish.name} lash work by PaoLash`} width={900} height={950} /><figcaption>Real work. By PaoLash.</figcaption></figure>
+        <figure className={styles.photograph}><Image unoptimized src={`/assets/lashes/${finish.image.replace(".webp", "-900.webp")}`} alt={`${finish.name} lash work by PaoLash`} width={finish.width} height={finish.height} /><figcaption>Real work. By PaoLash.</figcaption></figure>
         <div className={styles.resultCopy}><p className={styles.resultKicker}>Your starting point</p><h2 id="finish-title" ref={resultHeading} tabIndex={-1}>{finish.name}</h2><p className={styles.detail}>{finish.detail}</p><p className={styles.description}>{finish.description}</p>{finish.tryOnId && <Link className={styles.tryOn} href={`/try-on/?style=${finish.tryOnId}`} prefetch={false}>Try on me <Direction /></Link>}<a className={finish.tryOnId ? styles.bookingSecondary : styles.reserve} href={bookingUrl} target="_blank" rel="noreferrer">Book your appointment <Direction /></a><p className={styles.consultation}>Your final look is tailored together at the studio.</p></div>
       </div>}
     </div>
