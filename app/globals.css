@@ -481,8 +481,8 @@ a.studio-detail:hover > .arrow { transform: translateX(4px); }
 }
 
 /* White liquid-glass navigation: a defined edge, restrained tint and depth. */
-.site-header { border: 1px solid #7d1f2d16; background: linear-gradient(135deg,#fffffff0,#ffffffba); -webkit-backdrop-filter: blur(18px) saturate(115%); backdrop-filter: blur(18px) saturate(115%); box-shadow: 0 10px 34px #481c2612,inset 0 1px 0 #fff; }
-.site-header.is-scrolled { background: linear-gradient(135deg,#fffffff2,#ffffffce); box-shadow: 0 12px 36px #481c261a,inset 0 1px 0 #fff; }
+.site-header { border: 1px solid #7d1f2d16; border-radius: 999px; background: linear-gradient(135deg,#ffffffc0,#ffffff95); -webkit-backdrop-filter: blur(18px) saturate(115%); backdrop-filter: blur(18px) saturate(115%); box-shadow: 0 10px 34px #481c2612,inset 0 1px 0 #fff; }
+.site-header.is-scrolled { background: linear-gradient(135deg,#ffffffc2,#ffffffa5); box-shadow: 0 12px 36px #481c261a,inset 0 1px 0 #fff; }
 .site-header.menu-is-open { border-color: transparent; background: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
 @media (max-width: 700px) {
   .site-header { -webkit-backdrop-filter: blur(12px) saturate(110%); backdrop-filter: blur(12px) saturate(110%); }
