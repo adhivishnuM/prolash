@@ -20,10 +20,18 @@ export function startEditorialChapters(root: HTMLDivElement) {
       const trigger = root.querySelector(selector);
       return gsap.timeline({ defaults: { ease: "none" }, ...(trigger ? { scrollTrigger: { trigger, start, end, scrub: .35, invalidateOnRefresh: true } } : {}) });
     };
-    const reveal = (trigger: string, selector: string, distance = 38) => {
+    const rise = (trigger: string, selector: string, distance = 38) => {
       const nodes = q(selector);
       if (!nodes.length || !root.querySelector(trigger)) return;
-      scene(trigger).fromTo(nodes, { y: distance * amount, opacity: .55 }, { y: 0, opacity: 1, stagger: .08 });
+      scene(trigger).fromTo(nodes, { y: distance * amount }, { y: 0, stagger: .08 });
+    };
+    const exhibit = (selector: string, x: number, y: number, rotation: number) => {
+      if (!root.querySelector(selector)) return;
+      // Each exhibit owns its viewport timing. On a stacked phone layout, the
+      // certificate must still be moving when it arrives after the trophy.
+      scene(selector, "top 96%", "top 24%")
+        .fromTo(q(selector), { x: x * amount, y: y * amount, rotation: rotation * amount },
+          { x: 0, y: 0, rotation: 0 });
     };
 
     // CSS owns entrance once; only the parent invitation/independent translate
@@ -35,7 +43,7 @@ export function startEditorialChapters(root: HTMLDivElement) {
         .fromTo(q(".hero-portrait"), { "--portrait-depth": "18px" }, { "--portrait-depth": `${-25 * amount}px` });
     }
 
-    reveal("#services", "[data-motion='collection-label'], [data-motion='collection-intro']", 28);
+    rise("#services", "[data-motion='collection-label'], [data-motion='collection-intro']", 28);
     if (root.querySelector("[data-motion='collection-deck']")) {
       // Never scale or translate the carousel's layout/measurement root.
       // Its continuous depth belongs exclusively to the gesture engine.
@@ -44,19 +52,24 @@ export function startEditorialChapters(root: HTMLDivElement) {
     }
 
     if (root.querySelector(".artist")) {
-      reveal(".artist-top", ".artist-top > *", 22);
+      rise(".artist-top", ".artist-top > *", 22);
       scene(".artist-layout", "top 94%", "top 40%")
-        .fromTo(q(".artist-visual"), { x: -32 * amount, y: 24 * amount, opacity: .6 }, { x: 0, y: 0, opacity: 1 }, 0)
-        .fromTo(q(".artist-copy"), { y: 28 * amount, opacity: .65 }, { y: 0, opacity: 1 }, .08);
+        .fromTo(q(".artist-visual"), { x: -32 * amount, y: 24 * amount }, { x: 0, y: 0 }, 0)
+        .fromTo(q(".artist-copy"), { y: 28 * amount }, { y: 0 }, .08);
       scene(".artist-statement", "top 88%", "bottom 55%")
         .fromTo(q("[data-word]"), { "--word-fill": "0%" }, { "--word-fill": "100%", stagger: .12 });
     }
 
     if (root.querySelector(".recognition")) {
-      reveal(".recognition-copy", ".recognition-copy > *", 32);
-      scene(".recognition-gallery", "top 95%", "top 40%")
-        .fromTo(q(".proof-trophy"), { y: 50 * amount, rotation: -1.5 * amount, opacity: .65 }, { y: 0, rotation: 0, opacity: 1 }, 0)
-        .fromTo(q(".proof-certificate"), { y: 34 * amount, rotation: 1.5 * amount, opacity: .65 }, { y: 0, rotation: 0, opacity: 1 }, .08);
+      rise(".recognition-copy", ".recognition-copy > p", 24);
+      // A quiet counter-movement between the title, its accent and the award.
+      // Unlike a fade, every word and both original images stay fully visible.
+      scene(".recognition-copy", "top 94%", "top 32%")
+        .fromTo(q(".recognition .display"), { x: -24 * amount, y: 28 * amount }, { x: 0, y: 0 }, 0)
+        .fromTo(q(".recognition .display em"), { x: 44 * amount }, { x: 0 }, 0)
+        .fromTo(q(".award-number"), { y: 60 * amount }, { y: 0 }, 0);
+      exhibit(".proof-trophy", -18, 72, -1.6);
+      exhibit(".proof-certificate", 22, 86, 1.8);
     }
 
     // Preserve the aftercare poster's opposing typography and independent rise.
@@ -65,23 +78,31 @@ export function startEditorialChapters(root: HTMLDivElement) {
         { "--ritual-drift": "0px", "--ritual-rise": "0px", "--ritual-turn": "0deg" });
 
     if (root.querySelector(".academy")) {
-      reveal(".academy-copy", ".academy-copy > *", 38);
-      scene(".academy-layout", "top 95%", "top 38%")
-        .fromTo(q(".academy-portrait"), { x: 22 * amount, y: 48 * amount, opacity: .6 }, { x: 0, y: 0, opacity: 1 });
-      reveal(".trainer-credential-copy", ".trainer-credential-copy > *", 28);
-      reveal(".trainer-certificate", ".trainer-certificate", 40);
+      rise(".academy-copy", ".academy-copy > *", 38);
+      scene(".academy-copy", "top 94%", "top 34%")
+        .fromTo(q(".academy-copy h2 em"), { x: 30 * amount }, { x: 0 });
+      scene(".academy-portrait", "top 96%", "top 28%")
+        .fromTo(q(".academy-portrait"), { x: 16 * amount, y: 64 * amount }, { x: 0, y: 0 });
+      rise(".trainer-credential-copy", ".trainer-credential-copy > p", 24);
+      scene(".trainer-credential-copy", "top 94%", "top 34%")
+        .fromTo(q(".trainer-credential-copy h3"), { x: -18 * amount, y: 32 * amount }, { x: 0, y: 0 }, 0)
+        .fromTo(q(".trainer-credential-copy h3 em"), { x: 36 * amount }, { x: 0 }, 0);
+      exhibit(".trainer-certificate", 20, 74, 1.4);
     }
 
-    reveal(".studio-visit-intro", ".studio-visit-intro > *", 32);
-    reveal(".studio-visit-actions", ".studio-visit-actions > *", 20);
-    reveal(".studio-visit-details", ".studio-detail", 26);
-    reveal(".closing", ".closing > .eyebrow", 20);
+    rise(".studio-visit-intro", ".studio-visit-intro > *", 32);
+    if (root.querySelector(".studio-visit-intro")) scene(".studio-visit-intro", "top 94%", "top 34%")
+      .fromTo(q(".studio-visit-intro h2 em"), { x: 28 * amount }, { x: 0 });
+    rise(".studio-visit-actions", ".studio-visit-actions > *", 20);
+    if (root.querySelector(".studio-visit-details")) scene(".studio-visit-details", "top 94%", "top 40%")
+      .fromTo(q(".studio-detail"), { x: 22 * amount, y: 30 * amount }, { x: 0, y: 0, stagger: .1 });
+    rise(".closing", ".closing > .eyebrow", 20);
     if (root.querySelector(".closing h2")) scene(".closing h2", "top 95%", "top 38%")
       .fromTo(q(".closing h2 > span"), { x: -36 * amount, y: 22 * amount }, { x: 0, y: 0 }, 0)
       .fromTo(q(".closing h2 > em"), { x: 36 * amount, y: 32 * amount }, { x: 0, y: 0 }, 0);
-    reveal(".closing > .button", ".closing > .button", 22);
-    reveal(".closing-brand", ".closing-brand", 36);
-    reveal(".footer-details", ".footer-details > *", 20);
+    rise(".closing > .button", ".closing > .button", 22);
+    rise(".closing-brand", ".closing-brand", 36);
+    rise(".footer-details", ".footer-details > *", 20);
 
     return () => {
       root.classList.remove("motion-enabled", "motion-chapters");

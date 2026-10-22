@@ -17,6 +17,12 @@ assert.ok(display.size < original.size * .1, "Logo display image should be at le
 const choreography = await readFile("hooks/editorial-chapters.ts", "utf8");
 assert.doesNotMatch(choreography, /once:\s*true|yPercent:\s*105/);
 assert.match(choreography, /scrub:\s*\.35/);
+// Editorial chapters stay opaque: movement, not a fade, carries the reveal.
+assert.doesNotMatch(choreography.slice(choreography.indexOf('if (root.querySelector(".artist"))')), /opacity:/);
+assert.match(choreography, /scene\(selector, "top 96%", "top 24%"\)/);
+for (const exhibit of ["proof-trophy", "proof-certificate", "trainer-certificate"]) {
+  assert.match(choreography, new RegExp(`exhibit\\("\\.${exhibit}",`));
+}
 const finder = await readFile("components/lash-finder.tsx", "utf8");
 assert.match(finder, /WheelGesturesPlugin/);
 assert.match(finder, /skipSnaps:\s*true/);

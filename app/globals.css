@@ -164,6 +164,8 @@ em { font-family: inherit; font-style: normal; font-weight: 400; }
 .artist-signoff > span:last-child { font-size: 12px; line-height: 1.6; color: var(--muted); }
 
 /* 03 — intact exhibits arrive at different speeds, then settle level. */
+.recognition .display em,.academy-copy h2 em,.trainer-credential-copy h3 em,.studio-visit-intro h2 em { display: inline-block; }
+.proof,.trainer-certificate { transform-origin: 50% 65%; }
 .recognition { display: grid; grid-template-columns: .8fr 1.6fr; gap: 6%; align-items: center; padding-block: 135px 150px; }
 .recognition .display { margin-top: 26px; font-size: clamp(50px,5.3vw,82px); }
 .award-number { font: 500 clamp(110px,13vw,205px)/.95 var(--font-work-sans),sans-serif; color: var(--champagne); margin-top: 38px; letter-spacing: -.05em; }
