@@ -11,12 +11,15 @@ assert.match(html, /paolash-logo-display\.webp/);
 assert.match(html, /<source[^>]+srcSet="[^"]*paola-seated-display-480\.webp/);
 for (const target of ["services", "story", "academy", "visit"]) assert.match(html, new RegExp(`href="#${target}"`));
 assert.match(html, /class="trainer-certificate"><img/);
+assert.match(html, /data-motion="collection-zoom"/);
 const original = await stat("public/assets/brand/paolash-logo.png");
 const display = await stat("public/assets/brand/paolash-logo-display.webp");
 assert.ok(display.size < original.size * .1, "Logo display image should be at least 90% smaller");
 const choreography = await readFile("hooks/editorial-chapters.ts", "utf8");
 assert.doesNotMatch(choreography, /once:\s*true|yPercent:\s*105/);
 assert.match(choreography, /scrub:\s*\.35/);
+assert.match(choreography, /scene\("\[data-motion='collection-deck'\]", "top 95%", "top 32%"\)/);
+assert.match(choreography, /scale: 1 - \.12 \* amount/);
 // Editorial chapters stay opaque: movement, not a fade, carries the reveal.
 assert.doesNotMatch(choreography.slice(choreography.indexOf('if (root.querySelector(".artist"))')), /opacity:/);
 assert.match(choreography, /scene\(selector, "top 96%", "top 24%"\)/);

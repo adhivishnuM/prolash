@@ -93,6 +93,7 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
       {finish === null ? <div className={styles.choose} key="choose"><div className={styles.intro} data-motion="collection-intro"><div><span className={styles.eyebrow}>Find your signature. Make it yours.</span><h2 id="finish-title">The lash <span>edit.</span></h2></div></div>
       <div className={styles.deckScene} ref={scene} data-motion="collection-deck" role="region" aria-roledescription="carousel" aria-label="Lash collection"
         onKeyDown={event => { if (event.key === "ArrowLeft" || event.key === "ArrowRight") { event.preventDefault(); move(event.key === "ArrowLeft" ? -1 : 1); } }}>
+        <div className={styles.deckMotion} data-motion="collection-zoom">
         <p className={styles.activeName} aria-live="polite">{lashFinishes[active].name}</p>
         <div className={styles.deckViewport} ref={viewportRef}>
           <div className={styles.deck}>
@@ -113,6 +114,7 @@ export default function LashFinder({ bookingUrl }: { bookingUrl: string }) {
         <button className={`${styles.deckArrow} ${styles.previous}`} type="button" onClick={() => move(-1)} aria-label="Previous treatment"><Chevron back /></button>
         <button className={`${styles.deckArrow} ${styles.next}`} type="button" onClick={() => move(1)} aria-label="Next treatment"><Chevron /></button>
         <p className={styles.gestureHint}>Swipe or drag to discover. Tap to explore.</p>
+        </div>
       </div>
       </div> : <div className={styles.result} key={finish.name}>
         <div className={styles.resultTop}><button className={styles.back} onClick={() => setSelected(null)} type="button"><Direction back /> Choose another finish</button><span>{finish.label} / PaoLash</span></div>

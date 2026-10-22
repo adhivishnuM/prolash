@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import ResponsivePhoto from "@/components/responsive-photo";
-import { scrollToHomeSection } from "@/lib/section-scroll";
+import { resetHomeUrl, scrollToHomeSection } from "@/lib/section-scroll";
 import Link from "next/link";
 import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { useEditorialMotion } from "@/hooks/use-editorial-motion";
@@ -43,13 +43,15 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
   const menuRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const motionReady = useEditorialMotion(pageRef);
+  const navigationRevision = useRef(0);
 
   const scrollToSection = (id: string) => {
+    const revision = ++navigationRevision.current;
     setMenuOpen(false);
     requestAnimationFrame(() => requestAnimationFrame(async () => {
       await motionReady.current;
       await document.fonts.ready;
-      scrollToHomeSection(id);
+      if (revision === navigationRevision.current) scrollToHomeSection(id);
     }));
   };
 
@@ -57,10 +59,11 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
   useEffect(() => {
     if (initialSection === "top") return;
     let cancelled = false;
+    const revision = navigationRevision.current;
     const frame = requestAnimationFrame(async () => {
       await motionReady.current;
       await document.fonts.ready;
-      if (!cancelled) scrollToHomeSection(sectionTargets[initialSection]);
+      if (!cancelled && revision === navigationRevision.current) scrollToHomeSection(sectionTargets[initialSection]);
     });
     return () => { cancelled = true; cancelAnimationFrame(frame); };
   }, [initialSection, motionReady]);
@@ -99,7 +102,7 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
   return <div className="site" ref={pageRef}>
     <a className="skip-link" href="#main">Skip to content</a>
     <header className={`site-header${menuOpen ? " menu-is-open" : ""}`} onClick={event => { if (!(event.target as HTMLElement).closest("a,button")) scrollToSection("top"); }}>
-      <div inert={menuOpen}><Link className="brand" href="/" scroll={false} aria-label="PaoLash home" onNavigate={event => { event.preventDefault(); scrollToSection("top"); }}><Image unoptimized src={LOGO} alt="PaoLash" width={1536} height={1024} /></Link></div>
+      <div inert={menuOpen}><Link className="brand" href="/" scroll={false} aria-label="PaoLash home" onNavigate={event => { event.preventDefault(); resetHomeUrl(); scrollToSection("top"); }}><Image unoptimized src={LOGO} alt="PaoLash" width={1536} height={1024} /></Link></div>
       <nav className="desktop-nav" aria-label="Primary navigation" inert={menuOpen}>{navigation.map((item) => <Link href={`#${item.id}`} prefetch={false} scroll={false} onNavigate={event => { event.preventDefault(); scrollToSection(item.id); }} key={item.id}>{item.name}</Link>)}</nav>
       <div className="header-actions"><div className="desktop-booking" inert={menuOpen}><BookingLink className="header-booking">Book a visit</BookingLink></div><button ref={menuButtonRef} className="menu-toggle" type="button" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen} aria-controls="mobile-menu" onClick={() => setMenuOpen((value) => !value)}><i /><i /></button></div>
     </header>

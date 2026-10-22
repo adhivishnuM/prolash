@@ -44,11 +44,12 @@ export function startEditorialChapters(root: HTMLDivElement) {
     }
 
     rise("#services", "[data-motion='collection-label'], [data-motion='collection-intro']", 28);
-    if (root.querySelector("[data-motion='collection-deck']")) {
-      // Never scale or translate the carousel's layout/measurement root.
-      // Its continuous depth belongs exclusively to the gesture engine.
-      scene("#services", "top 96%", "top 48%")
-        .fromTo(q("[data-motion='collection-deck']"), { opacity: .65 }, { opacity: 1 });
+    if (root.querySelector("[data-motion='collection-zoom']")) {
+      // Restore the original .88 → 1 deck opening from ce49605. The static
+      // scene measures scroll; only the visual wrapper lifts and zooms.
+      // Embla retains its own positioned viewport and unscaled layout sizes.
+      scene("[data-motion='collection-deck']", "top 95%", "top 32%")
+        .fromTo(q("[data-motion='collection-zoom']"), { y: 110 * amount, scale: 1 - .12 * amount }, { y: 0, scale: 1 });
     }
 
     if (root.querySelector(".artist")) {

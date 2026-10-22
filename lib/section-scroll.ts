@@ -5,6 +5,13 @@ const targets: Record<string, string> = {
   visit: "#visit",
 };
 
+/** A logo click returns to the canonical homepage without reloading the same
+ * one-page experience or interrupting its native smooth scroll. */
+export function resetHomeUrl() {
+  const { pathname, search, hash } = window.location;
+  if (pathname !== "/" || search || hash) window.history.replaceState(window.history.state, "", "/");
+}
+
 /** Targets are static anchors outside reveal/GSAP transforms. Viewport bounds
  * also handle fractional zoom and nested layout offsets. Native scrolling remains
  * interruptible by touch, wheel and keyboard; there is no scroll hijacking. */

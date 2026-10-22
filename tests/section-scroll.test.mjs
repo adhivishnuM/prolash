@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { scrollToHomeSection } from "../lib/section-scroll.ts";
+import { resetHomeUrl, scrollToHomeSection } from "../lib/section-scroll.ts";
 
 test("section navigation uses layout positions, header clearance and reduced motion", () => {
   let reduced = false;
@@ -52,5 +52,32 @@ test("section navigation uses layout positions, header clearance and reduced mot
       if (descriptor) Object.defineProperty(globalThis,key,descriptor);
       else Reflect.deleteProperty(globalThis,key);
     }
+  }
+});
+
+test("logo clears section URLs, queries and hashes without reloading or losing history state", () => {
+  const original = Object.getOwnPropertyDescriptor(globalThis, "window");
+  const state = { __NA: true, preserved: "router-state" };
+  let result;
+  const location = { pathname: "/collection/", search: "?source=share", hash: "#services" };
+  Object.defineProperty(globalThis, "window", { configurable: true, value: {
+    location,
+    history: { state, replaceState: (...args) => { result = args; } },
+  } });
+  try {
+    resetHomeUrl();
+    assert.deepEqual(result, [state, "", "/"]);
+    for (const path of ["/artist/", "/academy/", "/visit/"]) {
+      location.pathname = path;
+      resetHomeUrl();
+      assert.deepEqual(result, [state, "", "/"]);
+    }
+    Object.assign(location, { pathname: "/", search: "", hash: "" });
+    result = undefined;
+    resetHomeUrl();
+    assert.equal(result, undefined);
+  } finally {
+    if (original) Object.defineProperty(globalThis, "window", original);
+    else Reflect.deleteProperty(globalThis, "window");
   }
 });
