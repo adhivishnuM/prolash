@@ -151,7 +151,7 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
         <div className="ritual-poster">
           <h2 id="detail-title"><span>AFTER</span><span>CARE.</span></h2>
           <figure className="ritual-product"><ResponsivePhoto unoptimized src="/assets/aftercare-product-800.webp" srcSet="/assets/aftercare-product-480.webp 480w, /assets/aftercare-product-800.webp 800w" sizes="(max-width: 700px) 55vw, 31vw" alt="PaoLash lash cleanser with a cleansing brush and spoolie, displayed with a burgundy ribbon" width={1254} height={1254} loading="lazy" /></figure>
-          <div className="ritual-note"><span className="ritual-note-line" aria-hidden="true" /><p>Cleanse gently.<br />Brush with care.</p></div>
+          <div className="ritual-note"><p>Cleanse gently.<br />Brush with care.</p></div>
           <p className="ritual-footnote">Ask your artist about<br />caring for your set.</p>
         </div>
       </section>

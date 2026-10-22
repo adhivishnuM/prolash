@@ -134,11 +134,11 @@ em { font-family: inherit; font-style: normal; font-weight: 400; }
 .hero-location { margin-bottom: 32px; font-size: 11px; letter-spacing: .13em; text-transform: uppercase; color: var(--champagne); animation: fadeUp 1s .1s var(--ease) both; }
 .hero-title { font-size: clamp(72px,9vw,136px); line-height: 1.06; letter-spacing: -.065em; }
 .hero-line { display: block; overflow: visible; }
-.hero-line > * { display: block; animation: titleEnter 1.4s .15s var(--ease) both; }
+.hero-line > * { display: block; animation: titleEnter .95s .1s var(--ease) both; }
 .hero-line:last-child > * { color: var(--champagne); animation-delay: .28s; }
 .hero-description { margin-top: 28px; font-size: clamp(14px,1.2vw,18px); line-height: 1.8; color: var(--muted); animation: fadeUp 1s .35s var(--ease) both; }
 .hero-intro .button { margin-top: 32px; animation: fadeUp 1s .5s var(--ease) both; }
-.hero-portrait { width: 100%; max-width: 440px; min-width: 0; justify-self: center; animation: portraitReveal 1.4s .1s var(--ease) both; }
+.hero-portrait { width: 100%; max-width: 440px; min-width: 0; justify-self: center; animation: portraitReveal 1.15s .15s var(--ease) both; }
 .hero-portrait img { width: 100%; height: min(62svh,610px); object-fit: contain; object-position: center bottom; }
 .hero-portrait figcaption,.academy-portrait figcaption { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 16px; padding-top: 16px; font-size: 11px; color: var(--muted); }
 .hero-portrait figcaption > span { color: var(--champagne); }
@@ -191,7 +191,6 @@ em { font-family: inherit; font-style: normal; font-weight: 400; }
 .ritual-product { position: absolute; z-index: 2; width: 31%; left: 34.5%; top: 21%; transform: translate3d(0,var(--ritual-rise,0px),0) rotate(var(--ritual-turn,0deg)); }
 .ritual-product img { width: 100%; height: auto; max-height: 580px; object-fit: contain; border-radius: 16px; box-shadow: 0 16px 36px #59101d0d; }
 .ritual-note { position: absolute; z-index: 3; bottom: 80px; left: 72%; font-size: 14px; line-height: 1.65; }
-.ritual-note-line { position: absolute; right: calc(100% + 20px); top: 12px; width: 8vw; height: 1px; background: var(--champagne); transform: rotate(-15deg); transform-origin: right; }
 .ritual-footnote { position: absolute; bottom: 55px; left: var(--gutter); font-size: 13px; color: var(--muted); }
 
 /* 05 — the educator and the work, with original studio photography. */
@@ -273,14 +272,7 @@ a.studio-detail:hover > .arrow { transform: translateX(4px); }
 .reveal-ready [data-reveal].is-visible { opacity: 1; transform: none; clip-path: none; }
 .reveal-ready [data-unfold] { opacity: 0; clip-path: inset(0 0 8%); transition: opacity .9s var(--ease) var(--delay,0ms),clip-path 1.3s var(--ease) var(--delay,0ms); }
 .reveal-ready [data-unfold].is-visible { opacity: 1; clip-path: inset(-20% -5%); }
-/* One animation owner per element. GSAP replaces the old timed hero effects;
-   default CSS remains visible if JavaScript is unavailable. */
-.motion-chapters .hero-location,
-.motion-chapters .hero-line > *,
-.motion-chapters .hero-description,
-.motion-chapters .hero-intro .button,
-.motion-chapters .hero-portrait { animation: none; }
-.motion-chapters .hero-line { clip-path: inset(-6% -10% -8% -10%); }
+/* CSS alone owns the hero entrance; chapter motion uses independent parents. */
 .motion-chapters .hero-portrait,
 .motion-chapters .artist-visual,
 .motion-chapters .academy-portrait { translate: 0 var(--portrait-depth,0px); }
@@ -367,7 +359,6 @@ a.studio-detail:hover > .arrow { transform: translateX(4px); }
   .ritual-product { width: 55%; left: 22.5%; top: 22%; }
   .ritual-product img { border-radius: 10px; }
   .ritual-note { top: auto; left: auto; right: var(--gutter); bottom: 54px; font-size: 11px; text-align: right; }
-  .ritual-note-line { display: none; }
   .ritual-footnote { left: var(--gutter); bottom: 54px; font-size: 10px; }
   .academy { padding-block: 80px 65px; }
   .trainer-credential { grid-template-columns: 1fr; gap: 28px; margin-top: 45px; padding-top: 40px; }
@@ -489,11 +480,15 @@ a.studio-detail:hover > .arrow { transform: translateX(4px); }
   .closing-brand { width: 150px; }
 }
 
-/* Lightweight mobile motion retains the existing layout and native scroll. */
+/* White liquid-glass navigation: a defined edge, restrained tint and depth. */
+.site-header { border: 1px solid #7d1f2d16; background: linear-gradient(135deg,#fffffff0,#ffffffba); -webkit-backdrop-filter: blur(18px) saturate(115%); backdrop-filter: blur(18px) saturate(115%); box-shadow: 0 10px 34px #481c2612,inset 0 1px 0 #fff; }
+.site-header.is-scrolled { background: linear-gradient(135deg,#fffffff2,#ffffffce); box-shadow: 0 12px 36px #481c261a,inset 0 1px 0 #fff; }
+.site-header.menu-is-open { border-color: transparent; background: transparent; box-shadow: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
 @media (max-width: 700px) {
-  .site-header,.menu-panel { -webkit-backdrop-filter: none; backdrop-filter: none; }
-  .reveal-ready [data-reveal] { transition-duration: .55s,.65s; }
-  .motion-mobile .ritual-product,.motion-mobile .ritual-poster h2 > span { transition: transform 1s var(--ease); }
-  .motion-mobile .ritual:not(.is-visible) { --ritual-drift: 30px; --ritual-rise: 35px; --ritual-turn: -2deg; }
-  .motion-mobile .ritual.is-visible { --ritual-drift: 0px; --ritual-rise: 0px; --ritual-turn: 0deg; }
+  .site-header { -webkit-backdrop-filter: blur(12px) saturate(110%); backdrop-filter: blur(12px) saturate(110%); }
+  .site-header.menu-is-open { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .menu-panel { -webkit-backdrop-filter: none; backdrop-filter: none; background: #fff; }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header,.site-header.is-scrolled { background: #fffffff5; }
 }

@@ -140,21 +140,35 @@
   .gestureHint { bottom: -26px; font-size: 10px; }
 }
 
-/* Preserve the original layered deck; the track handles native touch dragging. */
-.finder { --card-width: clamp(360px,37vw,450px); --deck-step: clamp(245px,25vw,360px); }
+/* Original overlapping composition, with continuous engine-driven depth. */
+.finder { position: relative; --card-width: clamp(360px,37vw,450px); --deck-step: clamp(245px,25vw,360px); }
 .stage { position: relative; }
-.sectionAnchor { position: absolute; top: 24px; left: 0; width: 1px; height: 1px; pointer-events: none; }
-.deckViewport { height: 100%; overflow: hidden; margin-inline: calc(-1 * var(--gutter)); touch-action: pan-y pinch-zoom; }
+.sectionAnchor { position: absolute; top: 58px; left: 0; width: 1px; height: 1px; pointer-events: none; }
+.deckViewport { position: relative; left: 50%; width: calc(100% + 2 * var(--gutter)); max-width: 1440px; height: 100%; overflow: hidden; margin: 0; transform: translateX(-50%); touch-action: pan-y pinch-zoom; overscroll-behavior-x: contain; }
 .deck { display: flex; position: relative; width: 100%; height: 100%; margin: 0; touch-action: pan-y pinch-zoom; }
 .deckSlide { flex: 0 0 var(--deck-step); min-width: 0; height: 100%; position: relative; z-index: 1; pointer-events: none; }
-.slideActive { z-index: 10; }
-.deckCard { width: var(--card-width); opacity: 0; transform: translateX(-50%) translateY(26px) scale(.9); pointer-events: none; will-change: auto; }
-.cardNearby { opacity: .77; pointer-events: auto; }
-.cardActive { transform: translateX(-50%); opacity: 1; }
+.slideActive { z-index: 20; }
+.deckCard { --deck-depth: 2; --deck-opacity: 0; width: var(--card-width); pointer-events: none; will-change: auto; }
+.cardNearby { --deck-depth: 1; --deck-opacity: .77; pointer-events: auto; }
+.cardActive { --deck-depth: 0; --deck-opacity: 1; }
+.deckCard,.cardActive,.cardNearby { opacity: var(--deck-opacity); transform: translateX(-50%) translateY(calc(var(--deck-depth) * 26px)) scale(calc(1 - var(--deck-depth) * .1)); transition: none; }
+.deckCard .cardShade { opacity: calc(var(--deck-depth) * .2); transition: none; }
 @media (min-width: 701px) and (max-width: 999px) { .finder { --card-width: clamp(330px,54vw,410px); } }
 @media (max-width: 700px) {
-  .finder { --card-width: min(74vw,340px); --deck-step: min(53.28vw,244.8px); }
-  .deckScene { height: clamp(340px,96vw,460px); }
-  .deckCard { top: 12px; height: clamp(305px,86vw,415px); aspect-ratio: auto; border-radius: 28px; transform: translateX(-50%) translateY(16px) scale(.92); }
-  .cardActive { transform: translateX(-50%); }
+  .finder { --card-width: min(74vw,340px); --deck-step: min(53.28vw,244.8px); padding-block: 35px 42px; }
+  .sectionAnchor { top: 35px; }
+  .masthead { font-size: 9px; padding-bottom: 19px; letter-spacing: .08em; }
+  .masthead > span:last-child { display: none; }
+  .intro { padding-top: 24px; }
+  .eyebrow { font-size: 9px; line-height: 1.5; margin-bottom: 11px; }
+  .intro h2 { font-size: clamp(44px,10.5vw,66px); }
+  .deckScene { height: clamp(340px,96vw,460px); margin-top: 50px; }
+  .activeName { top: -27px; font-size: 18px; }
+  .deckCard { top: 12px; height: clamp(305px,86vw,415px); aspect-ratio: auto; border-radius: 28px; }
+  .deckCard,.cardActive,.cardNearby { transform: translateX(-50%) translateY(calc(var(--deck-depth) * 16px)) scale(calc(1 - var(--deck-depth) * .08)); }
+  .deckArrow { width: 48px; height: 68px; top: 42%; padding: 10px; }
+  .deckArrow svg { width: 23px; height: 44px; }
+  .previous { left: calc(-1 * var(--gutter) + 4px); }
+  .next { right: calc(-1 * var(--gutter) + 4px); }
+  .gestureHint { bottom: -12px; font-size: 10px; }
 }
