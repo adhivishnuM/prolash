@@ -35,6 +35,8 @@ Existing section URL aliases are retained for compatibility only.
   opposing typography and independent product motion.
 - Removed the aftercare note's decorative line. The floating white navbar now
   has a defined glass edge, translucent surface and modest backdrop blur.
+- Production HTML now revalidates instead of using Firebase's default one-hour
+  browser cache. Versioned scripts remain immutable and images retain caching.
 
 Checks: `node --experimental-strip-types --test tests/section-scroll.test.mjs`,
 `npm run lint`, `npm run build`, `node scripts/check-home-export.mjs`.

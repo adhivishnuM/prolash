@@ -10,6 +10,15 @@
     ],
     "headers": [
       {
+        "regex": "^/(|index\\.html|404\\.html|(collection|artist|academy|visit)(/|/index\\.html)?)$",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache,max-age=0,must-revalidate"
+          }
+        ]
+      },
+      {
         "source": "/_next/static/**",
         "headers": [
           {
