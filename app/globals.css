@@ -29,7 +29,7 @@
   --font-sans: var(--font-work-sans),Arial,sans-serif;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 104px; }
+html { scroll-padding-top: 104px; }
 body { margin: 0; color: var(--ink); background: var(--cream); font: 400 16px/1.65 var(--font-work-sans),Arial,sans-serif; -webkit-font-smoothing: antialiased; }
 button,a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 button { font: inherit; color: inherit; cursor: pointer; }
@@ -487,4 +487,13 @@ a.studio-detail:hover > .arrow { transform: translateX(4px); }
   .hero-portrait figcaption { padding-inline: 0; }
   .closing h2 { font-size: clamp(44px,11.6vw,78px); }
   .closing-brand { width: 150px; }
+}
+
+/* Lightweight mobile motion retains the existing layout and native scroll. */
+@media (max-width: 700px) {
+  .site-header,.menu-panel { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .reveal-ready [data-reveal] { transition-duration: .55s,.65s; }
+  .motion-mobile .ritual-product,.motion-mobile .ritual-poster h2 > span { transition: transform 1s var(--ease); }
+  .motion-mobile .ritual:not(.is-visible) { --ritual-drift: 30px; --ritual-rise: 35px; --ritual-turn: -2deg; }
+  .motion-mobile .ritual.is-visible { --ritual-drift: 0px; --ritual-rise: 0px; --ritual-turn: 0deg; }
 }

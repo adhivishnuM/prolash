@@ -139,3 +139,22 @@
   .intro h2 { font-size: clamp(44px,12vw,66px); }
   .gestureHint { bottom: -26px; font-size: 10px; }
 }
+
+/* Preserve the original layered deck; the track handles native touch dragging. */
+.finder { --card-width: clamp(360px,37vw,450px); --deck-step: clamp(245px,25vw,360px); }
+.stage { position: relative; }
+.sectionAnchor { position: absolute; top: 24px; left: 0; width: 1px; height: 1px; pointer-events: none; }
+.deckViewport { height: 100%; overflow: hidden; margin-inline: calc(-1 * var(--gutter)); touch-action: pan-y pinch-zoom; }
+.deck { display: flex; position: relative; width: 100%; height: 100%; margin: 0; touch-action: pan-y pinch-zoom; }
+.deckSlide { flex: 0 0 var(--deck-step); min-width: 0; height: 100%; position: relative; z-index: 1; pointer-events: none; }
+.slideActive { z-index: 10; }
+.deckCard { width: var(--card-width); opacity: 0; transform: translateX(-50%) translateY(26px) scale(.9); pointer-events: none; will-change: auto; }
+.cardNearby { opacity: .77; pointer-events: auto; }
+.cardActive { transform: translateX(-50%); opacity: 1; }
+@media (min-width: 701px) and (max-width: 999px) { .finder { --card-width: clamp(330px,54vw,410px); } }
+@media (max-width: 700px) {
+  .finder { --card-width: min(74vw,340px); --deck-step: min(53.28vw,244.8px); }
+  .deckScene { height: clamp(340px,96vw,460px); }
+  .deckCard { top: 12px; height: clamp(305px,86vw,415px); aspect-ratio: auto; border-radius: 28px; transform: translateX(-50%) translateY(16px) scale(.92); }
+  .cardActive { transform: translateX(-50%); }
+}

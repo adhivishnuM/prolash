@@ -1,0 +1,16 @@
+import assert from "node:assert/strict";
+import { readFile, stat } from "node:fs/promises";
+
+const html = await readFile("out/index.html", "utf8");
+assert.doesNotMatch(html, /<a[^>]+href="\/assets\/(?:award|trainer-certificate)\.webp"/);
+assert.doesNotMatch(html, /View certificate|Meet Paola|View the full collection|Continue exploring/);
+assert.doesNotMatch(html, /\/collection\/(?:volume|classic|wispy-hybrid)\//);
+assert.match(html, /id="visit" class="studio-notes shell"/);
+assert.match(html, /paolash-logo-display\.webp/);
+assert.match(html, /<source[^>]+srcSet="[^"]*paola-seated-display-480\.webp/);
+for (const target of ["services", "story", "academy", "visit"]) assert.match(html, new RegExp(`href="#${target}"`));
+assert.match(html, /class="trainer-certificate"><img/);
+const original = await stat("public/assets/brand/paolash-logo.png");
+const display = await stat("public/assets/brand/paolash-logo-display.webp");
+assert.ok(display.size < original.size * .1, "Logo display image should be at least 90% smaller");
+console.log("PASS: original one-page composition, section navbar, plain certificates, no new-page UI, responsive photos and >90% smaller logo.");

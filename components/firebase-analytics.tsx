@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
-import { firebaseApp } from "@/lib/firebase";
 
 export default function FirebaseAnalytics() {
   useEffect(() => {
     let cancelled = false;
 
-    void import("firebase/analytics").then(async ({ getAnalytics, isSupported, logEvent }) => {
+    const start = () => { void Promise.all([import("firebase/analytics"), import("@/lib/firebase")]).then(async ([{ getAnalytics, isSupported, logEvent }, { firebaseApp }]) => {
       if (!(await isSupported()) || cancelled) return;
       const analytics = getAnalytics(firebaseApp);
       logEvent(analytics, "page_view", {
@@ -17,9 +16,17 @@ export default function FirebaseAnalytics() {
       });
     }).catch(() => {
       // Analytics is optional and must never block the page experience.
-    });
+    }); };
 
-    return () => { cancelled = true; };
+    // Neither Firebase core nor analytics competes with the hero or hydration.
+    const timer = setTimeout(() => {
+      if (cancelled) return;
+      if ("requestIdleCallback" in window) idle = window.requestIdleCallback(start, { timeout: 5000 });
+      else start();
+    }, 5000);
+    let idle: number | undefined;
+
+    return () => { cancelled = true; clearTimeout(timer); if (idle !== undefined) window.cancelIdleCallback(idle); };
   }, []);
 
   return null;
