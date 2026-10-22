@@ -116,7 +116,7 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
       <LashFinder bookingUrl={BOOKING_URL} />
 
       <section className="artist shell" id="story" data-scene="artist" aria-labelledby="artist-title">
-        <div className="artist-top"><Label>The artist, the individual</Label><span className="edition-note" data-reveal>A personal point of view</span></div>
+        <div className="artist-top"><Label>Meet your artist</Label><span className="edition-note" data-reveal>A personal approach</span></div>
         <div className="artist-layout">
           <figure className="artist-visual" data-unfold>
             <div className="artist-portrait"><Image unoptimized src="/assets/portraits/paola-standing-cutout-v3.webp" alt="Paola Gutierrez, the artist behind PaoLash, in her signature burgundy suit" width={578} height={1500} loading="lazy" /></div>
@@ -124,26 +124,26 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
           </figure>
           <div className="artist-copy">
             <h2 id="artist-title" className="artist-statement">{statement.map((word, index) => <span data-word key={index}>{word}{" "}</span>)}</h2>
-            <p data-reveal>Your shape, your features, your way of being. That’s where every PaoLash set begins.</p>
+            <p data-reveal>Your eye shape, your features, your style. Every PaoLash set is mapped around you.</p>
             <div className="artist-signoff" data-reveal><span className="signature">Paola G.</span><span>Made with intention.<br />Always by hand.</span></div>
           </div>
         </div>
       </section>
 
       <section className="recognition shell" id="recognition" data-scene="recognition" aria-labelledby="recognition-title">
-        <div className="recognition-copy"><Label>Beyond the studio</Label><Heading id="recognition-title">A little<br /><em>recognition.</em></Heading><div className="award-number" data-reveal>3<sup>rd</sup></div><p data-reveal>Creative Effects · Master category<br />Lash Star Elite, Dubai · 2025</p></div>
+        <div className="recognition-copy"><Label>International recognition</Label><Heading id="recognition-title">Recognised<br /><em>artistry.</em></Heading><div className="award-number" data-reveal aria-label="Third place">3<sup>rd</sup></div><p data-reveal>Creative Effects · Master category<br />Lash Star Elite · Dubai, 2025</p></div>
         <div className="recognition-gallery">
-          <figure className="proof proof-trophy"><a href="/assets/portraits/paola-award.webp" target="_blank" rel="noreferrer"><div className="proof-mat"><Image unoptimized src="/assets/portraits/paola-award.webp" alt="Paola Gutierrez in a red sari, holding her competition trophy at the Dubai award event" width={1086} height={1448} loading="lazy" /></div><figcaption><span>A moment to remember</span><span>Dubai, 2025 <Arrow /></span></figcaption></a></figure>
-          <figure className="proof proof-certificate"><a href="/assets/award.webp" target="_blank" rel="noreferrer"><div className="proof-mat"><Image unoptimized src="/assets/award.webp" alt="Full competition certificate: Paola Gutierrez, third place, Creative Effects, Master category, Lash Star Elite Dubai 2025" width={720} height={1019} loading="lazy" /></div><figcaption><span>The recognition</span><span>View certificate <Arrow /></span></figcaption></a></figure>
+          <figure className="proof proof-trophy"><a href="/assets/portraits/paola-award.webp" target="_blank" rel="noreferrer"><div className="proof-mat"><Image unoptimized src="/assets/portraits/paola-award.webp" alt="Paola Gutierrez in a red sari, holding her competition trophy at the Dubai award event" width={1086} height={1448} loading="lazy" /></div><figcaption><span>Lash Star Elite</span><span>Dubai, 2025 <Arrow /></span></figcaption></a></figure>
+          <figure className="proof proof-certificate"><a href="/assets/award.webp" target="_blank" rel="noreferrer"><div className="proof-mat"><Image unoptimized src="/assets/award.webp" alt="Full competition certificate: Paola Gutierrez, third place, Creative Effects, Master category, Lash Star Elite Dubai 2025" width={720} height={1019} loading="lazy" /></div><figcaption><span>Competition certificate</span><span>View certificate <Arrow /></span></figcaption></a></figure>
         </div>
       </section>
 
       <section className="ritual" data-scene="detail" aria-labelledby="detail-title">
-        <div className="ritual-caption shell"><Label>The PaoLash ritual</Label><span>Care, beyond the studio.</span></div>
+        <div className="ritual-caption shell"><Label>Lash aftercare</Label><span>Care between appointments.</span></div>
         <div className="ritual-poster">
           <h2 id="detail-title"><span>AFTER</span><span>CARE.</span></h2>
           <figure className="ritual-product"><Image unoptimized src="/assets/aftercare-product.webp" alt="PaoLash lash cleanser with a cleansing brush and spoolie, displayed with a burgundy ribbon" width={1254} height={1254} loading="lazy" /></figure>
-          <div className="ritual-note"><span className="ritual-note-line" aria-hidden="true" /><p>Your daily ritual.<br />Our finishing touch.</p></div>
+          <div className="ritual-note"><span className="ritual-note-line" aria-hidden="true" /><p>Cleanse gently.<br />Brush with care.</p></div>
           <p className="ritual-footnote">Ask your artist about<br />caring for your set.</p>
         </div>
       </section>
@@ -153,9 +153,9 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
           <div className="academy-copy">
             <Label>PaoLash Academy</Label>
             <h2 id="academy-title" data-reveal>The art.<br /><em>In your hands.</em></h2>
-            <p data-reveal>Learn with the artist behind the work. Lash education with Paola Gutierrez, for your next chapter.</p>
+            <p data-reveal>Professional lash education with Paola Gutierrez, founder of PaoLash and International Top Trainer.</p>
             <p className="academy-techniques" data-reveal>Classic · Hybrid · Volume · Wispy</p>
-            <a className="button button-wine" href="mailto:paolashacademy@gmail.com?subject=PaoLash%20Academy%20interest" data-reveal>Let’s talk training <Arrow /></a>
+            <a className="button button-wine" href="mailto:paolashacademy@gmail.com?subject=PaoLash%20Academy%20interest" data-reveal>Enquire about training <Arrow /></a>
           </div>
           <figure className="academy-portrait" data-unfold>
             <Image unoptimized src="/assets/portraits/paola-educator-cutout-v3.webp" alt="Paola Gutierrez walking towards the camera in a burgundy suit, lash tweezers in hand" width={430} height={1203} loading="lazy" />
@@ -164,7 +164,7 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
         </div>
         <div className="trainer-credential shell" data-reveal>
           <div className="trainer-credential-copy">
-            <p className="eyebrow">Your educator’s credentials</p>
+            <p className="eyebrow">Educator credentials</p>
             <h3>International<br /><em>Top Trainer.</em></h3>
             <p>Paola Gutierrez<br />International Lash School Lotus · June 2025</p>
             <a className="button" href="/assets/trainer-certificate.webp" target="_blank" rel="noreferrer">View certificate <Arrow /></a>
@@ -181,7 +181,7 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
             <p>Quiet appointments, thoughtful artistry,<br />and a set shaped around you.</p>
           </div>
           <div className="studio-visit-actions">
-            <BookingLink className="button button-light">Choose your time</BookingLink>
+            <BookingLink className="button button-light">Book an appointment</BookingLink>
             <button className="notes-open" type="button" onClick={() => notesRef.current?.showModal()}>Before you arrive <span aria-hidden="true">+</span></button>
           </div>
           <div className="studio-visit-details">
@@ -190,11 +190,11 @@ export default function PaoLashExperience({ initialSection = "top" }: { initialS
           </div>
         </div>
         <dialog ref={notesRef} className="studio-dialog" aria-labelledby="studio-notes-title" onClick={(event) => { if (event.target === event.currentTarget) notesRef.current?.close(); }}>
-          <div className="notes-sheet"><div className="notes-sheet-head"><h2 id="studio-notes-title">Before we meet.</h2><button type="button" aria-label="Close studio notes" onClick={() => notesRef.current?.close()}>×</button></div><div className="notes-content">{policies.map((policy) => <article key={policy.title}><h3>{policy.title}</h3><p>{policy.text}</p></article>)}</div><p className="notes-help">A question? <a href="mailto:paolashacademy@gmail.com">Ask the studio.</a></p></div>
+          <div className="notes-sheet"><div className="notes-sheet-head"><h2 id="studio-notes-title">Before your visit.</h2><button type="button" aria-label="Close studio notes" onClick={() => notesRef.current?.close()}>×</button></div><div className="notes-content">{policies.map((policy) => <article key={policy.title}><h3>{policy.title}</h3><p>{policy.text}</p></article>)}</div><p className="notes-help">A question? <a href="mailto:paolashacademy@gmail.com">Ask the studio.</a></p></div>
         </dialog>
       </section>
     </main>
 
-    <footer className="footer leather" id="visit" data-scene="visit" inert={menuOpen}><div className="closing shell"><Label>A little time, just for you</Label><h2><span>Your next</span><em>favourite look.</em></h2><BookingLink className="button button-light">Reserve your appointment</BookingLink><div className="closing-brand"><Image unoptimized src={LOGO} alt="PaoLash Lounge & Academy" width={1536} height={1024} loading="lazy" /></div></div><div className="footer-details shell"><div data-reveal><span className="footer-label">The studio</span><a href="https://www.google.com/maps/search/?api=1&query=6+St+Andrew%27s+St+3rd+Floor+Co.+Dublin+D02+VW40" target="_blank" rel="noreferrer">6 St Andrew’s St<br />3rd Floor · Co. Dublin · D02 VW40</a></div><div data-reveal style={delay(1)}><span className="footer-label">Say hello</span><a href="tel:+353838119207">083 811 9207</a><a href="mailto:paolashacademy@gmail.com">paolashacademy@gmail.com</a></div><div data-reveal style={delay(2)}><span className="footer-label">Follow the artistry</span><a href="https://www.instagram.com/pao_lashesdublin" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.tiktok.com/@paolash_0" target="_blank" rel="noreferrer">TikTok</a><a href="https://wa.me/353838119207" target="_blank" rel="noreferrer">WhatsApp</a></div><Link className="back-top" href="/" scroll={false} data-reveal>Back to top <Arrow /></Link></div><div className="footer-bottom shell"><span>© {new Date().getFullYear()} PaoLash Lounge & Academy</span><span>Dublin. With love.</span></div></footer>
+    <footer className="footer leather" id="visit" data-scene="visit" inert={menuOpen}><div className="closing shell"><Label>Your next appointment</Label><h2><span>Your next</span><em>favourite look.</em></h2><BookingLink className="button button-light">Reserve your appointment</BookingLink><div className="closing-brand"><Image unoptimized src={LOGO} alt="PaoLash Lounge & Academy" width={1536} height={1024} loading="lazy" /></div></div><div className="footer-details shell"><div data-reveal><span className="footer-label">The studio</span><a href="https://www.google.com/maps/search/?api=1&query=6+St+Andrew%27s+St+3rd+Floor+Co.+Dublin+D02+VW40" target="_blank" rel="noreferrer">6 St Andrew’s St<br />3rd Floor · Co. Dublin · D02 VW40</a></div><div data-reveal style={delay(1)}><span className="footer-label">Say hello</span><a href="tel:+353838119207">083 811 9207</a><a href="mailto:paolashacademy@gmail.com">paolashacademy@gmail.com</a></div><div data-reveal style={delay(2)}><span className="footer-label">Follow the artistry</span><a href="https://www.instagram.com/pao_lashesdublin" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.tiktok.com/@paolash_0" target="_blank" rel="noreferrer">TikTok</a><a href="https://wa.me/353838119207" target="_blank" rel="noreferrer">WhatsApp</a></div><Link className="back-top" href="/" scroll={false} data-reveal>Back to top <Arrow /></Link></div><div className="footer-bottom shell"><span>© {new Date().getFullYear()} PaoLash Lounge & Academy</span><span>Dublin. With love.</span></div></footer>
   </div>;
 }

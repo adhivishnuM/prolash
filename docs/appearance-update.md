@@ -3,7 +3,12 @@
 The full redesign was cancelled. Preserve the existing section compositions,
 content, photography, typography, routing, carousel, and editorial motion.
 
-- Canvas: white. Interface accents and primary actions: Burgundy Red #7D1F2D.
+- Canvas: white. Main headings and primary actions: Burgundy Red #7D1F2D.
+- Latest client direction adds rose-gold typography: #9B6257 for heading
+  emphasis, labels, captions and the artist statement's initial reading state.
+  It has a calculated 4.91:1 contrast against white; burgundy has 9.97:1.
+  Supporting copy uses #73545C (6.66:1). Light metallic rose is reserved for the
+  supplied logo, rather than low-contrast small text. Buttons retain white text.
 - Primary action text is white, including the collection booking action.
 - Header/footer logo: the newly supplied `rose gold logo.png`, copied unchanged
   into `assets/brand/rose-gold-logo-original.png` and served from
@@ -51,3 +56,14 @@ preserving the existing layout, text, palette and photography.
 Validation: lint, TypeScript/static export, production source/export guards,
 phone/desktop visual inspection, exact computed white/burgundy control colors,
 no horizontal overflow, live reduced-motion changes, and no background ribbons.
+
+## Heading and supporting-copy review — 22 October 2026
+
+- Recognition now reads “Recognised artistry.” with “International recognition”
+  and the verified Creative Effects / Master category / Dubai 2025 details.
+  Third place remains explicit; no higher placing or new awards are claimed.
+- Artist, aftercare, academy, training enquiry, studio booking and visit-note
+  copy is more direct. The client's treatment names, policies, contact details,
+  qualifications, original photographs and existing section animation remain.
+- Main/emphasis colors use the shared palette across all sections, collection
+  details and footer. No pale-gray text is used for the artist reading effect.

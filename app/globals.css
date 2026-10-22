@@ -6,7 +6,8 @@
   --font-editorial: var(--font-work-sans),Arial,sans-serif;
   color-scheme: light;
   --wine: #7d1f2d; --wine-deep: #481c26; --cream: #ffffff; --paper: #faf6f7;
-  --champagne: var(--wine); --gold-soft: var(--wine); --ink: #481c26; --muted: #776367; --line: #7d1f2d18;
+  --rose-gold: #9b6257;
+  --champagne: var(--rose-gold); --gold-soft: var(--rose-gold); --ink: var(--wine); --muted: #73545c; --line: #7d1f2d18;
   --action-background: var(--wine); --action-hover: #651925;
   --background: var(--cream); --foreground: var(--ink); --card: var(--cream); --card-foreground: var(--ink);
   --popover: var(--cream); --popover-foreground: var(--ink); --primary: var(--wine); --primary-foreground: var(--cream);
@@ -156,7 +157,7 @@ em { font-family: inherit; font-style: normal; font-weight: 400; }
 .artist-visual figcaption > span { color: var(--muted); }
 .artist-copy { min-width: 0; max-width: 640px; padding-block: 12px; }
 .artist-statement { font-size: clamp(40px,4.5vw,72px); line-height: 1.1; letter-spacing: -.055em; text-wrap: balance; }
-.artist-statement > span { background: linear-gradient(to right,var(--ink) var(--word-fill,100%),#b9b2b4 var(--word-fill,100%)); background-clip: text; color: transparent; }
+.artist-statement > span { background: linear-gradient(to right,var(--ink) var(--word-fill,100%),var(--rose-gold) var(--word-fill,100%)); background-clip: text; color: transparent; }
 .artist-copy > p { max-width: 36ch; margin-top: 28px; font-size: 16px; line-height: 1.8; color: var(--muted); }
 .artist-signoff { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px 28px; max-width: 440px; margin-top: 40px; }
 .signature { font: 500 clamp(30px,2.5vw,38px)/1.2 var(--font-work-sans),sans-serif; letter-spacing: -.05em; white-space: nowrap; }
@@ -448,23 +449,23 @@ a.studio-detail:hover > .arrow { transform: translateX(4px); }
   .proof,.closing h2 > span,.closing h2 > em { transform: none !important; }
 }
 
-/* White studio edition — burgundy details, with the existing composition. */
+/* White studio edition — burgundy headings and readable rose-gold emphasis. */
 .hero { position: relative; isolation: isolate; padding-block: 142px 76px; }
 .hero,.artist { background: transparent; }
 .hero-intro { padding-left: clamp(0px,2vw,28px); }
 .hero-title { font-size: clamp(72px,8.5vw,122px); font-weight: 550; }
-.hero-line:last-child > * { color: var(--wine); }
-.hero-location { color: var(--wine); }
+.hero-line:last-child > * { color: var(--rose-gold); }
+.hero-location { color: var(--rose-gold); }
 .hero-intro .button { min-width: 208px; }
 .hero-portrait { max-width: 470px; }
 .hero-portrait img { height: clamp(480px,48vw,660px); }
 .hero-portrait figcaption { padding-inline: 20px; font-size: 10px; }
-.eyebrow { color: var(--wine); }
+.eyebrow { color: var(--rose-gold); }
 .artist,.academy-layout,.recognition,.studio-notes { max-width: 1440px; margin-inline: auto; }
-.artist-statement > span { background-image: linear-gradient(to right,var(--ink) var(--word-fill,100%),#b9b2b4 var(--word-fill,100%)); }
-.ritual-poster h2 > span:last-child { color: var(--wine); }
-.studio-detail > .arrow { color: var(--wine); }
-.notes-open:hover { color: var(--wine); }
+.artist-statement > span { background-image: linear-gradient(to right,var(--ink) var(--word-fill,100%),var(--rose-gold) var(--word-fill,100%)); }
+.ritual-poster h2 > span:last-child { color: var(--rose-gold); }
+.studio-detail > .arrow { color: var(--rose-gold); }
+.notes-open:hover { color: var(--rose-gold); }
 .footer { background: transparent; }
 .closing h2 { font-size: clamp(64px,9vw,138px); line-height: 1.05; }
 .closing-brand { width: min(20vw,220px); margin-block: 48px 30px; }
